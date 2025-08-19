@@ -1,0 +1,225 @@
+import { validateCompanyName } from "../../Utils/Validations/nameValidation.js"
+import { validateEmail } from "../../Utils/Validations/emailValidation.js"
+import { validatePassword } from "../../Utils/Validations/passwordValidation.js"
+import { prisma } from "../../prisma/prismaClient.js"
+import jwt from "jsonwebtoken"
+import bcrypt from "bcryptjs"
+
+export const GetCompany = async (id) =>
+{
+    try {
+        const company = await prisma.company.findUnique({
+            where:{
+                id:id
+            },
+            select:{
+                name:true,
+                email:true,
+                image:true,
+                description:true,
+                employees_count:true,
+                created_at:true,
+                website:true,
+            }
+        })   
+        
+        if(!company)
+        {
+            const error = new Error("company not found")
+            error.status = 404
+            throw error
+        }
+
+        return{
+            status:200,
+            company
+        }
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const CreateCompany = async (data) =>
+{
+    try {
+        let company = await prisma.company.findFirst({
+            where:{
+                OR:[
+                    {
+                        email:data.email
+                    }
+                    ,
+                    {
+                        name:data.name
+                    }
+                ]
+            }
+        })
+        if(company)
+        {
+            const error = new Error("company already exist")
+            error.status = 400
+            throw error
+        }
+        validateCompanyName(data.name)
+        validateEmail(data.email)
+        validatePassword(data.password)
+
+        const hashedPassword = await bcrypt.hash(data.password,10)
+
+        company = await prisma.company.create({
+            data:{
+                name: data.name,
+                email: data.email,
+                password: hashedPassword
+            }
+        })
+
+        const token = jwt.sign({
+            id:company.id,
+        },process.env.JWT_SECRET,{expiresIn:"1h"})
+
+        return{
+            status: 201,
+            token,
+            company,
+            message: "company created successfully"
+        }
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const LogIn = async (credintials) =>
+{
+    try {
+        validateEmail(credintials.email)
+        validatePassword(credintials.password)
+        
+        const company = await prisma.company.findUnique({
+            where:{
+                email:credintials.email
+            }
+        })
+
+        if(!company)
+        {
+            const error = new Error("invalid email or password")
+            error.status = 401
+            throw error
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(credintials.password,company.password)
+
+        if(!isPasswordCorrect)
+        {
+            const error = new Error("invalid email or password")
+            error.status = 401
+            throw error
+        }
+
+        const token = jwt.sign({
+            id:company.id,
+        },process.env.JWT_SECRET,{
+            expiresIn:"1h"
+        })
+
+        return {
+            status: 200,
+            message: "logged in successfully",
+            token
+        }
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const UpdateCompany = async (id,data) =>
+{
+    try {
+        const company = await prisma.company.findUnique({
+            where:{
+                id:id
+            },
+        })
+
+        if(!company)
+        {
+            const error = new Error("company not found")
+            error.status = 404
+            throw error
+        }
+
+        const dataToUpdate = {}
+
+        if(data.description)
+            dataToUpdate.description = data.description
+
+        if(data.website)
+            dataToUpdate.website = data.website
+        
+        if(data.employees_count)
+            dataToUpdate.employees_count = data.employees_count
+
+        const updatedCompany = await prisma.company.update({
+            where:{
+                id:id,
+            },
+            select:{
+                name:true,
+                email:true,
+                image:true,
+                description:true,
+                employees_count:true,
+                created_at:true,
+                website:true,
+            },
+            data:dataToUpdate
+        })
+
+        return {
+            status:200,
+            message: "updated company successfully",
+            updatedCompany
+        }
+    }
+    catch (error) {
+        throw error
+    }
+}
+
+export const DeleteCompany = async (id) =>
+{
+    try {
+        const company = await prisma.company.findUnique({
+            where:{
+                id:id
+            }
+        })
+
+        if(!company)
+        {
+            const error = new Error("company not found")
+            error.status = 404
+            throw error
+        }
+
+        const deletedCompany = await prisma.company.delete({
+            where:{
+                id:id
+            }
+        })
+
+        return{
+            status:200,
+            message: `company ${company.name} was deleted successfully`,
+            id:deletedCompany.id
+        }
+    } 
+    catch (error) {
+        throw error
+    }
+}
