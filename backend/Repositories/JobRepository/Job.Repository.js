@@ -30,6 +30,9 @@ export const CreateJob = async (id,data) =>
                 },
                 skills:{
                     connect:skills.map((id) =>({id}))
+                },
+                Category:{
+                    connect:data.categoryId
                 }
             },
             include:{

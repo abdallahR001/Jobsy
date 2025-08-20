@@ -50,6 +50,7 @@ next-env.d.ts
 backend/generated/
 !backend/prisma/schema.prisma
 !backend/prisma/migrations/
+/backend/prisma/migrations/
 
 # Other build artifacts or caches
 *.log

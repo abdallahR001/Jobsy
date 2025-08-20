@@ -25,7 +25,8 @@ export const SignUp = async (newUser)=>
             })
             const token = jwt.sign({
             id: user.id,
-            name: user.first_name
+            name: user.first_name,
+            role: "user"
             },
             process.env.JWT_SECRET,
             {
@@ -78,6 +79,7 @@ export const SignIn = async(credintials)=>
             {
                 id:user.id,
                 name: user.first_name,
+                role: "user"
             }
         ,process.env.JWT_SECRET,
         {
@@ -162,6 +164,11 @@ export const UpdateProfile = async (id,data)=>
         if(data.years_of_experience)
         {
             dataToUpdate.years_of_experience = data.years_of_experience
+        }
+
+        if(data.image)
+        {
+            dataToUpdate.image = image
         }
 
         const updatedUser = await prisma.user.update({
