@@ -1,4 +1,4 @@
-import { AddSkill, DeleteSkill, GetSkillsByCategory, UpdateSkill } from "../Services/SkillService/SkillService"
+import { AddSkill, DeleteSkill, GetSkillsByCategory, UpdateSkill } from "../Services/SkillService/SkillService.js"
 
 export const getSkills = async (req,res,next) =>
 {

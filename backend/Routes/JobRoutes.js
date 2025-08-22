@@ -1,8 +1,8 @@
 import { Router } from "express";
 import {authMiddleWare} from "../MiddleWares/AuthMiddleWare.js"
 import { CreateJob } from "../Controllers/jobController.js";
-const JobRouter = Router()
+const jobRouter = Router()
 
-JobRouter.post("/",authMiddleWare,CreateJob)
+jobRouter.post("/",authMiddleWare,CreateJob)
 
-export default JobRouter
+export default jobRouter

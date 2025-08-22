@@ -7,11 +7,20 @@ import jwt from "jsonwebtoken"
 export const createAdmin = async (data) =>
 {
     try {
-        ValidateName(data.name)
-        validateEmail(data.email)
-        validatePassword(data.password)
+        let newAdmin = await prisma.admin.findUnique({
+            where:{
+                email:data.email
+            }
+        })
 
-        const newAdmin = await prisma.admin.create({
+        if(newAdmin)
+        {
+            const error = new Error("admin aleady exist")
+            error.status = 400
+            throw error
+        }
+
+        newAdmin = await prisma.admin.create({
             data
         })
 
@@ -33,9 +42,10 @@ export const loginAsAdmin = async (credentials) =>
         validateEmail(credentials.email)
         validatePassword(credentials.password)
 
-        const admin = await prisma.admin.findUnique({
+        const admin = await prisma.admin.findFirst({
             where:{
-                email:credentials.email
+                email:credentials.email,
+                name:credentials.name
             }
         })
         

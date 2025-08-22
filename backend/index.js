@@ -4,8 +4,11 @@ import cors from "cors"
 import userRouter from "./Routes/UserRoutes.js"
 import { errorHandler } from "./MiddleWares/ErrorHandling/ErrorHandlerMiddleWare.js"
 import companyRouter from "./Routes/CompanyRoutes.js"
-import JobRouter from "./Routes/JobRoutes.js"
+import jobRouter from "./Routes/JobRoutes.js"
+import categoryRouter from "./Routes/CategoryRoute.js"
 import path from "path"
+import skillRouter from "./Routes/SkillRoute.js"
+import adminRouter from "./Routes/AdminRoute.js"
 
 const app = express()
 dotenv.config()
@@ -19,7 +22,11 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 //routes
 app.use("/api/users",userRouter)
 app.use("/api/company",companyRouter)
-app.use("/api/jobs",JobRouter)
+app.use("/api/jobs",jobRouter)
+app.use("/api/categories",categoryRouter)
+app.use("/api/skills",skillRouter)
+app.use("/api/admins",adminRouter)
+
 //error handling
 app.use(errorHandler)
 
