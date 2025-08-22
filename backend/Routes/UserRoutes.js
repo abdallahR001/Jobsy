@@ -3,16 +3,25 @@ import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn } from "
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import multer from "multer";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
+import path from "path"
+import fs from "fs"
 const userRouter = Router()
+
+
+const uploadDir = path.join(process.cwd(), "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
 
 const storage = multer.diskStorage({
     destination:function(req,file,cb)
     {
-        cb(null,"../uploads")
+        cb(null,uploadDir)
     },
     filename:function(req,file,cb)
     {
-        cb(null,file.originalname + Date.now())
+        cb(null,file.originalname + "-" + Date.now())
     }
 })
 

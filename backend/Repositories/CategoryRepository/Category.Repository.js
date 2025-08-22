@@ -1,5 +1,45 @@
 import { prisma } from "../../prisma/prismaClient.js"
 
+export const getCategories = async () =>
+{
+    try {
+        const categories = await prisma.category.findMany({
+            select:{
+                id:true,
+                name:true,
+            }
+        })
+
+        return categories
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const getCategory = async (id) =>
+{
+    try {
+        const category = await prisma.category.findUnique({
+            where:{
+                id
+            }
+        })
+
+        if(!category)
+        {
+            const error = new Error("category not found")
+            error.status = 404
+            throw error
+        }
+
+        return category
+    } 
+    catch (error) {
+        throw error    
+    }
+}
+
 export const addCategory = async (data) =>
 {
     try {

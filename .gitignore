@@ -59,3 +59,4 @@ backend/generated/
 .cache
 /dist
 /build
+/uploads

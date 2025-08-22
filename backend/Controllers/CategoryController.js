@@ -1,4 +1,32 @@
-import { createCategory, DeleteCategory, UpdateCategory } from "../Services/CategoryService/CategoryService.js"
+import { createCategory, DeleteCategory, GetCategories, UpdateCategory } from "../Services/CategoryService/CategoryService.js"
+
+export const getCategories = async (req,res,next) =>
+{
+    try {
+        const result = await GetCategories()
+
+        res.status(200).json({
+            result
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
+export const getCategory = async (req,res,next) =>
+{
+    try {
+        const result = await GetCategory(req.params.id)
+
+        res.status(200).json({
+            result
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
 
 export const CreateCategory = async (req,res,next) =>
 {

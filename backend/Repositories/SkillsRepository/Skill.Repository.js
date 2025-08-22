@@ -1,10 +1,39 @@
 import { validateSkillName } from "../../Utils/Validations/nameValidation.js"
 import { prisma } from "../../prisma/prismaClient.js"
+
+export const getSkillsByCategory = async (categoryId) =>
+{
+    try {
+        const category = await prisma.category.findUnique({
+            where:{
+                id: categoryId
+            }
+        })
+
+        if(!category)
+        {
+            const error = new Error("category not found")
+            error.status = 404
+            throw error
+        }
+
+        const skills = await prisma.skill.findMany({
+            where:
+            {
+                categoryId: category.id
+            }
+        })
+
+        return skills
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
 export const addSkill = async (data) =>
 {
     try {
-        validateSkillName(data.name)
-
         let newSkill = await prisma.skill.findUnique({
             where:{
                 name:data.name

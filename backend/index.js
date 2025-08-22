@@ -5,6 +5,8 @@ import userRouter from "./Routes/UserRoutes.js"
 import { errorHandler } from "./MiddleWares/ErrorHandling/ErrorHandlerMiddleWare.js"
 import companyRouter from "./Routes/CompanyRoutes.js"
 import JobRouter from "./Routes/JobRoutes.js"
+import path from "path"
+
 const app = express()
 dotenv.config()
 
@@ -12,7 +14,7 @@ const PORT = process.env.PORT || 4000
 //middlewares
 app.use(express.json())
 app.use(cors())
-
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 //routes
 app.use("/api/users",userRouter)

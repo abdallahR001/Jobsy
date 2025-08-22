@@ -44,7 +44,13 @@ export const GetProfile = async (req,res,next) =>
 export const UpdateProfile = async (req,res,next) =>
 {
     try {
-        const result = await updateProfile(req.user.id,req.body)
+
+        const data = req.body
+
+        if (req.file) {
+            data.image = `uploads/${req.file.filename}`
+        }
+        const result = await updateProfile(req.user.id,data)
 
         res.status(result.status).json({
             result

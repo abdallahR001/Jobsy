@@ -143,7 +143,6 @@ export const UpdateProfile = async (id,data)=>
         }
         })
 
-        //finish this later
         const dataToUpdate = {}
     
         if(!user)
@@ -168,7 +167,7 @@ export const UpdateProfile = async (id,data)=>
 
         if(data.image)
         {
-            dataToUpdate.image = image
+            dataToUpdate.image = data.image
         }
 
         const updatedUser = await prisma.user.update({
