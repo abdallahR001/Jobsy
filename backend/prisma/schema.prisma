@@ -68,6 +68,7 @@ model Application {
   jobId String
   cover_letter String 
   salary String?
+  status String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)

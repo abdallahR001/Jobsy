@@ -16,10 +16,31 @@ export const createApplication = async (id,jobId,data) =>
             throw error
         }
 
+        const job = await prisma.job.findUnique({
+            where:{
+                id:jobId
+            }
+        })
+
+        if(!job)
+        {
+            const error = new Error("job not found")
+            error.status = 404
+            throw error
+        }
+
+        if(job.job_status === "hired")
+        {
+            const error = new Error("this job is closed because someone is hired")
+            error.status = 400
+            throw error
+        }
+
         const newApplication = await prisma.application.create({
             data:{
                 cover_letter:data.cover_letter,
                 salary:data.salary,
+                status: "pending",
                 user:{
                     connect:{
                         id
@@ -78,6 +99,176 @@ export const GetApplicationsByJob = async (jobId) =>
         })
 
         return applications
+    } 
+    catch (error) {
+        throw error    
+    }
+}
+
+export const GetUserApplications = async (id) =>
+{
+    try {
+        const applications = await prisma.application.findMany({
+            where:{
+                userId:id,
+            },
+            select:{
+                id:true,
+                salary:true,
+                job:{
+                    select:{
+                        id:true,
+                        title:true,
+                        description:true,
+                        salary:true,
+                    }
+                }
+            }
+        })
+
+        return applications
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const GetApplication = async (id) =>
+{
+    try {
+        const application = await prisma.application.findUnique({
+            where:{
+                id
+            },
+            select:{
+                id:true,
+                cover_letter:true,
+                salary:true,
+                user:{
+                    select:{
+                        id:true,
+                        first_name:true,
+                        last_name:true,
+                        image:true,
+                        title:true,
+                    }
+                }
+            }
+        }) 
+
+        if(!application)
+        {
+            const error = new Error("no application found")
+            error.status = 404
+            throw error
+        }
+
+        return application
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const ToggleApplicationSeen = async (id) =>
+{
+    try {
+        const application = await prisma.application.findUnique({
+            where:{
+                id
+            }
+        })
+
+        if(!application)
+        {
+            const error = new Error("application not found")
+            error.status = 404
+            throw error
+        }
+
+        if(application.status === "seen")
+            return application
+
+        const updatedApplication = await prisma.application.update({
+            where:{
+                id,
+            },
+            data:{
+                status:"seen"
+            }
+        })
+
+        return updatedApplication
+    } 
+    catch (error) {
+        throw error    
+    }
+}
+
+export const AcceptApplication = async (id) =>
+{
+    try {
+        const application = await prisma.application.findUnique({
+            where:{
+                id
+            }
+        })
+
+        if(!application)
+        {
+            const error = new Error("application not found")
+            error.status = 404
+            throw error
+        }
+
+        if(application.status === "accepted")
+            return application
+
+        const updatedApplication = await prisma.application.update({
+            where:{
+                id,
+            },
+            data:{
+                status:"accepted"
+            }
+        })
+
+        return updatedApplication
+    } 
+    catch (error) {
+        throw error    
+    }
+}
+
+export const RejectApplication = async (id) =>
+{
+    try {
+        const application = await prisma.application.findUnique({
+            where:{
+                id
+            }
+        })
+
+        if(!application)
+        {
+            const error = new Error("application not found")
+            error.status = 404
+            throw error
+        }
+
+        if(application.status === "rejected")
+            return application
+
+        const updatedApplication = await prisma.application.update({
+            where:{
+                id,
+            },
+            data:{
+                status:"rejected"
+            }
+        })
+
+        return updatedApplication
     } 
     catch (error) {
         throw error    

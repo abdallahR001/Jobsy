@@ -148,3 +148,27 @@ export const DeleteAllJobs = async (companyId) =>
         throw error    
     }
 }
+
+export const GetCompanyJobs = async (companyId) =>
+{
+    try {
+        const jobs = await prisma.job.findMany({
+            where:{
+                companyId
+            },
+            select:{
+                iid:true,
+                title:true,
+                description:true,
+                minimum_years_required: true,
+                salary:true,
+                skills:true,
+            }
+        })    
+
+        return jobs
+    } 
+    catch (error) {
+        throw error
+    }
+}
