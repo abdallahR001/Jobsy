@@ -1,4 +1,5 @@
 import { prisma } from "../../prisma/prismaClient.js"
+
 export const CreateJob = async (id,data) =>
 {
     try {
@@ -32,7 +33,9 @@ export const CreateJob = async (id,data) =>
                     connect:skills.map((id) =>({id}))
                 },
                 Category:{
-                    connect:data.categoryId
+                    connect:{
+                        id:data.categoryId
+                    }
                 }
             },
             include:{
@@ -48,5 +51,100 @@ export const CreateJob = async (id,data) =>
     } 
     catch (error) {
         throw error
+    }
+}
+
+export const GetJobsByCategory = async (categoryId) =>
+{
+    try {
+        const jobs = await prisma.job.findMany({
+            where:{
+                categoryId
+            },
+            select:{
+                id:true,
+                title:true,
+                description:true,
+                minimum_years_required: true,
+                salary:true,
+                skills:true,
+                Company:{
+                    select:{
+                        image:true,
+                        name:true,
+                    }
+                }
+            }
+        })
+
+        return jobs
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const GetJob = async (id) =>
+{
+    try {
+        const job = await prisma.job.findUnique({
+            where:{
+                id
+            },
+            select:{
+                id:true,
+                title:true,
+                description:true,
+                minimum_years_required: true,
+                salary:true,
+                skills:true,
+                Company:{
+                    select:{
+                        image:true,
+                        name:true,
+                    }
+                }
+            }
+        })     
+
+        return job
+    } catch (error) {
+        throw error
+    }
+}
+
+export const DeleteJob = async (id) =>
+{
+    try {
+        const deletedJob = await prisma.job.delete({
+            where:{
+                id
+            }
+        })
+
+        return {
+            status: 200,
+            message: "job deleted successfully",
+            deletedJob
+        }
+    } 
+    catch (error) {
+        throw error    
+    }
+}
+
+export const DeleteAllJobs = async (companyId) =>
+{
+    try {
+        const deletedJobs = await prisma.job.deleteMany({
+        where:{
+            companyId
+        }
+    })
+
+    return deletedJobs        
+    } 
+    catch (error) {
+        throw error    
     }
 }

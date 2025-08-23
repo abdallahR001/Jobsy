@@ -1,3 +1,3 @@
 import { prisma } from "../prisma/prismaClient.js";
 
-await prisma.skill.deleteMany()
+await prisma.admin.deleteMany()

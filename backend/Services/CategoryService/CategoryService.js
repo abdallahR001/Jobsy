@@ -1,4 +1,4 @@
-import { addCategory , deleteCategory, getCategories, updateCategory} from "../../Repositories/CategoryRepository/Category.Repository.js"
+import { addCategory , deleteCategory, getCategories, updateCategory, getCategory} from "../../Repositories/CategoryRepository/Category.Repository.js"
 import { validateCategoryName } from "../../Utils/Validations/nameValidation.js"
 
 export const GetCategories = async () =>

@@ -1,12 +1,12 @@
 import { validateSkillName } from "../../Utils/Validations/nameValidation.js"
 import { prisma } from "../../prisma/prismaClient.js"
 
-export const getSkillsByCategory = async (categoryId) =>
+export const getSkillsByCategory = async (id) =>
 {
     try {
         const category = await prisma.category.findUnique({
             where:{
-                id: categoryId
+                id
             }
         })
 

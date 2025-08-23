@@ -21,7 +21,7 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 //routes
 app.use("/api/users",userRouter)
-app.use("/api/company",companyRouter)
+app.use("/api/companies",companyRouter)
 app.use("/api/jobs",jobRouter)
 app.use("/api/categories",categoryRouter)
 app.use("/api/skills",skillRouter)

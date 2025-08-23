@@ -66,6 +66,8 @@ model Application {
   id String @id @default(cuid())
   userId String 
   jobId String
+  cover_letter String 
+  salary String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)

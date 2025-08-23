@@ -1,8 +1,6 @@
-import { validateAdminName, ValidateName } from "../../Utils/Validations/nameValidation.js"
-import { validateEmail} from "../../Utils/Validations/emailValidation.js"
-import { validatePassword } from "../../Utils/Validations/passwordValidation.js"
+
 import { prisma } from "../../prisma/prismaClient.js"
-import bcrypt from "bcryptjs"
+import bcrypt, { hash } from "bcryptjs"
 import jwt from "jsonwebtoken"
 export const createAdmin = async (data) =>
 {
@@ -20,14 +18,27 @@ export const createAdmin = async (data) =>
             throw error
         }
 
+        const hashedPassword = await bcrypt.hash(data.password,10)
+
         newAdmin = await prisma.admin.create({
-            data
+            data:{
+                name:data.name,
+                email:data.email,
+                password:hashedPassword
+            }
         })
+
+        const token = jwt.sign({
+            id: newAdmin.id,
+            name: newAdmin.name,
+            email: newAdmin.email,
+            role: "admin"
+        },process.env.JWT_SECRET,{expiresIn:"1d"})
 
         return {
             status: 201,
             message:"created admin successfully",
-            newAdmin
+            token,
         }
     } 
     catch (error) {
@@ -38,10 +49,6 @@ export const createAdmin = async (data) =>
 export const loginAsAdmin = async (credentials) =>
 {
     try {
-        validateAdminName(credentials.name)
-        validateEmail(credentials.email)
-        validatePassword(credentials.password)
-
         const admin = await prisma.admin.findFirst({
             where:{
                 email:credentials.email,
@@ -51,8 +58,8 @@ export const loginAsAdmin = async (credentials) =>
         
         if(!admin)
         {
-            const error = new Error("invalid email or password")
-            error.status = 400
+            const error = new Error("invalid name or email or password")
+            error.status = 401
             throw error
         }
 
@@ -61,7 +68,7 @@ export const loginAsAdmin = async (credentials) =>
         if(!isPasswordCorrect)
         {
             const error = new Error("invalid email or password")
-            error.status = 400
+            error.status = 401
             throw error
         }
 
@@ -70,7 +77,7 @@ export const loginAsAdmin = async (credentials) =>
             name: admin.name,
             email: admin.email,
             role: "admin"
-        })
+        },process.env.JWT_SECRET,{expiresIn:"1d"})
 
         return {
             status: 200,
