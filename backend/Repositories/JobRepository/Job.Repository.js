@@ -172,3 +172,31 @@ export const GetCompanyJobs = async (companyId) =>
         throw error
     }
 }
+
+export const SearchJobs = async (title, minSalary, maxSalary,minYearsRequired, maxYearsRequired) =>
+{
+    try {
+        const jobs = await prisma.job.findMany({
+            where: {
+                ...(title && { title: { contains: title, mode: "insensitive" } }),
+                ...(minSalary || maxSalary ? { 
+                    salary: {
+                    ...(minSalary && { gte: minSalary }),
+                    ...(maxSalary && { lte: maxSalary })
+                    }
+                } : {}),
+                ...(minYearsRequired || maxYearsRequired ? {
+                    minimum_years_required: {
+                    ...(minYearsRequired && { gte: minYearsRequired }),
+                    ...(maxYearsRequired && { lte: maxYearsRequired })
+                    }
+                } : {})
+                }
+        })
+
+        return jobs
+    } 
+    catch (error) {
+        throw error    
+    }
+}
