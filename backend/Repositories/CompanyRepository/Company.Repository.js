@@ -20,6 +20,16 @@ export const GetCompany = async (id) =>
                 employees_count:true,
                 created_at:true,
                 website:true,
+                jobs:{
+                    select:{
+                        id:true,
+                        title:true,
+                        description:true,
+                        minimum_years_required: true,
+                        salary:true,
+                        skills:true,
+                    }
+                }
             }
         })   
         

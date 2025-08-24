@@ -157,7 +157,7 @@ export const GetCompanyJobs = async (companyId) =>
                 companyId
             },
             select:{
-                iid:true,
+                id:true,
                 title:true,
                 description:true,
                 minimum_years_required: true,
@@ -194,6 +194,28 @@ export const SearchJobs = async (title, minSalary, maxSalary,minYearsRequired, m
                 }
         })
 
+        return jobs
+    } 
+    catch (error) {
+        throw error    
+    }
+}
+
+export const GetSkillsJobs = async (skillIds) =>
+{
+    try {
+        const jobs = await prisma.job.findMany({
+            where:{
+                skills:{
+                    some:{
+                        id:{
+                            in:skillIds
+                        }
+                    }
+                }
+            }
+        })
+        
         return jobs
     } 
     catch (error) {
