@@ -231,3 +231,168 @@ export const DeleteProfile = async (id) =>
         throw error
     }
 }
+
+export const FollowCompany = async (userId,companyId) =>
+{
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            }
+        })
+
+        if(!user)
+        {
+            const error = new Error("user not found")
+            error.status = 404
+            throw error
+        }
+
+        const company = await prisma.company.findUnique({
+            where:{
+                id:companyId
+            }
+        })
+
+        if(!company)
+        {
+            const error = new Error("company not found")
+            error.status = 404
+            throw error
+        }
+
+        const updatedUser = await prisma.user.update({
+            where:{
+                id:userId
+            },
+            select:{
+                first_name:true,
+                last_name:true,
+                email:true,
+                image:true,
+                bio:true,
+                years_of_experience:true,
+                title:true
+            },
+            data:{
+                followings:{
+                    connect:{
+                        id:companyId
+                    }
+                }
+            }
+        })
+
+        return {
+            status: 200,
+            message: "followed company successfully",
+            updatedUser
+        }
+    } 
+    catch (error) {
+        throw error        
+    }
+}
+
+export const GetFollowedCompanies = async (userId) =>
+{
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            }
+        })
+
+        if(!user)
+        {
+            const error = new Error("user not found")
+            error.status = 404
+            throw error
+        }
+
+        const followedCompanies = await prisma.company.findMany({
+            where:{
+                followers:{
+                    some:{
+                        id:userId
+                    }
+                }
+            },
+            select:{
+                id:true,
+                name:true,
+                image:true,
+                description:true,
+                employees_count:true,
+                created_at:true,
+            }
+        })
+
+        return followedCompanies
+    } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const UnfollowCompany = async (userId,companyId) =>
+{
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            }
+        })
+
+        if(!user)
+        {
+            const error = new Error("user not found")
+            error.status = 404
+            throw error
+        }
+
+        const company = await prisma.company.findUnique({
+            where:{
+                id:companyId
+            }
+        })
+
+        if(!company)
+        {
+            const error = new Error("company not found")
+            error.status = 404
+            throw error
+        }
+
+        const updatedUser = await prisma.user.update({
+            where:{
+                id:userId
+            },
+            select:{
+                first_name:true,
+                last_name:true,
+                email:true,
+                image:true,
+                bio:true,
+                years_of_experience:true,
+                title:true
+            },
+            data:{
+                followings:{
+                    disconnect:{
+                        id:companyId
+                    }
+                }
+            }
+        })
+
+        return {
+            status: 200,
+            message: "unfollowed company successfully",
+            updatedUser
+        }
+    } 
+    catch (error) {
+        throw error    
+    }
+}

@@ -1,4 +1,5 @@
 import { createCategory, DeleteCategory, GetCategories, UpdateCategory, GetCategory} from "../Services/CategoryService/CategoryService.js"
+import { GetCompanyFollowers } from "../Services/CompanyService/CompanyService.js"
 
 export const getCategories = async (req,res,next) =>
 {
@@ -76,3 +77,20 @@ export const deleteCategory = async (req,res,next) =>
         next(error)    
     }
 }
+
+export const getCompanyFollowers = async (req,res,next) =>
+{
+    try {
+        const companyId = req.user.id
+
+        const result = await GetCompanyFollowers(companyId)
+        
+        res.status(200).json({
+            result
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+

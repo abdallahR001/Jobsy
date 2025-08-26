@@ -1,4 +1,4 @@
-import { GetCompany , CreateCompany , LogIn, UpdateCompany, DeleteCompany} from "../../Repositories/CompanyRepository/Company.Repository.js";
+import { GetCompany , CreateCompany , LogIn, UpdateCompany, DeleteCompany, getCompanyFollowers} from "../../Repositories/CompanyRepository/Company.Repository.js";
 
 export const GetCompanyProfile = async (id) =>
 {
@@ -60,5 +60,18 @@ export const DeleteCompanyProfile = async (id) =>
     catch (error) {
         console.log("error❌",error.message) 
         throw error    
+    }
+}
+
+export const GetCompanyFollowers = async (companyId) =>
+{
+    try {
+        const result = await getCompanyFollowers(companyId)
+
+        return result
+    }
+    catch (error) {
+        console.log("error❌",error.message) 
+        throw error  
     }
 }

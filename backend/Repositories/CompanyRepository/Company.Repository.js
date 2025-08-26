@@ -13,6 +13,7 @@ export const GetCompany = async (id) =>
                 id:id
             },
             select:{
+                id:true,
                 name:true,
                 email:true,
                 image:true,
@@ -181,6 +182,7 @@ export const UpdateCompany = async (id,data) =>
                 id:id,
             },
             select:{
+                id:true,
                 name:true,
                 email:true,
                 image:true,
@@ -212,6 +214,7 @@ export const DeleteCompany = async (id) =>
             }
         })
 
+
         if(!company)
         {
             const error = new Error("company not found")
@@ -231,6 +234,26 @@ export const DeleteCompany = async (id) =>
             id:deletedCompany.id
         }
     } 
+    catch (error) {
+        throw error
+    }
+}
+
+export const getCompanyFollowers = async (companyId) =>
+{
+    try {
+        const followers = await prisma.user.findMany({
+            where:{
+                followings:{
+                    some:{
+                        id:companyId
+                    }
+                }
+            }
+        })    
+
+        return followers
+    }
     catch (error) {
         throw error
     }

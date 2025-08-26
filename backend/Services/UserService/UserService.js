@@ -1,4 +1,4 @@
-import { UpdateProfile, DeleteProfile, SignIn, SignUp } from "../../Repositories/UserRepository/User.Repository.js"
+import { UpdateProfile, DeleteProfile, SignIn, SignUp, FollowCompany, GetFollowedCompanies, UnfollowCompany } from "../../Repositories/UserRepository/User.Repository.js"
 import { validateEmail } from "../../Utils/Validations/emailValidation.js"
 import { ValidateName } from "../../Utils/Validations/nameValidation.js"
 import { validatePassword } from "../../Utils/Validations/passwordValidation.js"
@@ -73,6 +73,45 @@ export const deleteProfile = async (id) =>
         
         return result
     } 
+    catch (error) {
+        console.log("error❌", error.message)
+        throw error
+    }
+}
+
+export const followCompany = async (userId,companyId) =>
+{
+    try {
+        const result = await FollowCompany(userId,companyId)
+
+        return result
+    }
+    catch (error) {
+        console.log("error❌", error.message)
+        throw error
+    }
+}
+
+export const getFollowedCompanies = async (userId) =>
+{
+    try {
+        const result = await GetFollowedCompanies(userId)
+
+        return result
+    }
+    catch (error) {
+        console.log("error❌", error.message)
+        throw error
+    }
+}
+
+export const unFollowCompany = async (userId,companyId) =>
+{
+    try {
+        const result = await UnfollowCompany(userId,companyId)
+
+        return result
+    }
     catch (error) {
         console.log("error❌", error.message)
         throw error

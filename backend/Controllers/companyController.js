@@ -1,4 +1,4 @@
-import { GetCompanyProfile , CreateNewCompany , LogInAsCompany, UpdateCompanyProfile , DeleteCompanyProfile } from "../Services/CompanyService/CompanyService.js"
+import { GetCompanyProfile , CreateNewCompany , LogInAsCompany, UpdateCompanyProfile , DeleteCompanyProfile, GetCompanyFollowers } from "../Services/CompanyService/CompanyService.js"
 export const getCompany = async (req,res,next) =>
 {
     try {
@@ -62,6 +62,22 @@ export const deleteCompany = async (req,res,next) =>
         const result = await DeleteCompanyProfile(req.user.id)
 
         res.status(result.status).json({
+            result
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
+export const getCompanyFollowers = async (req,res,next) =>
+{
+    try {
+        const companyId = req.user.id
+
+        const result = await GetCompanyFollowers(companyId)
+
+        res.status(200).json({
             result
         })
     } 
