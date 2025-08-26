@@ -1,6 +1,6 @@
-import { prisma } from "../../prisma/prismaClient"
+import { prisma } from "../../prisma/prismaClient.js"
 
-export const createApplication = async (id,jobId,data) =>
+export const CreateApplication = async (id,jobId,data) =>
 {
     try {
         const user = await prisma.user.findUnique({

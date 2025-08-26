@@ -1,6 +1,6 @@
 import { prisma } from "../../prisma/prismaClient.js"
 
-export const CreateJob = async (id,data) =>
+export const CreateJob = async (companyId,data) =>
 {
     try {
         if(data.minimum_years_required < 0)
@@ -24,9 +24,11 @@ export const CreateJob = async (id,data) =>
                 minimum_years_required:data.minimum_years_required || null,
                 salary:data.salary || null,
                 job_status:"pending",
+                type:data.type,
+                location: data.location || "remote",
                 Company:{
                     connect:{
-                        id:id
+                        id:companyId
                     }
                 },
                 skills:{
@@ -68,6 +70,8 @@ export const GetJobsByCategory = async (categoryId) =>
                 minimum_years_required: true,
                 salary:true,
                 skills:true,
+                type:true,
+                location:true,
                 Company:{
                     select:{
                         image:true,
@@ -98,6 +102,8 @@ export const GetJob = async (id) =>
                 minimum_years_required: true,
                 salary:true,
                 skills:true,
+                type:true,
+                location:true,
                 Company:{
                     select:{
                         image:true,
@@ -136,13 +142,30 @@ export const DeleteJob = async (id) =>
 export const DeleteAllJobs = async (companyId) =>
 {
     try {
+        const company = await prisma.company.findUnique({
+            where:{
+                id:companyId
+            }
+        })
+
+        if(!company)
+        {
+            const error = new Error("company not found")
+            error.status = 404
+            throw error
+        }
+
         const deletedJobs = await prisma.job.deleteMany({
         where:{
             companyId
         }
     })
 
-    return deletedJobs        
+    return {
+        status: 200,
+        message: "deleted all jobs successfully",
+        deletedJobs
+    }       
     } 
     catch (error) {
         throw error    
@@ -163,6 +186,8 @@ export const GetCompanyJobs = async (companyId) =>
                 minimum_years_required: true,
                 salary:true,
                 skills:true,
+                type:true,
+                location:true,
             }
         })    
 
@@ -173,25 +198,18 @@ export const GetCompanyJobs = async (companyId) =>
     }
 }
 
-export const SearchJobs = async (title, minSalary, maxSalary,minYearsRequired, maxYearsRequired) =>
+export const SearchJobs = async (title,type = null,location = null) =>
 {
     try {
         const jobs = await prisma.job.findMany({
-            where: {
-                ...(title && { title: { contains: title, mode: "insensitive" } }),
-                ...(minSalary || maxSalary ? { 
-                    salary: {
-                    ...(minSalary && { gte: minSalary }),
-                    ...(maxSalary && { lte: maxSalary })
-                    }
-                } : {}),
-                ...(minYearsRequired || maxYearsRequired ? {
-                    minimum_years_required: {
-                    ...(minYearsRequired && { gte: minYearsRequired }),
-                    ...(maxYearsRequired && { lte: maxYearsRequired })
-                    }
-                } : {})
-                }
+            where:{
+                title:{
+                    contains:title,
+                    mode:"insensitive"
+                },
+                ...(type && {type}),
+                ...(location && {location})
+            }
         })
 
         return jobs
@@ -201,7 +219,7 @@ export const SearchJobs = async (title, minSalary, maxSalary,minYearsRequired, m
     }
 }
 
-export const GetSkillsJobs = async (skillIds) =>
+export const GetSkillsJobs = async (skillsIds) =>
 {
     try {
         const jobs = await prisma.job.findMany({
@@ -209,8 +227,24 @@ export const GetSkillsJobs = async (skillIds) =>
                 skills:{
                     some:{
                         id:{
-                            in:skillIds
+                            in:skillsIds
                         }
+                    }
+                }
+            },
+            select:{
+                id:true,
+                title:true,
+                description:true,
+                minimum_years_required: true,
+                salary:true,
+                skills:true,
+                type:true,
+                location:true,
+                Company:{
+                    select:{
+                        image:true,
+                        name:true,
                     }
                 }
             }

@@ -158,7 +158,7 @@ export const UpdateProfile = async (id,data)=>
 
         if(data.bio)
         {
-            dataToUpdate.bio =  data.bio
+            dataToUpdate.bio = data.bio
         }
 
         if(data.years_of_experience)

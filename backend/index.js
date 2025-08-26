@@ -9,6 +9,7 @@ import categoryRouter from "./Routes/CategoryRoute.js"
 import path from "path"
 import skillRouter from "./Routes/SkillRoute.js"
 import adminRouter from "./Routes/AdminRoute.js"
+import applicationRoute from "./Routes/ApplicationRoute.js"
 
 const app = express()
 dotenv.config()
@@ -26,6 +27,7 @@ app.use("/api/jobs",jobRouter)
 app.use("/api/categories",categoryRouter)
 app.use("/api/skills",skillRouter)
 app.use("/api/admins",adminRouter)
+app.use("/api/applications",applicationRoute)
 
 //error handling
 app.use(errorHandler)

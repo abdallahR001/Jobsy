@@ -24,6 +24,7 @@ model User {
   years_of_experience Int?
   title String?
   bio String?
+  followings Company[]
   created_at DateTime @default(now())
 
   applications Application[]
@@ -38,6 +39,8 @@ model Job {
   description String 
   minimum_years_required Int?
   salary Int?
+  type String
+  location String
   job_status String
   created_at DateTime @default(now())
 
@@ -59,6 +62,7 @@ model Company {
   employees_count Int?
   created_at DateTime @default(now())
 
+  followers User[]
   jobs Job[]
 }
 
@@ -85,13 +89,6 @@ model Skill {
   
   user User[]
   job Job[]
-}
-
-model CompanyFollowers {
-  companyId String 
-  userId String
-
-  @@id([companyId,userId])
 }
 
 model Category {
