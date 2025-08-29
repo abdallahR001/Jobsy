@@ -1,10 +1,10 @@
-import Header from "./Components/Header/Header";
+import Main from "./components/LandingPageMainSection/LandingPageMainSection";
 
 export default function Home() {
   
   return (
     <>
-      <h1>hello, Jobsy</h1>
+      <Main />
     </>
   );
 }
