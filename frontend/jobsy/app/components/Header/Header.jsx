@@ -1,12 +1,23 @@
 "use client"
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 export default function Header (){
     const [open,setOpen] = useState(false)
 
+    const pathName = usePathname()
+
+    const hideHeaderIn = [
+        "/register/jobseeker",
+        "register/employer"
+    ]
+
     const navLinks = [
         // we will add nav links later on
     ]
+
+    if(hideHeaderIn.includes(pathName))
+        return null
 
     return(
         <header className="fixed w-full bg-white shadow-md">

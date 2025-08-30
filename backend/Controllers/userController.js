@@ -99,7 +99,7 @@ export const UnFollowCompany = async (req,res,next) =>
         const {companyId} = req.params
 
         const result = await unFollowCompany(userId,companyId)
-        
+    
         res.status(result.status).json({
             result
         })
