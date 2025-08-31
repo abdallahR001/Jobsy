@@ -11,11 +11,11 @@ export default function JobSeekerRegisterForm(){
                 </div>
                 {/* email */}
                 <div>
-                    <input type="email" placeholder="email..." className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none" />
+                    <input type="email" placeholder="email..." className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 transition-all duration-500" />
                 </div>
                 {/* password */}
                 <div>
-                    <input type="password" placeholder="password..." className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none" />
+                    <input type="password" placeholder="password..." className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 transition-all duration-500" />
                 </div>
                 {/* submit button */}
                 <button type="submit" className="w-full bg-indigo-500 text-white py-3 rounded-lg font-semibold hover:bg-indigo-600 transition-all duration-500 cursor-pointer">
@@ -24,7 +24,7 @@ export default function JobSeekerRegisterForm(){
             </form>
             <p className="text-center text-sm text-gray-600 mt-6">
                 Already have an account?
-                <Link href={"/login"} className="text-indigo-500 font-medium hover:underline ml-1">
+                <Link href={"/login/jobseeker"} className="text-indigo-500 font-medium hover:underline ml-1">
                     login
                 </Link>
             </p>
