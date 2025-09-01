@@ -35,7 +35,7 @@ export const LogIn = async(credintials)=>
         return result
     } 
     catch (error) {
-        console.log("error❌", error.message)
+        console.log("error❌", error)
         throw error
     }
 }

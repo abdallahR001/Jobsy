@@ -24,9 +24,11 @@ model User {
   years_of_experience Int?
   title String?
   bio String?
-  followings Company[]
+  location String?
+
   created_at DateTime @default(now())
 
+  followings Company[]
   applications Application[]
   skills Skill[]
 }

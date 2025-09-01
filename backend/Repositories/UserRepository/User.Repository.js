@@ -190,7 +190,7 @@ export const UpdateProfile = async (id,data)=>
         return {
             status:200,
             message:"updated user profile successfully",
-            data: updatedUser
+            updatedUser
         }
     }
     catch (error) {

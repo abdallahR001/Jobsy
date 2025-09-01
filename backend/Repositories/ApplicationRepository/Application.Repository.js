@@ -221,8 +221,26 @@ export const AcceptApplication = async (id) =>
             throw error
         }
 
+        const job = await prisma.job.findUnique({
+            where:{
+                id:application.jobId
+            }
+        })
+
+        if(!job)
+        {
+            const error = new Error("job not found")
+            error.status = 404
+            throw error
+        }
+
         if(application.status === "accepted")
-            return application
+            return {
+                status: 400,
+                message: "already accepted",
+                application,
+                job
+            }
 
         const updatedApplication = await prisma.application.update({
             where:{
@@ -233,7 +251,21 @@ export const AcceptApplication = async (id) =>
             }
         })
 
-        return updatedApplication
+        const updatedJob = await prisma.application.update({
+            where:{
+                id:jobId
+            },
+            data:{
+                status:"hired"
+            }
+        })
+
+        return {
+            status: 200,
+            message: "accepted successfully",
+            updatedApplication,
+            updatedJob
+        }
     } 
     catch (error) {
         throw error    

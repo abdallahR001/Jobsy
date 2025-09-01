@@ -5,7 +5,7 @@ export const createAccount = async(req,res,next) =>
         const result = await CreateAccount(req.body)    
 
         res.status(result.status).json({
-            result
+            message:result.message
         })
     } 
     catch (error) {
@@ -19,7 +19,8 @@ export const logIn = async(req,res,next) =>
         const result = await LogIn(req.body)
         
         res.status(result.status).json({
-            result
+            message:result.message,
+            token: result.token
         })
     } 
     catch (error) {
@@ -53,7 +54,8 @@ export const UpdateProfile = async (req,res,next) =>
         const result = await updateProfile(req.user.id,data)
 
         res.status(result.status).json({
-            result
+            message:result.message,
+            updatedUser:result.updatedUser
         })
     } 
     catch (error) {
