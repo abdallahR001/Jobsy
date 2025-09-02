@@ -1,4 +1,4 @@
-import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, unFollowCompany, getFollowedCompanies } from "../Services/UserService/UserService.js"
+import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, unFollowCompany, getFollowedCompanies, saveJob, unSaveJob, getSavedJobs } from "../Services/UserService/UserService.js"
 export const createAccount = async(req,res,next) =>
 {
     try {
@@ -127,3 +127,56 @@ export const GetFollowedCompanies = async (req,res,next) =>
     }
 }
 
+export const SaveJob = async (req,res,next) =>
+{
+    try {
+        const userId = req.user.id
+        
+        const {jobId} = req.params
+
+        const result = await saveJob(userId,jobId)
+
+        res.status(200).json({
+            message:"saved job successfully",
+            user: result
+        })
+    } 
+    catch (error) {
+        next(error)
+    }
+}
+
+export const UnSaveJob = async (req,res,next) =>
+{
+    try {
+        const userId = req.user.id
+        
+        const {jobId} = req.params
+
+        const result = await unSaveJob(userId,jobId)
+
+        res.status(200).json({
+            message:"unsaved job successfully",
+            user: result
+        })
+    } 
+    catch (error) {
+        next(error)
+    }
+}
+
+export const GetSavedJobs = async (req,res,next) =>
+{
+    try {
+        const userId = req.user.id
+
+        const result = await getSavedJobs(userId)
+
+        res.status(200).json({
+            savedJobs:result
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}

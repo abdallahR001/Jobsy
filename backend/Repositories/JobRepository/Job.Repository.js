@@ -17,7 +17,8 @@ export const CreateJob = async (companyId,data) =>
             throw error
         }
         const {skills} = data
-        const NewJob = await prisma.job.create({
+
+        let NewJob = await prisma.job.create({
             data:{
                 title:data.title,
                 description:data.description,
@@ -31,9 +32,6 @@ export const CreateJob = async (companyId,data) =>
                         id:companyId
                     }
                 },
-                skills:{
-                    connect:skills.map((id) =>({id}))
-                },
                 Category:{
                     connect:{
                         id:data.categoryId
@@ -44,6 +42,20 @@ export const CreateJob = async (companyId,data) =>
                 skills:true
             }
         })
+
+        if(skills)
+        {
+            await prisma.job.update({
+                where:{
+                    id:NewJob.id
+                },
+                data:{
+                    skills:{
+                    connect:skills.map((id) =>({id}))
+                },
+                }
+            })
+        }
 
         return {
             status:201,

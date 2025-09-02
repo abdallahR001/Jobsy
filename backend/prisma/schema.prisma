@@ -25,9 +25,10 @@ model User {
   title String?
   bio String?
   location String?
-
   created_at DateTime @default(now())
 
+
+  savedJobs Job[]
   followings Company[]
   applications Application[]
   skills Skill[]
@@ -48,7 +49,7 @@ model Job {
 
   Company Company @relation(fields: [companyId], references: [id],onDelete: Cascade)
   Category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
+  savedBy User[]
   applications Application[]
   skills Skill[]
 }

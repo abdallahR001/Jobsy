@@ -115,6 +115,14 @@ export const GetProfile = async(id)=>
                 image:true,
                 years_of_experience:true,
                 created_at:true,
+                savedJobs:true,
+                _count:{
+                    select:{
+                        applications:true,
+                        followings:true,
+                        savedJobs:true
+                    }
+                }
             }
         })
 
@@ -394,5 +402,156 @@ export const UnfollowCompany = async (userId,companyId) =>
     } 
     catch (error) {
         throw error    
+    }
+}
+
+export const SaveJob = async(userId,jobId) =>
+{
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            }
+        })
+
+        if(!user)
+        {
+            const error = new Error("user not found")
+            error.status= 404
+            throw error
+        }
+
+        const job = await prisma.job.findUnique({
+            where:{
+                id:jobId
+            }
+        })
+
+        if(!job)
+        {
+            const error = new Error("job not found")
+            error.status= 404
+            throw error
+        }
+
+        const updatedUser = await prisma.user.update({
+            where:{
+                id:userId
+            },
+            select:{
+                first_name:true,
+                last_name:true,
+                email:true,
+                image:true,
+                bio:true,
+                years_of_experience:true,
+                title:true,
+                savedJobs:true
+            },
+            data:{
+                savedJobs:{
+                    connect:{
+                        id:jobId
+                    }
+                }
+            }
+        })
+
+        return updatedUser
+    } 
+    catch (error) {
+        throw error    
+    }
+}
+
+export const UnSaveJob = async(userId,jobId) =>
+{
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            }
+        })
+
+        if(!user)
+        {
+            const error = new Error("user not found")
+            error.status= 404
+            throw error
+        }
+
+        const job = await prisma.job.findUnique({
+            where:{
+                id:jobId
+            }
+        })
+
+        if(!job)
+        {
+            const error = new Error("job not found")
+            error.status = 404
+            throw error
+        }
+
+        const updatedUser = await prisma.user.update({
+            where:{
+                id:userId
+            },
+            select:{
+                first_name:true,
+                last_name:true,
+                email:true,
+                image:true,
+                bio:true,
+                years_of_experience:true,
+                title:true,
+                savedJobs:true
+            },
+            data:{
+                savedJobs:{
+                    disconnect:{
+                        id:jobId
+                    }
+                }
+            }
+        })
+
+        return updatedUser
+    } 
+    catch (error) {
+        throw error    
+    }
+}
+
+export const GetSavedJobs = async (userId) =>
+{
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            }
+        })
+
+        if(!user)
+        {
+            const error = new Error("user not found")
+            error.status= 404
+            throw error
+        }
+
+        const savedJobs = await prisma.job.findMany({
+            where:{
+                savedBy:{
+                    some:{
+                        id:userId
+                    }
+                }
+            }
+        })
+
+        return savedJobs
+    } 
+    catch (error) {
+        throw error
     }
 }
