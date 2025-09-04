@@ -1,3 +1,4 @@
+import { prisma } from "../prisma/prismaClient.js"
 import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, unFollowCompany, getFollowedCompanies, saveJob, unSaveJob, getSavedJobs } from "../Services/UserService/UserService.js"
 export const createAccount = async(req,res,next) =>
 {
@@ -13,14 +14,45 @@ export const createAccount = async(req,res,next) =>
     }
 }
 
+export const me = async(req,res,next) =>
+{
+    try {
+        console.log(req.cookies)
+        const user = await prisma.user.findUnique({
+            where:{
+                id:req.user.id
+            },
+            select:{
+                id:true,
+                first_name:true,
+                last_name:true,
+                image:true,
+            }
+        })    
+
+        res.status(200).json({
+            id:user.id,
+            first_name:user.first_name,
+            last_name:user.last_name,
+            image:user.image,
+        })
+
+        return user
+    } 
+    catch (error) {
+        next(error)
+    }
+}
+
 export const logIn = async(req,res,next) =>
 {
     try {
         const result = await LogIn(req.body)
-        
-        res.status(result.status).json({
-            message:result.message,
-            token: result.token
+        res.cookie("token",result.token,{
+            httpOnly:true,
+            secure:false
+        }).json({
+            message:"logged in successfully",
         })
     } 
     catch (error) {

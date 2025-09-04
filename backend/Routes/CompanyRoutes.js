@@ -2,14 +2,34 @@ import { Router } from "express";
 import { createCompany, deleteCompany, getCompany, getCompanyFollowers, logIn, updateCompany } from "../Controllers/companyController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
+import multer from "multer";
+import path from "path"
+import fs from "fs";
 
 const companyRouter = Router()
 
-companyRouter.get("/",authMiddleWare,getCompany)
+const uploadDir = path.join(process.cwd(), "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+    destination:(req,file,cb) =>{
+        cb(null,uploadDir)
+    },
+    filename:(req,file,cb) =>
+    {
+        cb(null,file.originalname + "-" + Date.now())
+    },
+})
+
+const upload = multer({storage})
+
+companyRouter.get("/",authMiddleWare,authorizeRoles("company"),getCompany)
 companyRouter.post("/",createCompany)
 companyRouter.post("/login",logIn)
-companyRouter.put("/",authMiddleWare,updateCompany)
-companyRouter.delete("/",authMiddleWare,deleteCompany)
+companyRouter.put("/",authMiddleWare,authorizeRoles("company"),upload.single("image"),updateCompany)
+companyRouter.delete("/",authMiddleWare,authorizeRoles("company"),deleteCompany)
 companyRouter.get("/followers",authMiddleWare,authorizeRoles("company"),getCompanyFollowers)
 
 export default companyRouter

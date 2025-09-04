@@ -10,6 +10,7 @@ import path from "path"
 import skillRouter from "./Routes/SkillRoute.js"
 import adminRouter from "./Routes/AdminRoute.js"
 import applicationRoute from "./Routes/ApplicationRoute.js"
+import cookieParser from "cookie-parser"
 
 const app = express()
 dotenv.config()
@@ -17,8 +18,12 @@ dotenv.config()
 const PORT = process.env.PORT || 4000
 //middlewares
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin:"http://localhost:3000",
+    credentials:true
+}))
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+app.use(cookieParser())
 
 //routes
 app.use("/api/users",userRouter)
@@ -31,7 +36,6 @@ app.use("/api/applications",applicationRoute)
 
 //error handling
 app.use(errorHandler)
-
 
 app.listen(PORT,async () =>
 {

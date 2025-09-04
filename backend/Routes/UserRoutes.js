@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, UnFollowCompany, GetFollowedCompanies, SaveJob, UnSaveJob, GetSavedJobs } from "../Controllers/userController.js";
+import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, UnFollowCompany, GetFollowedCompanies, SaveJob, UnSaveJob, GetSavedJobs, me } from "../Controllers/userController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import multer from "multer";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
@@ -28,6 +28,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 userRouter.get("/profile",authMiddleWare,GetProfile)
+userRouter.get("/me",authMiddleWare,authorizeRoles("user"),me)
 userRouter.post("/signUp", createAccount)
 userRouter.post("/signIn",logIn)
 userRouter.put("/update-profile",authMiddleWare,upload.single("image"),authorizeRoles("user"),UpdateProfile)

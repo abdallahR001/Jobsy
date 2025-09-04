@@ -2,16 +2,9 @@ import jwt from "jsonwebtoken"
 
 export const authMiddleWare = (req,res,next) =>
 {
-    const authHeader = req.headers["authorization"]
-
-    if(!authHeader)
-    {
-        return res.status(401).json({
-            message:"missing authorization header"
-        })
-    }
-
-    const token = authHeader.split(" ")[1]
+    console.log(req.cookies)
+    
+    const token = req.cookies.token
 
     if(!token)
     {

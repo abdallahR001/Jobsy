@@ -32,8 +32,11 @@ export const logIn = async (req,res,next) =>
     try {
         const result = await LogInAsCompany(req.body)
 
-        res.status(result.status).json({
-            result
+        res.status(result.status).cookie("token",result.token,{
+            httpOnly: true,
+            secure:false
+        }).json({
+            message:result.message
         })
     } 
     catch (error) {
