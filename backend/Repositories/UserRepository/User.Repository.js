@@ -21,7 +21,8 @@ export const SignUp = async (newUser)=>
                     first_name: newUser.first_name,
                     last_name: newUser.last_name,
                     email: newUser.email,
-                    password:hashedPassword
+                    password:hashedPassword,
+                    hasSeenOnboarding:false
                 }
             })
             const token = jwt.sign({

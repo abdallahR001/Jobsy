@@ -13,7 +13,12 @@ export default function Header (){
         "/register/jobseeker",
         "/register/employer",
         "/login/jobseeker",
-        "/login/employer"
+        "/login/employer",
+        "/onboarding/step1",
+        "/onboarding/step2",
+        "/onboarding/step3",
+        "/onboarding/step4",
+        "/onboarding/step5",
     ]
     useEffect(() =>
     {
@@ -77,8 +82,27 @@ export default function Header (){
                 <button onClick={()=>setOpen(!open)} className="md:hidden text-gray-700 font-medium">{open ? "close" : "menu"}</button>
                 {/* mobile nav */}
                     <nav className={`fixed top-0 right-0 w-[70%] h-full flex flex-col gap-6 px-4 pb-4 md:hidden bg-gray-50 transition-transform duration-500 ease-in-out ${open ? "translate-x-0 ": "translate-x-full"}`}>
-                        <Link href={"/login/jobseeker"} className="text-gray-700 hover:text-indigo-600 transition-colors duration-300" onClick={()=>setOpen(false)}>Login</Link>
-                        <Link href={"/join"} className="text-gray-700 hover:text-indigo-600 transition-colors duration-300" onClick={()=>setOpen(false)}>Join</Link>
+                        {
+                            user ? 
+                            <Link href={"/profile"} className="flex items-center gap-8 py-2">
+                                <h1>{`${user.first_name} ${user.last_name}`}</h1>
+                                {
+                                    user.image ? <Image 
+                                    src={`http://localhost:4000/${user.image}`}
+                                    width={40}
+                                    height={40}
+                                    alt="profile"
+                                    className="rounded-full"
+                                    />: <div className="rounded-full w-[40px] h-[40px] bg-gray-300"></div> 
+                                }
+                            </Link>
+                            :
+                            <>
+                                <Link href={"/login/jobseeker"} className="text-gray-700 hover:text-indigo-600 transition-colors duration-300" onClick={()=>setOpen(false)}>Login</Link>
+                                <Link href={"/join"} className="text-gray-700 hover:text-indigo-600 transition-colors duration-300" onClick={()=>setOpen(false)}>Join</Link>
+                            </>
+                        }
+                        
                         <button onClick={() => setOpen(false)} className="text-gray-70 text-left mt-7">close</button>
                     </nav>
                 

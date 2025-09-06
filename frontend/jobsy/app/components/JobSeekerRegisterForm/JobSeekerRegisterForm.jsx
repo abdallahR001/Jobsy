@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 export default function JobSeekerRegisterForm(){
     const [first_name,setFirstName] = useState("")
@@ -10,7 +11,8 @@ export default function JobSeekerRegisterForm(){
     const [emailError,setEmailError] = useState(false)
     const [passwordError,setPasswordError] = useState(false)
     const [loading,setLoading] = useState(false)
-    const [result,setResult] = useState(null)
+
+    const router = useRouter()
 
     const handleFirstNameChange = (e) =>
     {
@@ -66,7 +68,6 @@ export default function JobSeekerRegisterForm(){
             }
 
             setErrorMessage("")
-            setResult(null)
             setLoading(true)
 
             const response = await fetch("http://localhost:4000/api/users/signUp",
@@ -80,7 +81,8 @@ export default function JobSeekerRegisterForm(){
                     method:"POST",
                     headers:{
                         "content-type":"application/json"
-                    }
+                    },
+                    credentials:"include"
                 }
             )
 
@@ -93,13 +95,18 @@ export default function JobSeekerRegisterForm(){
                 return
             }
 
-            setResult(data)
             setLoading(false)
             setEmailError(false)
             setPasswordError(false)
+
+            localStorage.setItem("userName",first_name)
+
+            window.location.replace("/onboarding/step1")
         } 
         catch (error) {
             setErrorMessage("something wrong happened, please try again later")
+            console.log(error)
+            setLoading(false)
         }
     }
     return (
@@ -109,9 +116,6 @@ export default function JobSeekerRegisterForm(){
                 <h1>{errorMessage}</h1>
             </div>
 
-            <div className="text-green-500 text-center font-semibold text-lg mb-5">
-                <h1>{result && result.message}</h1>
-            </div>
             <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
                 {/* first name + last name */}
                 <div className="flex flex-col md:flex-row border border-gray-300 rounded-lg overflow-hidden">

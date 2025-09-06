@@ -5,12 +5,39 @@ export const createAccount = async(req,res,next) =>
     try {
         const result = await CreateAccount(req.body)    
 
-        res.status(result.status).json({
+        res.status(201).cookie("token",result.token,{
+            httpOnly:true,
+            secure:false
+        }).json({
             message:result.message
         })
     } 
     catch (error) {
         next(error)
+    }
+}
+
+export const onBoardingPage = async (req,res,next) =>
+{
+    try {
+        const userId = req.user.id
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            },
+            select:{
+                first_name:true,
+                hasSeenOnboarding:true
+            }
+        })
+
+        res.status(200).json({
+            id:userId,
+            name: user.first_name
+        })
+    } 
+    catch (error) {
+        next(error)    
     }
 }
 

@@ -25,6 +25,7 @@ model User {
   title String?
   bio String?
   location String?
+  hasSeenOnboarding Boolean
   created_at DateTime @default(now())
 
 
