@@ -180,18 +180,9 @@ export const UpdateProfile = async (id,data)=>
             dataToUpdate.image = data.image
         }
 
-        const updatedUser = await prisma.user.update({
+        await prisma.user.update({
             where:{
                 id:id
-            },
-            select:{
-                first_name:true,
-                last_name:true,
-                email:true,
-                image:true,
-                bio:true,
-                years_of_experience:true,
-                title:true
             },
             data: dataToUpdate
         })
@@ -199,7 +190,6 @@ export const UpdateProfile = async (id,data)=>
         return {
             status:200,
             message:"updated user profile successfully",
-            updatedUser
         }
     }
     catch (error) {

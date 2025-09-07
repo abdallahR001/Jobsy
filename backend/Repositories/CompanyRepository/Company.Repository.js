@@ -177,6 +177,9 @@ export const UpdateCompany = async (id,data) =>
         if(data.employees_count)
             dataToUpdate.employees_count = data.employees_count
 
+        if(data.image)
+            dataToUpdate.image = data.image
+
         const updatedCompany = await prisma.company.update({
             where:{
                 id:id,

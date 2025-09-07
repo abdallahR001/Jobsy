@@ -47,7 +47,14 @@ export const logIn = async (req,res,next) =>
 export const updateCompany = async (req,res,next) =>
 {
     try {
-        const result = await UpdateCompanyProfile(req.user.id,req.body)
+        const data = req.body
+
+        const companyId = req.user.id
+
+        const result = await UpdateCompanyProfile(companyId,data)
+
+        if(req.file)
+            data.image = `uploads/${req.file.filename}`
 
         res.status(result.status).json({
             result

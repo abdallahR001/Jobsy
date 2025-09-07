@@ -19,6 +19,7 @@ export default function Header (){
         "/onboarding/step3",
         "/onboarding/step4",
         "/onboarding/step5",
+        "/onboarding/step6",
     ]
     useEffect(() =>
     {

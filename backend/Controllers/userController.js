@@ -114,7 +114,6 @@ export const UpdateProfile = async (req,res,next) =>
 
         res.status(result.status).json({
             message:result.message,
-            updatedUser:result.updatedUser
         })
     } 
     catch (error) {

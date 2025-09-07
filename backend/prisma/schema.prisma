@@ -21,7 +21,7 @@ model User {
   email String @unique
   password String
   image String?
-  years_of_experience Int?
+  years_of_experience String?
   title String?
   bio String?
   location String?
