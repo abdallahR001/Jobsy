@@ -45,7 +45,9 @@ export const onBoardingPage = async (req,res,next) =>
 export const me = async(req,res,next) =>
 {
     try {
-        const user = await prisma.user.findUnique({
+        if(req.user.role === "user")
+        {
+            const user = await prisma.user.findUnique({
             where:{
                 id:req.user.id
             },
@@ -62,9 +64,32 @@ export const me = async(req,res,next) =>
             first_name:user.first_name,
             last_name:user.last_name,
             image:user.image,
+            type:"user"
         })
 
         return user
+        }
+
+        else if(req.user.role === "company")
+        {
+            const company = await prisma.company.findUnique({
+                where:{
+                    id:req.user.id
+                },
+                select:{
+                    id:true,
+                    name:true,
+                    image:true,
+                }
+            })
+
+            res.status(200).josn({
+                id:company.id,
+                name:company.name,
+                image:company.image,
+                type:"company"
+            })
+        }
     } 
     catch (error) {
         next(error)

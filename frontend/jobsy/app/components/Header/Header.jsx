@@ -23,6 +23,7 @@ export default function Header (){
         "/onboarding/users/step6",
         "/onboarding/employer/step1",
         "/onboarding/employer/step2",
+        "/onboarding/employer/step3",
     ]
     useEffect(() =>
     {
@@ -69,7 +70,7 @@ export default function Header (){
                     <div className="hidden md:flex gap-6 items-center">
                         {
                             user ? <Link className="flex items-center gap-5" href={"/profile"}>
-                                <h1>{user.first_name && user.last_name ?`${user.first_name} ${user.last_name}` : ""}</h1>
+                                <h1>{user.type === "user" ? user.first_name && user.last_name ?`${user.first_name} ${user.last_name}` : user.name ? `${user.name}` : "" : ""}</h1>
                                 {
                                     user.image ? <Image 
                                     src={`http://localhost:4000/${user.image}`}

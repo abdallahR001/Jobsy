@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 userRouter.get("/profile",authMiddleWare,GetProfile)
-userRouter.get("/onBoarding",authMiddleWare,authorizeRoles("user"),onBoardingPage)
+userRouter.get("/onBoarding",authMiddleWare,authorizeRoles("user","company"),onBoardingPage)
 userRouter.get("/me",authMiddleWare,authorizeRoles("user"),me)
 userRouter.post("/signUp", createAccount)
 userRouter.post("/signIn",logIn)

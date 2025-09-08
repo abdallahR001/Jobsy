@@ -34,6 +34,8 @@ export default function Step6(){
             return
         }
 
+        localStorage.clear()
+
         window.location.replace("/")
     }
 
