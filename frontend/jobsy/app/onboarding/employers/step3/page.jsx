@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function Step3(){
-    const [companyName, setCompanyName] = useState("")
     const [employeesCount,setEmployeesCount] = useState("")
 
     const router = useRouter()
@@ -20,7 +19,6 @@ export default function Step3(){
 
     useEffect(() =>
     {
-        setCompanyName(localStorage.getItem("companyName"))
         const fetchData = async ()=>
                 {
                     const response = await fetch("http://localhost:4000/api/companies/onBoarding",{
@@ -52,9 +50,7 @@ export default function Step3(){
     return(
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-indigo-50 to-white px-4">
       <h1 className="text-3xl font-bold text-center text-indigo-500 mb-6">
-        {companyName
-          ? `${companyName}, let's talk about your team!`
-          : "Let's talk about your team!"}
+        Let's talk about your team!
       </h1>
       <p className="text-gray-600 text-center mb-6">
         How many employees does your company have?
