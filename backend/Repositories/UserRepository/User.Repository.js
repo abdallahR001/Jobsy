@@ -166,25 +166,22 @@ export const UpdateProfile = async (id,data)=>
             dataToUpdate.title = data.title
 
         if(data.bio)
-        {
             dataToUpdate.bio = data.bio
-        }
 
         if(data.years_of_experience)
-        {
             dataToUpdate.years_of_experience = data.years_of_experience
-        }
 
         if(data.image)
-        {
             dataToUpdate.image = data.image
-        }
+
+        if(!user.hasSeenOnboarding)
+            dataToUpdate.hasSeenOnboarding = true
 
         await prisma.user.update({
             where:{
                 id:id
             },
-            data: dataToUpdate
+            data: dataToUpdate,
         })
 
         return {

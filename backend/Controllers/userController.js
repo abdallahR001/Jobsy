@@ -33,7 +33,8 @@ export const onBoardingPage = async (req,res,next) =>
 
         res.status(200).json({
             id:userId,
-            name: user.first_name
+            name: user.first_name,
+            hasSeenOnBoarding: user.hasSeenOnboarding
         })
     } 
     catch (error) {
@@ -44,7 +45,6 @@ export const onBoardingPage = async (req,res,next) =>
 export const me = async(req,res,next) =>
 {
     try {
-        console.log(req.cookies)
         const user = await prisma.user.findUnique({
             where:{
                 id:req.user.id

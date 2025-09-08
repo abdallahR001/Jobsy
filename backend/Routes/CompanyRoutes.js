@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCompany, deleteCompany, getCompany, getCompanyFollowers, logIn, updateCompany } from "../Controllers/companyController.js";
+import { createCompany, deleteCompany, getCompany, getCompanyFollowers, logIn, me, onBoardingPage, updateCompany } from "../Controllers/companyController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
 import multer from "multer";
@@ -26,6 +26,8 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 companyRouter.get("/",authMiddleWare,authorizeRoles("company"),getCompany)
+companyRouter.get("/onBoarding",authMiddleWare,authorizeRoles("company"),onBoardingPage)
+companyRouter.get("/me",authMiddleWare,authorizeRoles("company"),me)
 companyRouter.post("/",createCompany)
 companyRouter.post("/login",logIn)
 companyRouter.put("/",authMiddleWare,authorizeRoles("company"),upload.single("image"),updateCompany)

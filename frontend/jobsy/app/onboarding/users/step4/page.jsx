@@ -53,7 +53,7 @@ export default function step4(){
           <button
             onClick={() => {
               localStorage.setItem("bio", bio);
-              router.push("/onboarding/step5");
+              router.push("/onboarding/users/step5");
             }}
             disabled={!bio.trim()}
             className={`w-full py-3 rounded-lg font-medium transition ${

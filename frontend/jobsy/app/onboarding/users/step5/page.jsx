@@ -22,7 +22,7 @@ export default function step5(){
           <button
             onClick={() => {
               localStorage.setItem("experience", experience);
-              router.push("/onboarding/step6"); // الصفحة اللي بعدها
+              router.push("/onboarding/users/step6");
             }}
             disabled={!experience.trim()}
             className={`w-full py-3 rounded-lg font-medium transition ${

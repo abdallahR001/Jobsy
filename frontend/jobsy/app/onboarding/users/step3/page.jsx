@@ -53,7 +53,7 @@ export default function Step3(){
           <button
             onClick={() => {
               localStorage.setItem("location", location);
-              router.push("/onboarding/step5");
+              router.push("/onboarding/users/step4");
             }}
             disabled={!location.trim()}
             className={`w-full py-3 rounded-lg font-medium transition ${

@@ -63,7 +63,8 @@ model Company {
   description String?
   image String?
   website String?
-  employees_count Int?
+  employees_count String?
+  hasSeenOnboarding Boolean
   created_at DateTime @default(now())
 
   followers User[]

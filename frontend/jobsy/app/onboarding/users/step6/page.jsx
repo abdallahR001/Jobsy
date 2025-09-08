@@ -56,6 +56,7 @@ export default function Step6(){
                     if(data.hasSeenOnBoarding === true)
                       {
                         router.push("/profile")
+                        return
                       }
                     }
         fetchData()

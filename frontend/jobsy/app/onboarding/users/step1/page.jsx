@@ -80,7 +80,7 @@ export default function StepOne(){
             }`}
             onClick={() => {
                 localStorage.setItem("field",field)
-                router.push("/onboarding/step2")
+                router.push("/onboarding/users/step2")
             }}
           >
             Continue

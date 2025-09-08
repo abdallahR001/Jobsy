@@ -83,7 +83,8 @@ export const CreateCompany = async (data) =>
             data:{
                 name: data.name,
                 email: data.email,
-                password: hashedPassword
+                password: hashedPassword,
+                hasSeenOnboarding:false,
             }
         })
 
@@ -94,8 +95,7 @@ export const CreateCompany = async (data) =>
 
         return{
             status: 201,
-            token,
-            company,
+            token:token,
             message: "company created successfully"
         }
     } 

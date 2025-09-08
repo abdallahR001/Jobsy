@@ -24,6 +24,8 @@ export default function Step2(){
 
                 const data = await response.json()
 
+                console.log(data)
+
                 if(data.hasSeenOnBoarding === true)
                 {
                     router.push("/profile")
@@ -54,7 +56,7 @@ export default function Step2(){
           <button
             onClick={() => {
                 localStorage.setItem("title",title)
-                router.push("/onboarding/step3")
+                router.push("/onboarding/users/step3")
             }}
             disabled={!title.trim()}
             className={`w-full py-3 rounded-lg font-medium transition ${

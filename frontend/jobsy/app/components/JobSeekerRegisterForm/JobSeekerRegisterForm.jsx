@@ -9,10 +9,9 @@ export default function JobSeekerRegisterForm(){
     const [password,setPassword] = useState("")
     const [errorMessage,setErrorMessage] = useState("")
     const [emailError,setEmailError] = useState(false)
+    const [nameError,setNameError] = useState(false)
     const [passwordError,setPasswordError] = useState(false)
     const [loading,setLoading] = useState(false)
-
-    const router = useRouter()
 
     const handleFirstNameChange = (e) =>
     {
@@ -38,17 +37,13 @@ export default function JobSeekerRegisterForm(){
     {
         e.preventDefault()
         try {
+            setNameError(false)
             setEmailError(false)
             setPasswordError(false)
 
-            if(first_name.trim().length === 0)
+            if(first_name.trim().length === 0 || last_name.trim().length === 0)
             {
-                setErrorMessage("name cannot be empty")
-                return 
-            }
-
-            if(last_name.trim().length === 0)
-            {
+                setNameError(true)
                 setErrorMessage("name cannot be empty")
                 return 
             }
@@ -101,7 +96,7 @@ export default function JobSeekerRegisterForm(){
 
             localStorage.setItem("userName",first_name)
 
-            window.location.replace("/onboarding/step1")
+            window.location.replace("/onboarding/users/step1")
         } 
         catch (error) {
             setErrorMessage("something wrong happened, please try again later")
@@ -118,7 +113,7 @@ export default function JobSeekerRegisterForm(){
 
             <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
                 {/* first name + last name */}
-                <div className="flex flex-col md:flex-row border border-gray-300 rounded-lg overflow-hidden">
+                <div className={`flex flex-col md:flex-row border ${nameError ? "border-red-500" : "border-gray-300"} rounded-lg overflow-hidden duration-500 transition-all`}>
                     <input type="text" onChange={(e) => handleFirstNameChange(e)} placeholder="first name..." className="flex-1 px-4 py-3 focus:outline-none border-b md:border-b-0 md:border-r border-gray-300"/>
                     <input type="text" onChange={(e) => handleLastNameChange(e)} placeholder="last name..." className="flex-1 px-4 py-3 focus:outline-none" />
                 </div>
@@ -131,7 +126,7 @@ export default function JobSeekerRegisterForm(){
                     <input type="password" onChange={(e) => handlePasswordChange(e)} placeholder="password..." className={`w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:border-indigo-500 transition-all duration-500 ${passwordError ? "border-red-500" : "border-gray-300"}`} />
                 </div>
                 {/* submit button */}
-                <button type="submit" disabled={loading} className="disabled:bg-indigo-400 w-full bg-indigo-500 text-white py-3 rounded-lg font-semibold hover:bg-indigo-600 transition-all duration-500 cursor-pointer">
+                <button type="submit" disabled={loading || !first_name || !last_name || !email || !password} className="disabled:bg-indigo-400 disabled:cursor-not-allowed w-full bg-indigo-500 text-white py-3 rounded-lg font-semibold hover:bg-indigo-600 transition-all duration-500 cursor-pointer">
                     {
                         loading ? "wait a minute..." : "Create Account"
                     }

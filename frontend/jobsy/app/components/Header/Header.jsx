@@ -10,21 +10,27 @@ export default function Header (){
     const pathName = usePathname()
 
     const hideHeaderIn = [
+        "/join",
         "/register/jobseeker",
         "/register/employer",
         "/login/jobseeker",
         "/login/employer",
-        "/onboarding/step1",
-        "/onboarding/step2",
-        "/onboarding/step3",
-        "/onboarding/step4",
-        "/onboarding/step5",
-        "/onboarding/step6",
+        "/onboarding/users/step1",
+        "/onboarding/users/step2",
+        "/onboarding/users/step3",
+        "/onboarding/users/step4",
+        "/onboarding/users/step5",
+        "/onboarding/users/step6",
+        "/onboarding/employer/step1",
+        "/onboarding/employer/step2",
     ]
     useEffect(() =>
     {
+        if(hideHeaderIn.includes(pathName))
+            return
         const fetchUserData = async () =>
         {
+            
             try {
                 const response = await fetch("http://localhost:4000/api/users/me",{
                 credentials:"include"
