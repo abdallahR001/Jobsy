@@ -12,32 +12,32 @@ export const getCompany = async (req,res,next) =>
     }
 }
 
-export const me = async(req,res,next) =>
-{
-    try {
-        const company = await prisma.company.findUnique({
-            where:{
-                id:req.user.id
-            },
-            select:{
-                id:true,
-                name:true,
-                image:true,
-            }
-        })    
+// export const me = async(req,res,next) =>
+// {
+//     try {
+//         const company = await prisma.company.findUnique({
+//             where:{
+//                 id:req.user.id
+//             },
+//             select:{
+//                 id:true,
+//                 name:true,
+//                 image:true,
+//             }
+//         })    
 
-        res.status(200).json({
-            id:company.id,
-            companyName:company.name,
-            image:company.image,
-        })
+//         res.status(200).json({
+//             id:company.id,
+//             companyName:company.name,
+//             image:company.image,
+//         })
 
-        return company
-    } 
-    catch (error) {
-        next(error)
-    }
-}
+//         return company
+//     } 
+//     catch (error) {
+//         next(error)
+//     }
+// }
 
 export const onBoardingPage = async (req,res,next) =>
 {
@@ -102,10 +102,10 @@ export const updateCompany = async (req,res,next) =>
 
         const companyId = req.user.id
 
-        const result = await UpdateCompanyProfile(companyId,data)
-
         if(req.file)
             data.image = `uploads/${req.file.filename}`
+
+        const result = await UpdateCompanyProfile(companyId,data)
 
         res.status(result.status).json(result)
     } 

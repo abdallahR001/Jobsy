@@ -29,7 +29,7 @@ const upload = multer({storage})
 
 userRouter.get("/profile",authMiddleWare,GetProfile)
 userRouter.get("/onBoarding",authMiddleWare,authorizeRoles("user","company"),onBoardingPage)
-userRouter.get("/me",authMiddleWare,authorizeRoles("user"),me)
+userRouter.get("/me",authMiddleWare,authorizeRoles("user","company"),me)
 userRouter.post("/signUp", createAccount)
 userRouter.post("/signIn",logIn)
 userRouter.put("/update-profile",authMiddleWare,upload.single("image"),authorizeRoles("user"),UpdateProfile)

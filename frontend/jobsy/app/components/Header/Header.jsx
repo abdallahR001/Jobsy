@@ -26,6 +26,7 @@ export default function Header (){
         "/onboarding/employers/step3",
         "/onboarding/employers/step4",
         "/onboarding/employers/step5",
+        "/onboarding/employers/step6",
     ]
     useEffect(() =>
     {
@@ -39,13 +40,15 @@ export default function Header (){
                 credentials:"include"
             })
 
+            const me = await response.json()
+
+            console.log(me)
+
             if(!response.ok)
             {
                 setUser(null)
                 return
             }
-
-            const me = await response.json()
 
             setUser(me)
 
@@ -72,7 +75,7 @@ export default function Header (){
                     <div className="hidden md:flex gap-6 items-center">
                         {
                             user ? <Link className="flex items-center gap-5" href={"/profile"}>
-                                <h1>{user.type === "user" ? user.first_name && user.last_name ?`${user.first_name} ${user.last_name}` : user.name ? `${user.name}` : "" : ""}</h1>
+                                <h1>{user.type === "user" ? `${user.first_name} ${user.last_name}` : user.name ? `${user.name}` : "" }</h1>
                                 {
                                     user.image ? <Image 
                                     src={`http://localhost:4000/${user.image}`}
@@ -80,7 +83,7 @@ export default function Header (){
                                     height={40}
                                     alt="profile"
                                     className="rounded-full"
-                                    />: <div className="rounded-full w-[40px] h-[40px] bg-gray-300"></div>
+                                    />: <div className="rounded-full w-[40px] h-[40px] bg-gradient-to-t from-indigo-500 to-white"></div>
                                 }
                             </Link>:<>
                                 <Link href={"/login/jobseeker"} className="text-gray-700 hover:text-indigo-600 transition-colors duration-300" >Login</Link>

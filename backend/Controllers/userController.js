@@ -83,7 +83,7 @@ export const me = async(req,res,next) =>
                 }
             })
 
-            res.status(200).josn({
+            res.status(200).json({
                 id:company.id,
                 name:company.name,
                 image:company.image,
