@@ -1,4 +1,4 @@
-import { createJob, deleteAllJobs, deleteJob, getCompanyJobs, getJob, getJobsByCategory, getSkillsJobs } from "../Services/JobService/JobService.js"
+import { createJob, deleteAllJobs, deleteJob, getCompanyJobs, getJob, getJobsByCategory, getSkillsJobs, searchJobs } from "../Services/JobService/JobService.js"
 
 export const CreateJob = async (req,res,next) =>
 {
@@ -13,6 +13,21 @@ export const CreateJob = async (req,res,next) =>
     } 
     catch (error) {
         next(error)    
+    }
+}
+
+export const SearchJobs = async (req,res,next) =>
+{
+    try {
+        const {title,location,type} = req.query
+        const result = await searchJobs(title,type,location)
+        
+        res.status(200).json({
+            jobs:result
+        })
+    } 
+    catch (error) {
+        next(error)
     }
 }
 

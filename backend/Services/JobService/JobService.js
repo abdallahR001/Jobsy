@@ -92,7 +92,7 @@ export const getCompanyJobs = async (companyId) =>
 export const searchJobs = async (title,type = null,location = null) =>
 {
     try {
-        if(!title || title.trim().length <= 0)
+        if(!title || typeof title !== "string" || title.trim().length <= 0)
         {
             const error = new Error("title cannot be empty")
             error.status = 400
@@ -104,7 +104,7 @@ export const searchJobs = async (title,type = null,location = null) =>
         return result
     } 
     catch (error) {
-        console.log("error❌",error.message)    
+        console.log("error❌",error)    
         
         throw error
     }

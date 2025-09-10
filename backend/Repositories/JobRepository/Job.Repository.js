@@ -220,7 +220,15 @@ export const SearchJobs = async (title,type = null,location = null) =>
                     mode:"insensitive"
                 },
                 ...(type && {type}),
-                ...(location && {location})
+                ...(location &&{
+                    location:{
+                        contains:location,
+                        mode:"insensitive"
+                    }
+                })
+            },
+            include:{
+                Company:true
             }
         })
 
