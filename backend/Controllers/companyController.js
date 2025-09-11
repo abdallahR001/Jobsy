@@ -69,7 +69,10 @@ export const createCompany = async (req,res,next) =>
     try {
         const result = await CreateNewCompany(req.body)
 
-        res.status(result.status).cookie("token",result.token).json({
+        res.status(result.status).cookie("token",result.token,{
+            httpOnly:true,
+            secure:false
+        }).json({
             message:result.message,
         })
     } 
@@ -135,6 +138,59 @@ export const getCompanyFollowers = async (req,res,next) =>
         const result = await GetCompanyFollowers(companyId)
 
         res.status(200).json.json(result)
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
+export const dashBoard = async (req,res,next) =>
+{
+    try {
+        const companyId = req.user.id
+        const jobs = await prisma.job.count({
+            where:{
+                companyId:companyId
+            }
+        })
+
+        const activeJobs = await prisma.job.count({
+            where:{
+                AND:[
+                    {
+                        companyId
+                    },
+                    {
+                        job_status:"open"
+                    }
+                ]
+            }
+        })
+
+        const applicants = await prisma.application.count({
+            where:{
+                job:{
+                    companyId
+                }
+            }
+        })
+
+        const followers = await prisma.user.count({
+            where:{
+                followings:{
+                    some:{
+                        id:companyId
+                    }
+                }
+            }
+        })
+
+        res.status(200).json({
+            jobs,
+            activeJobs,
+            applicants,
+            followers
+        })
     } 
     catch (error) {
         next(error)    

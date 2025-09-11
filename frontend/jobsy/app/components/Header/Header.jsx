@@ -11,6 +11,7 @@ export default function Header (){
 
     const hideHeaderIn = [
         "/join",
+        "/dashboard",
         "/register/jobseeker",
         "/register/employer",
         "/login/jobseeker",

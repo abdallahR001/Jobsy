@@ -25,9 +25,9 @@ const prisma = new PrismaClient();
 
   // ===== Companies =====
   const companies = [
-    { name: "Techify", email: "hr@techify.com", password: "pass", hasSeenOnboarding: true },
-    { name: "Designly", email: "jobs@designly.com", password: "pass", hasSeenOnboarding: true },
-    { name: "MarketPro", email: "team@marketpro.com", password: "pass", hasSeenOnboarding: true },
+    { name: "Techify", email: "t@gmail.com", password: "12345678", hasSeenOnboarding: true },
+    { name: "Designly", email: "d@gmail.com", password: "12345678", hasSeenOnboarding: true },
+    { name: "MarketPro", email: "m@gmail.com", password: "12345678", hasSeenOnboarding: true },
   ];
   await prisma.company.createMany({ data: companies, skipDuplicates: true });
 
@@ -37,7 +37,7 @@ const prisma = new PrismaClient();
 
   const jobs = [
     {
-      title: "Frontend Developer",
+      title: "node js developer",
       description: "Work on amazing web apps",
       minimum_years_required: 2,
       salary: 8000,
@@ -48,8 +48,8 @@ const prisma = new PrismaClient();
       categoryId: categoryIds[0].id,
     },
     {
-      title: "Backend Developer",
-      description: "Node.js and database work",
+      title: "flutter developer",
+      description: "mobile development",
       minimum_years_required: 3,
       salary: 9000,
       type: "remote",

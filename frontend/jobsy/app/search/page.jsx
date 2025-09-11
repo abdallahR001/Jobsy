@@ -1,7 +1,6 @@
-import Link from "next/link";
 import MainSearch from "../components/SearchForm/MainSearch";
-import Image from "next/image";
 import JobCard from "../components/JobCard/JobCard";
+import { Suspense } from "react";
 export default async function SearchPage({ searchParams }) {
   const params = new URLSearchParams(await searchParams);
 
@@ -20,7 +19,12 @@ export default async function SearchPage({ searchParams }) {
       </div>
 
       {/* Results */}
-      <div className="w-full max-w-6xl">
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center">
+            <h1 className="text-indigo-500 font-bold">Loading</h1>
+        </div>
+      }>
+        <div className="w-full max-w-6xl">
         {jobs.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {jobs.map((job) => (
@@ -33,6 +37,7 @@ export default async function SearchPage({ searchParams }) {
           </p>
         )}
       </div>
+      </Suspense>
     </div>
   );
 }

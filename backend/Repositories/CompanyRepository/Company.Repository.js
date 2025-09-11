@@ -180,6 +180,9 @@ export const UpdateCompany = async (id,data) =>
         if(data.image)
             dataToUpdate.image = data.image
 
+        if(!user.hasSeenOnboarding)
+            dataToUpdate.hasSeenOnboarding = true
+
         const updatedCompany = await prisma.company.update({
             where:{
                 id:id,

@@ -1,6 +1,6 @@
 export const validateEmail = (email) =>
 {
-    if(!email || !email.endsWith("@gmail.com"))
+    if(!email || !email.includes("@"))
     {
         const error = new Error("email is not valid")
         error.status = 400
