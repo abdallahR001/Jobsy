@@ -210,7 +210,7 @@ export const GetCompanyJobs = async (companyId) =>
     }
 }
 
-export const SearchJobs = async (title,type = null,location = null) =>
+export const SearchJobs = async (userId = null,title,type = null,location = null) =>
 {
     try {
         const jobs = await prisma.job.findMany({
@@ -228,11 +228,39 @@ export const SearchJobs = async (title,type = null,location = null) =>
                 })
             },
             include:{
-                Company:true
+                Company:{
+                    select:{
+                        id:true,
+                        name:true,
+                        image:true,
+                        followers:{
+                            where:{
+                                ...(userId && {id:userId})
+                            },
+                            select:{
+                                id:true
+                            }
+                        }
+                    }
+                },
+                savedBy: {
+                    where:{
+                        ...(userId && {id:userId})
+                    },
+                    select:{
+                        id:true
+                    }
+                }
             }
         })
 
-        return jobs
+        const result = jobs.map((job) =>({
+            ...job,
+            isCompanyFollowed: userId ? job.Company.followers.length > 0 : false ,
+            isSaved: userId ? job.savedBy.length > 0 : false
+        }))
+
+        return result
     } 
     catch (error) {
         throw error    

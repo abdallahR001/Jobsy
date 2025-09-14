@@ -19,8 +19,9 @@ export const CreateJob = async (req,res,next) =>
 export const SearchJobs = async (req,res,next) =>
 {
     try {
+        const id = req.user?.id
         const {title,location,type} = req.query
-        const result = await searchJobs(title,type,location)
+        const result = await searchJobs(id,title,type,location)
         
         res.status(200).json({
             jobs:result

@@ -33,7 +33,7 @@ export default function DashboardCards() {
 
     console.log(data)
   return (
-      <div className="flex-1 p-6 bg-gray-50">
+      <div className="p-6 bg-white z-0">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
           <DashBoardCard title={"All Jobs"} icon={<Briefcase />} value={data.jobs} color={"text-blue-500"}/>
           <DashBoardCard title={"Active Jobs"} icon={<Rocket />} value={data.activeJobs} color={"text-green-500"}/>

@@ -89,7 +89,7 @@ export const getCompanyJobs = async (companyId) =>
     }
 }
 
-export const searchJobs = async (title,type = null,location = null) =>
+export const searchJobs = async (userId = null,title,type = null,location = null) =>
 {
     try {
         if(!title || typeof title !== "string" || title.trim().length <= 0)
@@ -99,7 +99,7 @@ export const searchJobs = async (title,type = null,location = null) =>
             throw error
         }
 
-        const result = await SearchJobs(title,type,location)
+        const result = await SearchJobs(userId,title,type,location)
 
         return result
     } 
