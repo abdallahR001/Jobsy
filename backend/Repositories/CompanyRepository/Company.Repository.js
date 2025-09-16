@@ -91,7 +91,7 @@ export const CreateCompany = async (data) =>
         const token = jwt.sign({
             id:company.id,
             role: "company"
-        },process.env.JWT_SECRET,{expiresIn:"1h"})
+        },process.env.JWT_SECRET,{expiresIn:"1d"})
 
         return{
             status: 201,
@@ -136,7 +136,7 @@ export const LogIn = async (email,password) =>
             id:company.id,
             role: "company"
         },process.env.JWT_SECRET,{
-            expiresIn:"1h"
+            expiresIn:"1d"
         })
 
         return {

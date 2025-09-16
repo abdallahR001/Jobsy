@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 export default function JobForm() {
@@ -8,10 +9,45 @@ export default function JobForm() {
   const [salary, setSalary] = useState("");
   const [city, setCity] = useState("");
   const [category, setCategory] = useState("");
+  const [categories,setCategories] = useState([])
   const [query, setQuery] = useState("");
+  const [type,setType] = useState("")
   const [skills, setSkills] = useState([]);
   const [defaultSkills, setDefaultSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const [errorMessage,setErrorMessage] = useState("")
+  const [loading,setLoading] = useState(false)
+
+  const router = useRouter()
+
+  useEffect(() =>
+  {
+    const fetchCategories = async () =>
+    {
+      try {
+        const response = await fetch("http://localhost:4000/api/categories",{
+        credentials:"include"
+      })
+
+      const data = await response.json()
+
+      console.log(data)
+
+      if(!response.ok)
+      {
+        setErrorMessage(data.message)
+        return
+      }
+
+      setCategories(data.categories)  
+      } 
+      catch (error) {
+        setErrorMessage("something went wrong, plase try again later")
+      }
+    }
+
+    fetchCategories()
+  },[])
 
   useEffect(() => {
     if (category) {
@@ -34,7 +70,10 @@ export default function JobForm() {
             credentials:"include"
         })
           .then((res) => res.json())
-          .then((data) => setSkills(data.skills || []))
+          .then((data) => {
+            setSkills(data.skills || [])
+            console.log(data.skills)
+          })
           .catch(() => setSkills([]));
       } else {
         setSkills(defaultSkills);
@@ -54,23 +93,53 @@ export default function JobForm() {
     setSelectedSkills(selectedSkills.filter((s) => s.id !== skillId));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = {
+    try {
+      setLoading(true)
+      const payload = {
       title,
       description,
-      experience: experience || null,
-      salary: salary || null,
+      experience: Number(experience) || null,
+      salary: Number(salary) || null,
       city,
+      type,
       category,
       skills: selectedSkills.map((s) => s.id),
     };
     console.log("Submitting job:", payload);
+
+    const response = await fetch("http://localhost:4000/api/jobs",{
+      method:"POST",
+      body:JSON.stringify(payload),
+      credentials:"include",
+      headers:{
+        "content-type":"application/json"
+      }
+    })
+
+    const result = await response.json()
+
+    if(!response.ok)
+    {
+      setErrorMessage(result.message)
+      setLoading(false)
+      return
+    }
+
+    router.push("/dashboard")
+    } 
+    catch (error) {
+      console.log(error)
+      setErrorMessage("something went wrong, please try again later")
+      setLoading(false)
+    }
   };
 
   return (
     <div className="max-w-3xl mx-auto p-4 sm:p-6">
       <h1 className="text-3xl font-bold mb-6 text-indigo-500">Create Job</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-red-500">{errorMessage}</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Job Title */}
         <div className="flex flex-col w-full">
@@ -144,22 +213,43 @@ export default function JobForm() {
               className="w-full border cursor-pointer border-gray-300 rounded-md p-4 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="">Select Category</option>
-              <option value="marketing">Marketing</option>
-              <option value="graphic">Graphic Design</option>
-              <option value="software">Software Engineering</option>
+              {
+                categories.map((category) => (
+                  <option value={category.name} key={category.id}>{category.name}</option>
+                ))
+              }
             </select>
           </div>
+        </div>
+
+        {/* Job Type Section */}
+
+        <div className="flex flex-col w-full">
+          <label className="mb-1 font-medium text-gray-700">Job Type</label>
+          <select 
+          value={type}
+          onChange={(e) => setType(e.target.value)} 
+          required
+          className="w-full border cursor-pointer border-gray-300 rounded-md p-4 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="">Select Job Type</option>
+            <option value="Full-Time">Full-Time</option>
+            <option value="Part-Time">Part-Time</option>
+            <option value="Remote">Remote</option>
+            <option value="InternShip">InternShip</option>
+          </select>
         </div>
 
         {/* Skills Section */}
         <div className="flex flex-col w-full">
           <label className="mb-2 font-medium text-gray-700">Skills</label>
           <input
+            disabled={!category}
             type="text"
             placeholder="Search skill..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full border border-gray-300 rounded-md p-4 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="disabled:cursor-not-allowed w-full border border-gray-300 rounded-md p-4 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <div className="flex flex-wrap gap-2 mt-3">
             {(skills.length > 0 ? skills : defaultSkills).map((skill) => (
@@ -190,7 +280,7 @@ export default function JobForm() {
           disabled={!title || !description || !city || !skills || !category}
           className="w-full cursor-pointer disabled:bg-indigo-400 disabled:cursor-not-allowed bg-indigo-500 text-white font-semibold py-4 rounded-md hover:bg-indigo-600 transition text-lg"
         >
-          Create Job
+          {loading ? "Wait a moment..." : "Create Job"}
         </button>
       </form>
     </div>

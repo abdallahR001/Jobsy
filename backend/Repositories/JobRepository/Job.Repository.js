@@ -3,30 +3,46 @@ import { prisma } from "../../prisma/prismaClient.js"
 export const CreateJob = async (companyId,data) =>
 {
     try {
-        if(data.minimum_years_required < 0)
+        if(data.minimum_years_required && data.minimum_years_required < 0)
         {
             const error = new Error("minimum years cannot be less than zero")
             error.status = 400
             throw error
         }
 
-        if(data.salary <= 0)
+        if(data.salary && data.salary <= 0)
         {
             const error = new Error("salary cannot be equal to zero or less")
             error.status = 400
             throw error
         }
-        const {skills} = data
+        const {skills,category} = data
+
+        const cat = await prisma.category.findUnique({
+            where:{
+                name:category
+            },
+            select:{
+                id:true
+            }
+        })
+
+        if(!cat)
+        {
+            const error = new Error("category not found")
+            error.status = 404
+            throw error
+        }
 
         let NewJob = await prisma.job.create({
             data:{
                 title:data.title,
                 description:data.description,
-                minimum_years_required:data.minimum_years_required || null,
+                minimum_years_required:data.experience || null,
                 salary:data.salary || null,
-                job_status:"pending",
+                job_status:"open",
                 type:data.type,
-                location: data.location || "remote",
+                location: data.city || "remote",
                 Company:{
                     connect:{
                         id:companyId
@@ -34,13 +50,10 @@ export const CreateJob = async (companyId,data) =>
                 },
                 Category:{
                     connect:{
-                        id:data.categoryId
+                        id:cat.id
                     }
                 }
             },
-            include:{
-                skills:true
-            }
         })
 
         if(skills)

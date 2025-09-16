@@ -1,8 +1,6 @@
 import { prisma } from "../prisma/prismaClient.js"
 import { AddSkill, DeleteSkill, GetSkillsByCategory, UpdateSkill } from "../Services/SkillService/SkillService.js"
 
-
-
 export const defaultSkills = async (req,res,next) =>
 {
     try {
@@ -28,6 +26,46 @@ export const defaultSkills = async (req,res,next) =>
     } 
     catch (error) {
         next(error)
+    }
+}
+
+export const searchSkills = async (req,res,next) =>
+{
+    try {
+        const {query,category} = req.query
+
+    const cat = await prisma.category.findUnique({
+            where:{
+                name:category
+            }
+        })
+
+    const skills = await prisma.skill.findMany({
+        where:{
+            AND:[
+                {
+                    categoryId:cat.id
+                },
+                {
+                    name:{
+                        contains:query,
+                        mode:"insensitive"
+                    }
+                }
+            ]
+        },
+        select:{
+            id:true,
+            name:true
+        }
+    })
+
+    res.status(200).json({
+        skills:skills
+    })
+    } 
+    catch (error) {
+        next(error)    
     }
 }
 

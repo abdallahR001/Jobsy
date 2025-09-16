@@ -7,7 +7,7 @@ export const getCategories = async (req,res,next) =>
         const result = await GetCategories()
 
         res.status(200).json({
-            result
+            categories:result
         })
     } 
     catch (error) {

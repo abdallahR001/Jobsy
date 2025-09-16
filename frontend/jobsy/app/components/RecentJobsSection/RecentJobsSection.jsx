@@ -1,3 +1,4 @@
+import Link from "next/link";
 import JobDashboardCard from "../JobCard/JobDashboardCard";
 
 const jobsData = [
@@ -54,9 +55,9 @@ export default function RecentJobsSection() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold text-gray-800">Recent Jobs</h2>
-        <button className="cursor-pointer duration-300 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition">
+        <Link href={"/dashboard/newjob"} className="cursor-pointer duration-300 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition">
           Post a New Job
-        </button>
+        </Link>
       </div>
 
       {/* Jobs List */}
