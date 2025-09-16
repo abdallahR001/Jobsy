@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken"
 
 export const authMiddleWare = (req,res,next) =>
 {  
-    const token = req.cookies.token
+    const {token} = req.cookies || req.headers
 
     if(!token)
     {

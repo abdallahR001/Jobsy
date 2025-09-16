@@ -1,98 +1,46 @@
+// prisma/seed.js
 import { PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
 
-  // ===== Categories =====
+  // أولاً نضيف شوية categories
   const categories = [
-    { name: "Development" },
-    { name: "Design" },
-    { name: "Marketing" },
-    { name: "Data Science" },
+    { name: "marketing" },
+    { name: "graphic Design" },
+    { name: "software Engineering" },
   ];
-  await prisma.category.createMany({ data: categories, skipDuplicates: true });
 
-  // ===== Skills =====
-  const skills = [
-    { name: "JavaScript", categoryId: (await prisma.category.findFirst({ where: { name: "Development" } })).id },
-    { name: "React", categoryId: (await prisma.category.findFirst({ where: { name: "Development" } })).id },
-    { name: "Node.js", categoryId: (await prisma.category.findFirst({ where: { name: "Development" } })).id },
-    { name: "UI/UX", categoryId: (await prisma.category.findFirst({ where: { name: "Design" } })).id },
-    { name: "Figma", categoryId: (await prisma.category.findFirst({ where: { name: "Design" } })).id },
-    { name: "SEO", categoryId: (await prisma.category.findFirst({ where: { name: "Marketing" } })).id },
-    { name: "Python", categoryId: (await prisma.category.findFirst({ where: { name: "Data Science" } })).id },
-    { name: "Machine Learning", categoryId: (await prisma.category.findFirst({ where: { name: "Data Science" } })).id },
-  ];
-  await prisma.skill.createMany({ data: skills, skipDuplicates: true });
+  const createdCategories = [];
+  for (const cat of categories) {
+    const created = await prisma.category.upsert({
+      where: { name: cat.name },
+      update: {},
+      create: cat,
+    });
+    createdCategories.push(created);
+  }
 
-  // ===== Companies =====
-  const companies = [
-    { name: "Techify", email: "t@gmail.com", password: "12345678", hasSeenOnboarding: true },
-    { name: "Designly", email: "d@gmail.com", password: "12345678", hasSeenOnboarding: true },
-    { name: "MarketPro", email: "m@gmail.com", password: "12345678", hasSeenOnboarding: true },
-  ];
-  await prisma.company.createMany({ data: companies, skipDuplicates: true });
+  // بعد كدا نضيف شوية skills لكل category
+  const skillsData = {
+    Marketing: ["SEO", "Content Writing", "Social Media Management"],
+    "Graphic Design": ["Photoshop", "Illustrator", "Figma"],
+    "Software Engineering": ["JavaScript", "Python", "React", "Node.js"],
+  };
 
-  // ===== Jobs =====
-  const companyIds = await prisma.company.findMany();
-  const categoryIds = await prisma.category.findMany();
+  for (const category of createdCategories) {
+    const skills = skillsData[category.name] || [];
+    for (const skillName of skills) {
+      await prisma.skill.upsert({
+        where: { name: skillName },
+        update: {},
+        create: {
+          name: skillName,
+          categoryId: category.id,
+        },
+      });
+    }
+  }
 
-  const jobs = [
-    {
-      title: "node js developer",
-      description: "Work on amazing web apps",
-      minimum_years_required: 2,
-      salary: 8000,
-      type: "fullTime",
-      location: "Cairo",
-      job_status: "open",
-      companyId: companyIds[0].id,
-      categoryId: categoryIds[0].id,
-    },
-    {
-      title: "flutter developer",
-      description: "mobile development",
-      minimum_years_required: 3,
-      salary: 9000,
-      type: "remote",
-      location: "Alexandria",
-      job_status: "open",
-      companyId: companyIds[0].id,
-      categoryId: categoryIds[0].id,
-    },
-    {
-      title: "UI/UX Designer",
-      description: "Design web and mobile apps",
-      minimum_years_required: 1,
-      salary: 7000,
-      type: "partTime",
-      location: "Cairo",
-      job_status: "open",
-      companyId: companyIds[1].id,
-      categoryId: categoryIds[1].id,
-    },
-    {
-      title: "SEO Specialist",
-      description: "Improve search rankings",
-      minimum_years_required: 2,
-      salary: 7500,
-      type: "fullTime",
-      location: "Dubai",
-      job_status: "open",
-      companyId: companyIds[2].id,
-      categoryId: categoryIds[2].id,
-    },
-    {
-      title: "Data Scientist",
-      description: "Work with ML models",
-      minimum_years_required: 4,
-      salary: 12000,
-      type: "fullTime",
-      location: "London",
-      job_status: "open",
-      companyId: companyIds[2].id,
-      categoryId: categoryIds[3].id,
-    },
-  ];
-  await prisma.job.createMany({ data: jobs });
+  console.log("Seeding done ✅");
 
-  console.log("✅ Data inserted successfully!");
 

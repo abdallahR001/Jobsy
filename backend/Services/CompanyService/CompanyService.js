@@ -25,14 +25,14 @@ export const CreateNewCompany = async (data) =>
     }
 }
 
-export const LogInAsCompany = async (credintials) =>
+export const LogInAsCompany = async (email,password) =>
 {
     try {
-        const result = await LogIn(credintials)
+        const result = await LogIn(email,password)
 
         return result
     } catch (error) {
-        console.log("error❌",error.message) 
+        console.log("error❌",error) 
         throw error
     }
 }

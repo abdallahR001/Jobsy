@@ -104,15 +104,15 @@ export const CreateCompany = async (data) =>
     }
 }
 
-export const LogIn = async (credintials) =>
+export const LogIn = async (email,password) =>
 {
     try {
-        validateEmail(credintials.email)
-        validatePassword(credintials.password)
+        validateEmail(email)
+        validatePassword(password)
         
         const company = await prisma.company.findUnique({
             where:{
-                email:credintials.email
+                email
             }
         })
 
@@ -123,7 +123,7 @@ export const LogIn = async (credintials) =>
             throw error
         }
 
-        const isPasswordCorrect = await bcrypt.compare(credintials.password,company.password)
+        const isPasswordCorrect = await bcrypt.compare(password,company.password)
 
         if(!isPasswordCorrect)
         {

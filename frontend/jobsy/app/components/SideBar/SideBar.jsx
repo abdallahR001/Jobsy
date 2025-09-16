@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 export default function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div

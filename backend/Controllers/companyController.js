@@ -84,7 +84,8 @@ export const createCompany = async (req,res,next) =>
 export const logIn = async (req,res,next) =>
 {
     try {
-        const result = await LogInAsCompany(req.body)
+        const {email,password} = req.body
+        const result = await LogInAsCompany(email,password)
 
         res.status(result.status).cookie("token",result.token,{
             httpOnly: true,

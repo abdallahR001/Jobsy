@@ -1,5 +1,6 @@
 "use client"
 
+import { Search } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -41,7 +42,7 @@ export default function MainSearch(){
                         <option value={"internShip"}>Internship</option>
                     </select>
 
-                    <button disabled={!title} type="submit" className="disabled:bg-indigo-400 px-6 py-4 bg-indigo-600 cursor-pointer hover:bg-indigo-700 transition-all duration-500">🔍</button>
+                    <button disabled={!title} type="submit" className="disabled:bg-indigo-400 px-6 py-4 bg-indigo-600 cursor-pointer hover:bg-indigo-700 transition-all duration-500"><Search className="text-white"/></button>
                 </div>
         </form>
     )
