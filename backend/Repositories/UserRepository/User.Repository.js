@@ -415,6 +415,8 @@ export const SaveJob = async(userId,jobId) =>
             }
         })
 
+        console.log(job)
+
         if(!job)
         {
             const error = new Error("job not found")
@@ -422,30 +424,42 @@ export const SaveJob = async(userId,jobId) =>
             throw error
         }
 
-        const updatedUser = await prisma.user.update({
+        const alreadySaved = await prisma.user.findFirst({
             where:{
-                id:userId
-            },
-            select:{
-                first_name:true,
-                last_name:true,
-                email:true,
-                image:true,
-                bio:true,
-                years_of_experience:true,
-                title:true,
-                savedJobs:true
-            },
-            data:{
+                id:user.id,
                 savedJobs:{
-                    connect:{
-                        id:jobId
+                    some:{
+                        id:job.id
                     }
                 }
             }
         })
 
-        return updatedUser
+        let isSaved;
+
+        if(!alreadySaved)
+        {
+            await prisma.user.update({
+                where:{
+                    id:user.id,
+                },
+                data:{
+                    savedJobs:{
+                        connect:{
+                            id:job.id
+                        }
+                    }
+                }
+            })
+
+            isSaved = true
+        }
+
+        else{
+            isSaved = true
+        }
+
+        return isSaved
     } 
     catch (error) {
         throw error    

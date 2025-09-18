@@ -4,8 +4,8 @@ export default function JobDashboardCard({ job }) {
       {/* Left side */}
       <div className="flex-1">
         <h3 className="text-lg font-semibold text-gray-900">{job.title}</h3>
-        <p className="text-sm text-gray-600 line-clamp-2">{job.description}</p>
-        <p className="text-sm text-gray-500 mt-1">📍 {job.location}</p>
+        <p className="text-sm text-gray-600 w-3xl truncate">{job.description}</p>
+        <p className="text-sm text-gray-500 mt-4">📍 {job.location}</p>
       </div>
 
       {/* Right side */}
@@ -19,7 +19,7 @@ export default function JobDashboardCard({ job }) {
         >
           {job.status}
         </span>
-        <p className="text-sm text-gray-600">{job.applicants} Applicants</p>
+        <p className="text-sm text-gray-500">{job.applicants} Applicants</p>
         <button className="cursor-pointer transition-all duration-300 bg-indigo-500 hover:bg-indigo-600 text-white text-sm px-4 py-2 rounded-lg">
           Details
         </button>

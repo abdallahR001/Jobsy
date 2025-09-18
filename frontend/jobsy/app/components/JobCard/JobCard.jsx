@@ -1,5 +1,8 @@
 import Link from "next/link"
-export default function JobCard({job}){
+import Image from "next/image"
+import SaveJobButton from "../SaveJobButton/SaveJobButton"
+export default async function JobCard({job}){  
+
     return(
         <div
   key={job.id || job.title}
@@ -8,7 +11,7 @@ export default function JobCard({job}){
   {/* Title */}
   <div>
     <h2 className="text-lg font-bold text-gray-900 mb-1">{job.title}</h2>
-    <p className="text-sm text-gray-600 line-clamp-3 mb-3">{job.description}</p>
+    <p className="text-sm text-gray-600 truncate mb-3">{job.description}</p>
   </div>
 
   {/* Company Info */}
@@ -16,7 +19,7 @@ export default function JobCard({job}){
     <div className="flex items-center gap-2">
       {job.Company?.image ? (
         <Image
-          src={job.Company.Image}
+          src={`http://localhost:4000/${job.Company.image}`}
           width={30}
           height={30}
           alt="company image"
@@ -39,18 +42,25 @@ export default function JobCard({job}){
   </div>
 
   {/* Job Details */}
-  <div className="text-sm text-gray-600 space-y-1 mb-4">
-    <p>💰 {job.salary || "N/A"}</p>
-    <p>🌍 {job.location}</p>
+  <div className="text-sm text-gray-600 space-y-1 mb-4 ">
+      <p>💰 {job.salary || "N/A"}</p>
+      <div className="flex justify-between items-center mt-2">
+        <p>🌍 {job.location}</p>
+        <p className="text-gray-400 ">{job.type}</p>
+      </div>
   </div>
 
   {/* Button */}
-  <Link
-    href={`/jobs/${job.id}`}
-    className="mt-auto block w-full text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
-  >
-    Details
-  </Link>
+  <div className="flex gap-8 items-center">
+     <Link
+      href={`/jobs/${job.id}`}
+      className="mt-auto block w-[80%] text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
+    >
+      Details
+    </Link>
+
+      <SaveJobButton jobId={job.id} initialIsSaved={job.isSaved}/>
+  </div>
 </div>
 
     )

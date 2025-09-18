@@ -37,7 +37,7 @@ userRouter.delete("/delete",authMiddleWare,DeleteProfile)
 userRouter.put("/follow",authMiddleWare,authorizeRoles("user"),FollowCompany)
 userRouter.put("/unfollow",authMiddleWare,authorizeRoles("user"),UnFollowCompany)
 userRouter.get("followed-companies",authMiddleWare,authorizeRoles("user"),GetFollowedCompanies)
-userRouter.put("/save/:jobId",authMiddleWare,authorizeRoles("user"),SaveJob)
+userRouter.post("/save",authMiddleWare,authorizeRoles("user"),SaveJob)
 userRouter.put("/unsave/:jobId",authMiddleWare,authorizeRoles("user"),UnSaveJob)
 userRouter.get("/savedjobs",authMiddleWare,authorizeRoles("user"),GetSavedJobs)
 export default userRouter

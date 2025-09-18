@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken"
 export const searchMiddleWare = (req,res,next) =>
 {
-    const token = req.cookies.token
+    const token = req.cookies.token || req.headers.token
+
+    console.log(token)
 
     if(!token)
         return next()
@@ -10,7 +12,8 @@ export const searchMiddleWare = (req,res,next) =>
         {
             if(err)
             {
-                return res.status(401).json({message:"token is not valid"})
+                next()
+                return
             }
     
             req.user = decoded

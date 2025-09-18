@@ -240,7 +240,13 @@ export const SearchJobs = async (userId = null,title,type = null,location = null
                     }
                 })
             },
-            include:{
+            select:{
+                id:true,
+                title:true,
+                description:true,
+                location:true,
+                salary:true,
+                job_status:true,
                 Company:{
                     select:{
                         id:true,

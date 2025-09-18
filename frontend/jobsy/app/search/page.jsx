@@ -1,15 +1,32 @@
 import MainSearch from "../components/SearchForm/MainSearch";
 import JobCard from "../components/JobCard/JobCard";
 import { Suspense } from "react";
+import { cookies } from "next/headers";
 export default async function SearchPage({ searchParams }) {
   const params = new URLSearchParams(await searchParams);
 
+  console.log(params);
+  
+
+  const cookieStore = cookies()
+
+  const token = (await cookieStore).get("token")?.value
+  console.log(token)
+
   const response = await fetch(
     `http://localhost:4000/api/jobs/search?${params.toString()}`,
-    { cache: "no-store" }
+    { 
+      cache: "no-store",
+      headers:{
+        token: token
+      }
+     }
   );
 
-  const { jobs } = await response.json();
+  const data = await response.json();
+
+  console.log(data);
+  
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center pt-24 px-4">
@@ -25,9 +42,9 @@ export default async function SearchPage({ searchParams }) {
         </div>
       }>
         <div className="w-full max-w-6xl">
-        {jobs.length > 0 ? (
+        {data.jobs.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {jobs.map((job) => (
+            {data.jobs.map((job) => (
                 <JobCard key={job.id} job={job}/>
             ))}
           </div>

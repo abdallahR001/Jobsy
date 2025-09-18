@@ -214,14 +214,18 @@ export const SaveJob = async (req,res,next) =>
 {
     try {
         const userId = req.user.id
-        
-        const {jobId} = req.params
+        console.log(userId)
 
-        const result = await saveJob(userId,jobId)
+        console.log(req.body)
+        
+        const {jobId} = req.body
+        console.log(jobId)
+
+        const isSaved = await saveJob(userId,jobId)
 
         res.status(200).json({
             message:"saved job successfully",
-            user: result
+            isSaved: isSaved
         })
     } 
     catch (error) {

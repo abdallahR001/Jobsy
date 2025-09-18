@@ -24,7 +24,7 @@ const jobsData = [
     id: 3,
     title: "UI/UX Designer",
     description:
-      "We want a creative designer to create elegant, user-friendly interfaces and design systems.",
+      "We want a creative designer to create elegant, user-friendly interfaces and design systems.555555555555555555555555555555555555555555555555555555555555555555555555555555556666666666666666666666666666666666666555555555555555555555555555555555555",
     location: "Remote",
     applicants: 8,
     status: "Open",
