@@ -1,5 +1,5 @@
 "use client"
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import DashBoardCard from "./DashboardCard";
 import { Briefcase, Rocket, UserPlus, Users } from "lucide-react";
 import { useEffect, useState } from "react";

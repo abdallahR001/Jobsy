@@ -1,6 +1,5 @@
 "use client"
 import { Bookmark } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 export default function SaveJobButton({jobId,initialIsSaved}){
     const [isSaved, setIsSaved] = useState(initialIsSaved)

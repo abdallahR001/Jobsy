@@ -40,4 +40,5 @@ userRouter.get("followed-companies",authMiddleWare,authorizeRoles("user"),GetFol
 userRouter.post("/save",authMiddleWare,authorizeRoles("user"),SaveJob)
 userRouter.put("/unsave/:jobId",authMiddleWare,authorizeRoles("user"),UnSaveJob)
 userRouter.get("/savedjobs",authMiddleWare,authorizeRoles("user"),GetSavedJobs)
+
 export default userRouter

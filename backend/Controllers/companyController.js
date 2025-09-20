@@ -12,33 +12,6 @@ export const getCompany = async (req,res,next) =>
     }
 }
 
-// export const me = async(req,res,next) =>
-// {
-//     try {
-//         const company = await prisma.company.findUnique({
-//             where:{
-//                 id:req.user.id
-//             },
-//             select:{
-//                 id:true,
-//                 name:true,
-//                 image:true,
-//             }
-//         })    
-
-//         res.status(200).json({
-//             id:company.id,
-//             companyName:company.name,
-//             image:company.image,
-//         })
-
-//         return company
-//     } 
-//     catch (error) {
-//         next(error)
-//     }
-// }
-
 export const onBoardingPage = async (req,res,next) =>
 {
     try {
@@ -186,11 +159,34 @@ export const dashBoard = async (req,res,next) =>
             }
         })
 
+        const recentJobs = await prisma.job.findMany({
+            where:{
+                companyId: companyId,
+            },
+            take:5,
+            select:{
+                id:true,
+                title:true,
+                description:true,
+                location:true,
+                salary:true || null,
+                minimum_years_required:true || null,
+                type:true,
+                job_status:true,
+                _count:{
+                    select:{
+                        applications:true
+                    }
+                }
+            }
+        })
+
         res.status(200).json({
             jobs,
             activeJobs,
             applicants,
-            followers
+            followers,
+            recentJobs
         })
     } 
     catch (error) {

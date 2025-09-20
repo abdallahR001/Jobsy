@@ -29,7 +29,7 @@ export default async function SearchPage({ searchParams }) {
   
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center pt-24 px-4">
+    <div className="min-h-screen bg-gray-50 max-w-full flex flex-col items-center pt-24 px-4">
       {/* Search Bar */}
       <div className="w-full max-w-4xl mb-8">
         <MainSearch />
