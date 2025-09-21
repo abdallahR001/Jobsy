@@ -236,7 +236,7 @@ export default function JobForm() {
             <option value="Full-Time">Full-Time</option>
             <option value="Part-Time">Part-Time</option>
             <option value="Remote">Remote</option>
-            <option value="InternShip">InternShip</option>
+            <option value="InternShip">Internship</option>
           </select>
         </div>
 

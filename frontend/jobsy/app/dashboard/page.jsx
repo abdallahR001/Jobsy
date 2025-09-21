@@ -1,6 +1,5 @@
 import DashboardCards from "../components/DashBoardCards/DashBoardCards";
 import RecentJobsSection from "../components/RecentJobsSection/RecentJobsSection";
-import Sidebar from "../components/SideBar/SideBar";
 
 export default function Dashboard(){
     return(

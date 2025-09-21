@@ -99,12 +99,12 @@ export const DeleteAllJobs = async (req,res,next) =>
 export const GetCompanyJobs = async (req,res,next) =>
 {
     try {
-        const companyId = req.user.id
+        const {companyId} = req.user
 
         const result = await getCompanyJobs(companyId)
 
         res.status(200).json({
-            result
+            jobs: result
         })
     } 
     catch (error) {

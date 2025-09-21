@@ -83,7 +83,7 @@ export const getCompanyJobs = async (companyId) =>
         return result
     } 
     catch (error) {
-        console.log("error❌",error.message)    
+        console.log("error❌",error)    
         
         throw error
     }

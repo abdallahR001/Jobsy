@@ -28,7 +28,8 @@ export default function Header (){
         "/onboarding/employers/step4",
         "/onboarding/employers/step5",
         "/onboarding/employers/step6",
-        "/dashboard/newjob"
+        "/dashboard/newjob",
+        "/dashboard/myjobs",
     ]
     useEffect(() =>
     {

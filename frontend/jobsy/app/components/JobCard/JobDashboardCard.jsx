@@ -10,14 +10,14 @@ export default function JobDashboardCard({ job }) {
           <h3 className="text-lg capitalize font-semibold text-gray-900">{job.title}</h3>
           <span className="text-sm text-gray-400">{job.type}</span>
         </div>
-        <p className="text-sm text-gray-600 w-2xl truncate">{job.description}</p>
+        <p className="text-sm text-gray-600 w-[30%] md:w-2xl truncate">{job.description}</p>
         <div className="flex mt-4 items-center gap-3">
           <p className="text-sm text-gray-500 capitalize">📍 {job.location}</p>
           {job.minimum_years_required ? 
-          <span className="px-4 py-2 bg-gray-400 rounded-full text-white">Years Required: {job.minimum_years_required}</span>
+          <span className="px-4 py-2 text-sm bg-indigo-100 rounded-full text-indigo-800">Years Required: {job.minimum_years_required} 🏢</span>
           : ""
         }
-        {job.salary ? <span className="px-4 py-2 bg-gray-400 rounded-full text-white">Salary: {job.salary} 💰</span> : ""}
+        {job.salary ? <span className="px-4 py-2 text-sm bg-indigo-100 rounded-full text-indigo-800">Salary: {job.salary} 💰</span> : ""}
         </div>
       </div>
 

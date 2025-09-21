@@ -202,7 +202,10 @@ export const GetCompanyJobs = async (companyId) =>
     try {
         const jobs = await prisma.job.findMany({
             where:{
-                companyId
+                companyId: companyId
+            },
+            orderBy:{
+                created_at:"desc"
             },
             select:{
                 id:true,
@@ -213,6 +216,12 @@ export const GetCompanyJobs = async (companyId) =>
                 skills:true,
                 type:true,
                 location:true,
+                job_status:true,
+                _count:{
+                    select:{
+                        applications:true
+                    }
+                }
             }
         })    
 
