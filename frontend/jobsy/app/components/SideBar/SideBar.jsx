@@ -12,13 +12,14 @@ import {
   Rocket,
 } from "lucide-react";
 import Link from "next/link";
+import LogoutButton from "../LogoutButton/LogoutButton";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div
-      className={`flex h-screen transition-all z-30 duration-100 ${
+      className={`flex h-screen transition-all duration-100 sticky top-0 ${
         isOpen ? "w-54" : "w-20"
       } bg-white`}
     >
@@ -48,11 +49,11 @@ export default function Sidebar() {
         <nav className="flex flex-col mt-4 space-y-2">
           <SidebarLink href="#" icon={<Building />} text="My Company" isOpen={isOpen} />
           <SidebarLink href="/dashboard/myjobs" icon={<Briefcase />} text="My Jobs" isOpen={isOpen} />
-          <SidebarLink href="#" icon={<Rocket />} text="Active Jobs" isOpen={isOpen} />
+          <SidebarLink href="/dashboard/activejobs" icon={<Rocket />} text="Active Jobs" isOpen={isOpen} />
           <SidebarLink href="#" icon={<Users />} text="Applicants" isOpen={isOpen} />
           <SidebarLink href="#" icon={<UserPlus />} text="Followers" isOpen={isOpen} />
-          <SidebarLink href="#" icon={<LogOutIcon />} text="Log Out" isOpen={isOpen} isDanger />
-        </nav>
+          <LogoutButton icon={<LogOutIcon />} text="Logout" isOpen={isOpen}/>        
+      </nav>
       </div>
     </div>
   );

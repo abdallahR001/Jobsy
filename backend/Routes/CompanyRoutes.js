@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createCompany, dashBoard, deleteCompany, getCompany, getCompanyFollowers, logIn, onBoardingPage, updateCompany } from "../Controllers/companyController.js";
+import { createCompany, dashBoard, deleteCompany, getCompany, getCompanyFollowers, logIn, logout, onBoardingPage, updateCompany } from "../Controllers/companyController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
 import multer from "multer";
@@ -33,5 +33,6 @@ companyRouter.post("/login",logIn)
 companyRouter.put("/",authMiddleWare,authorizeRoles("company"),upload.single("image"),updateCompany)
 companyRouter.delete("/",authMiddleWare,authorizeRoles("company"),deleteCompany)
 companyRouter.get("/followers",authMiddleWare,authorizeRoles("company"),getCompanyFollowers)
+companyRouter.get("/logout",authMiddleWare,authorizeRoles("company"),logout)
 
 export default companyRouter

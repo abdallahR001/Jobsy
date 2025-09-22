@@ -193,3 +193,18 @@ export const dashBoard = async (req,res,next) =>
         next(error)    
     }
 }
+
+export const logout = (req,res,next) =>
+{
+    try {
+        res.status(200).clearCookie("token",{
+            httpOnly:true,
+            secure:false
+        }).json({
+            message:"logged out"
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}

@@ -1,3 +1,4 @@
+import { prisma } from "../prisma/prismaClient.js"
 import { createJob, deleteAllJobs, deleteJob, getCompanyJobs, getJob, getJobsByCategory, getSkillsJobs, searchJobs } from "../Services/JobService/JobService.js"
 
 export const CreateJob = async (req,res,next) =>
@@ -121,6 +122,48 @@ export const GetSkillsJobs = async (req,res,next) =>
 
         res.status(200).json({
             result
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
+export const GetOpenJobs = async (req,res,next) =>
+{
+    try {
+        const companyId = req.user.id
+        const jobs = await prisma.job.findMany({
+            where:{
+                AND:[
+                    {
+                        companyId:companyId
+                    },
+                    {
+                        job_status:"open"
+                    }
+                ]
+            },
+            select:{
+                id:true,
+                title:true,
+                description:true,
+                minimum_years_required: true,
+                salary:true,
+                skills:true,
+                type:true,
+                location:true,
+                job_status:true,
+                _count:{
+                    select:{
+                        applications:true
+                    }
+                }
+            }
+        })
+
+        res.status(200).json({
+            jobs: jobs
         })
     } 
     catch (error) {

@@ -14,6 +14,7 @@ export default async function RecentJobsSection() {
     redirect("/login/employer")
 
   const response = await fetch("http://localhost:4000/api/companies/dashboard",{
+    cache:"no-cache",
     headers:{
       token: token
     }
@@ -42,11 +43,15 @@ export default async function RecentJobsSection() {
       </div>
 
       {/* Jobs List */}
-      <div className="flex flex-col gap-4 bg-white p-4 rounded-xl shadow-sm w-full">
+      {
+        recentJobs.length > 0 ?
+        <div className="flex flex-col gap-4 md:grid md:grid-cols-1 p-4 rounded-xl shadow-sm w-full">
         {recentJobs.map((job) => (
           <JobDashboardCard key={job.id} job={job} />
         ))}
       </div>
+      : <h1 className="text-2xl text-indigo-500 font-bold text-center mt-5">you have no jobs yet</h1>
+      }
     </div>
   );
 }
