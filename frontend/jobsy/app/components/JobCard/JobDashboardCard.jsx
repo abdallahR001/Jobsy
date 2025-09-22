@@ -7,7 +7,7 @@ export default function JobDashboardCard({ job }) {
     <div className="w-full bg-white shadow-md hover:shadow-lg rounded-2xl p-4 flex flex-col md:flex-row justify-center md:justify-between items-start md:items-center gap-4 transition-shadow duration-300">
       {/* Left side */}
       <div className="w-full md:w-1/2">
-        <div className="mb-5 flex items-center justify-between md:justify-normal gap-2">
+        <div className="mb-2 flex items-center justify-between md:justify-normal gap-2">
           <h3 className="text-lg w-fit capitalize font-semibold text-gray-900">{job.title}</h3>
           <span className="text-sm  text-gray-400 ">{job.type}</span>
         </div>

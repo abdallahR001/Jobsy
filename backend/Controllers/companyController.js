@@ -3,9 +3,14 @@ import { GetCompanyProfile , CreateNewCompany , LogInAsCompany, UpdateCompanyPro
 export const getCompany = async (req,res,next) =>
 {
     try {
-        const result = await GetCompanyProfile(req.user.id)
+        const {id} = req.user
+        const result = await GetCompanyProfile(id)
 
-        res.status(result.status).json(result)
+        res.status(result.status).json(
+            {
+                company: result.company
+            }
+        )
     } 
     catch (error) {
         next(error)    
@@ -84,7 +89,9 @@ export const updateCompany = async (req,res,next) =>
 
         const result = await UpdateCompanyProfile(companyId,data)
 
-        res.status(result.status).json(result)
+        res.status(result.status).json({
+            company: result.updatedCompany
+        })
     } 
     catch (error) {
         next(error)    

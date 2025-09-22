@@ -29,6 +29,10 @@ export const GetCompany = async (id) =>
                         minimum_years_required: true,
                         salary:true,
                         skills:true,
+                    },
+                    take:5,
+                    orderBy:{
+                        created_at:"desc"
                     }
                 }
             }
@@ -167,6 +171,9 @@ export const UpdateCompany = async (id,data) =>
         }
 
         const dataToUpdate = {}
+
+        if(data.name)
+            dataToUpdate.name = data.name
 
         if(data.description)
             dataToUpdate.description = data.description

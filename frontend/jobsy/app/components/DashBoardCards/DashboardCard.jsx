@@ -17,7 +17,7 @@ export default function DashBoardCard({icon,title,value,color})
                     <p className="text-2xl font-bold">{value}</p>
                 </div>
             </div>
-            <div className={`${colors[color]} w-full h-0.5 rounded-full`}></div>
+            <div className={`${colors[color]} w-full h-1 rounded-full`}></div>
         </div>
     )
 }

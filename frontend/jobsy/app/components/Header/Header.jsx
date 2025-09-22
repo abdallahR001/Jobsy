@@ -1,4 +1,5 @@
 "use client"
+import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -31,6 +32,7 @@ export default function Header (){
         "/dashboard/newjob",
         "/dashboard/myjobs",
         "/dashboard/activejobs",
+        "/dashboard/mycompany",
     ]
     useEffect(() =>
     {
@@ -96,13 +98,13 @@ export default function Header (){
                         }
                     </div>
                 </nav>
-                <button onClick={()=>setOpen(!open)} className="md:hidden text-gray-700 font-medium">{open ? "close" : "menu"}</button>
+                <button onClick={()=>setOpen(!open)} className="md:hidden text-gray-700 font-medium">{open ? <X/> : <Menu/>}</button>
                 {/* mobile nav */}
                     <nav className={`fixed top-0 right-0 w-[70%] h-full flex flex-col gap-6 px-4 pb-4 md:hidden bg-gray-50 transition-transform duration-500 ease-in-out ${open ? "translate-x-0 ": "translate-x-full"}`}>
                         {
                             user ? 
                             <Link href={"/profile"} className="flex items-center gap-8 py-2">
-                                <h1>{`${user.first_name} ${user.last_name}`}</h1>
+                                <h1>{user.type === "user" ? `${user.first_name} ${user.last_name}` : user.name ? `${user.name}` : "" }</h1>
                                 {
                                     user.image ? <Image 
                                     src={`http://localhost:4000/${user.image}`}
@@ -120,7 +122,7 @@ export default function Header (){
                             </>
                         }
                         
-                        <button onClick={() => setOpen(false)} className="text-gray-70 text-left mt-7">close</button>
+                        <button onClick={() => setOpen(false)} className="text-gray-70 text-left mt-7"><X/></button>
                     </nav>
                 
             </div>

@@ -10,6 +10,7 @@ import {
   LogOutIcon,
   Building,
   Rocket,
+  LayoutDashboard,
 } from "lucide-react";
 import Link from "next/link";
 import LogoutButton from "../LogoutButton/LogoutButton";
@@ -47,7 +48,8 @@ export default function Sidebar() {
 
         {/* Links */}
         <nav className="flex flex-col mt-4 space-y-2">
-          <SidebarLink href="#" icon={<Building />} text="My Company" isOpen={isOpen} />
+          <SidebarLink href="/dashboard" icon={<LayoutDashboard />} text="Dashboard" isOpen={isOpen} />
+          <SidebarLink href="/dashboard/mycompany" icon={<Building />} text="My Company" isOpen={isOpen} />
           <SidebarLink href="/dashboard/myjobs" icon={<Briefcase />} text="My Jobs" isOpen={isOpen} />
           <SidebarLink href="/dashboard/activejobs" icon={<Rocket />} text="Active Jobs" isOpen={isOpen} />
           <SidebarLink href="#" icon={<Users />} text="Applicants" isOpen={isOpen} />
