@@ -173,7 +173,22 @@ export const UpdateCompany = async (id,data) =>
         const dataToUpdate = {}
 
         if(data.name)
-            dataToUpdate.name = data.name
+        {
+            const isCompanyExist = await prisma.company.findUnique({
+                where:{
+                    name: data.name
+                }
+            })
+            
+            if(isCompanyExist)
+            {
+                const error = new Error("there is already a company with that name")
+                error.status = 400
+                throw error
+            }
+            else
+                dataToUpdate.name = data.name
+        }
 
         if(data.description)
             dataToUpdate.description = data.description

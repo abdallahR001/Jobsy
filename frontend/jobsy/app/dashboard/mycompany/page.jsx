@@ -31,7 +31,7 @@ export default async function MyCompany() {
             <span className="text-sm text-gray-500">{company.email}</span>
             <CompanyDescription description={company.description}/>
             <CompanyEmployeesCount employeesCount={company.employees_count}/>
-            <span className="text-sm text-gray-500">{!company.website === "null" ? `${company.website}` : "no website provided"}</span>
+            <a href={`https://${company.website}`} target="_blank" className="text-sm text-gray-500">{company.website !== "null" ? `${company.website}` : "no website provided"}</a>
             <RecentJobsSection />
         </div>
     )

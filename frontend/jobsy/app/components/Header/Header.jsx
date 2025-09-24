@@ -2,13 +2,15 @@
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 export default function Header (){
     const [open,setOpen] = useState(false)
     const [user,setUser] = useState(null)
 
     const pathName = usePathname()
+
+    const router = useRouter()
 
     const hideHeaderIn = [
         "/join",
@@ -58,6 +60,9 @@ export default function Header (){
 
             setUser(me)
 
+            if(me.type === "company")
+                router.push("/dashboard") 
+
             } 
             catch (error) {
                 setUser(null)
@@ -65,7 +70,7 @@ export default function Header (){
             }
         }
         fetchUserData()
-    },[])
+    },[])       
 
     if(hideHeaderIn.includes(pathName))
         return null

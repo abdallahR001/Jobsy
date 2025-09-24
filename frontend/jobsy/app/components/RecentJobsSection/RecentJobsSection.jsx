@@ -8,7 +8,6 @@ export default async function RecentJobsSection() {
   const cookieStore = cookies()
 
   const token = (await cookieStore).get("token")?.value
-  console.log(token)
 
   if(!token)
     redirect("/login/employer")
@@ -28,8 +27,6 @@ export default async function RecentJobsSection() {
   const data = await response.json()
 
   const recentJobs = data.recentJobs
-
-  console.log(recentJobs)
 
   return (
     <div className="flex flex-col gap-6 mt-8 p-6">
