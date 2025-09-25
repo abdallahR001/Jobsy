@@ -129,6 +129,12 @@ export const GetJob = async (id) =>
                 skills:true,
                 type:true,
                 location:true,
+                job_status:true,
+                _count:{
+                    select:{
+                        applications:true
+                    }
+                },
                 Company:{
                     select:{
                         image:true,
@@ -136,7 +142,7 @@ export const GetJob = async (id) =>
                     }
                 }
             }
-        })     
+        })
 
         return job
     } catch (error) {
@@ -256,6 +262,7 @@ export const SearchJobs = async (userId = null,title,type = null,location = null
                 location:true,
                 salary:true,
                 job_status:true,
+                type:true,
                 Company:{
                     select:{
                         id:true,

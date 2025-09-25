@@ -17,6 +17,52 @@ export const getCompany = async (req,res,next) =>
     }
 }
 
+export const getAllApplicants = async (req,res,next) =>
+{
+    try {
+        const companyId = req.user.id
+
+        const applicants = await prisma.user.findMany({
+            where:{
+                applications:{
+                    some:{
+                        job:{
+                            companyId:companyId
+                        }
+                    }
+                },
+            },
+            select:{
+                id:true,
+                first_name:true,
+                last_name:true,
+                email:true,
+                location:true,
+                image:true,
+                applications:{
+                    select:{
+                        id:true,
+                        job:{
+                            select:{
+                                title:true
+                            }
+                        },
+                        cover_letter:true,
+                        salary:true
+                    }
+                }
+            }
+        })
+
+        res.status(200).json({
+            applicants: applicants
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
 export const onBoardingPage = async (req,res,next) =>
 {
     try {

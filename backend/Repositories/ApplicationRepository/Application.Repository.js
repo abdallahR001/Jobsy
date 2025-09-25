@@ -31,7 +31,7 @@ export const CreateApplication = async (id,jobId,data) =>
 
         if(job.job_status === "hired")
         {
-            const error = new Error("this job is closed because someone is hired")
+            const error = new Error("this job is closed because someone is already hired")
             error.status = 400
             throw error
         }
@@ -39,7 +39,7 @@ export const CreateApplication = async (id,jobId,data) =>
         const newApplication = await prisma.application.create({
             data:{
                 cover_letter:data.cover_letter,
-                salary:data.salary,
+                salary:data.salaryNumber || null,
                 status: "pending",
                 user:{
                     connect:{

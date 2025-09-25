@@ -35,6 +35,7 @@ export default function Header (){
         "/dashboard/myjobs",
         "/dashboard/activejobs",
         "/dashboard/mycompany",
+        "/dashboard/applicants",
     ]
     useEffect(() =>
     {
@@ -49,8 +50,6 @@ export default function Header (){
             })
 
             const me = await response.json()
-
-            console.log(me)
 
             if(!response.ok)
             {

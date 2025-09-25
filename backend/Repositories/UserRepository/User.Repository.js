@@ -415,8 +415,6 @@ export const SaveJob = async(userId,jobId) =>
             }
         })
 
-        console.log(job)
-
         if(!job)
         {
             const error = new Error("job not found")
@@ -455,70 +453,25 @@ export const SaveJob = async(userId,jobId) =>
             isSaved = true
         }
 
-        else{
-            isSaved = true
+        else if(alreadySaved)
+        {
+            await prisma.user.update({
+                where:{
+                    id:user.id
+                },
+                data:{
+                    savedJobs:{
+                        disconnect:{
+                            id:job.id
+                        }
+                    }
+                }
+            })
+
+            isSaved = false
         }
 
         return isSaved
-    } 
-    catch (error) {
-        throw error    
-    }
-}
-
-export const UnSaveJob = async(userId,jobId) =>
-{
-    try {
-        const user = await prisma.user.findUnique({
-            where:{
-                id:userId
-            }
-        })
-
-        if(!user)
-        {
-            const error = new Error("user not found")
-            error.status= 404
-            throw error
-        }
-
-        const job = await prisma.job.findUnique({
-            where:{
-                id:jobId
-            }
-        })
-
-        if(!job)
-        {
-            const error = new Error("job not found")
-            error.status = 404
-            throw error
-        }
-
-        const updatedUser = await prisma.user.update({
-            where:{
-                id:userId
-            },
-            select:{
-                first_name:true,
-                last_name:true,
-                email:true,
-                image:true,
-                bio:true,
-                years_of_experience:true,
-                title:true,
-                savedJobs:true
-            },
-            data:{
-                savedJobs:{
-                    disconnect:{
-                        id:jobId
-                    }
-                }
-            }
-        })
-
-        return updatedUser
     } 
     catch (error) {
         throw error    

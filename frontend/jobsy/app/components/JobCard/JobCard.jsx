@@ -10,7 +10,7 @@ export default async function JobCard({job}){
 >
   {/* Title */}
   <div>
-    <h2 className="text-lg font-bold text-gray-900 mb-1">{job.title}</h2>
+      <h2 className="text-lg font-bold text-gray-900 mb-1">{job.title}</h2>
     <p className="text-sm text-gray-600 truncate mb-3">{job.description}</p>
   </div>
 
@@ -23,7 +23,8 @@ export default async function JobCard({job}){
           width={30}
           height={30}
           alt="company image"
-          className="rounded-full object-cover"
+          className="rounded-full object-cover w-auto"
+          priority
         />
       ) : (
         <div className="w-[30px] h-[30px] rounded-full bg-gradient-to-t from-indigo-500 to-white"></div>
@@ -53,7 +54,7 @@ export default async function JobCard({job}){
   {/* Button */}
   <div className="flex gap-8 items-center">
      <Link
-      href={`/jobs/${job.id}`}
+      href={`/job/${job.id}`}
       className="mt-auto block w-[80%] text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
     >
       Details

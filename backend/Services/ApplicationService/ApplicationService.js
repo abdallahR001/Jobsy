@@ -3,16 +3,18 @@ import { AcceptApplication, CreateApplication, GetApplication, GetApplicationsBy
 export const createApplication = async (id,jobId,data) =>
 {
     try {
-        const {cover_letter, salary} = data
+        const {cover_letter} = data
 
-        if(!cover_letter || cover_letter.trim().length < 30)
+        const salary = data.salaryNumber || null
+
+        if(!cover_letter || cover_letter.trim().length < 10)
         {
-            const error = new Error("cover letter should be at least 30 characters long")
+            const error = new Error("cover letter should be at least 10 characters long")
             error.status = 400
             throw error
         }
 
-        if(salary <= 0 )
+        if(salary && salary <= 0 )
         {
             const error = new Error("salary cannot be 0")
             error.status = 400
