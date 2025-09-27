@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage } from "../Controllers/userController.js";
+import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile } from "../Controllers/userController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import multer from "multer";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
@@ -31,6 +31,7 @@ userRouter.get("/profile",authMiddleWare,authorizeRoles("user","company"),GetPro
 userRouter.get("/followed-companies",authMiddleWare,authorizeRoles("user"),GetFollowedCompanies)
 userRouter.get("/onBoarding",authMiddleWare,authorizeRoles("user","company"),onBoardingPage)
 userRouter.get("/me",authMiddleWare,authorizeRoles("user","company"),me)
+userRouter.get("/company/:companyId",authMiddleWare,authorizeRoles("user","admin"),viewCompanyProfile)
 userRouter.post("/signUp", createAccount)
 userRouter.post("/signIn",logIn)
 userRouter.put("/update-profile",authMiddleWare,upload.single("image"),authorizeRoles("user"),UpdateProfile)

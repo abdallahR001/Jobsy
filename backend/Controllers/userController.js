@@ -17,6 +17,113 @@ export const createAccount = async(req,res,next) =>
     }
 }
 
+export const viewCompanyProfile = async (req,res,next) =>
+{
+    try {
+        const {id} = req.user
+
+        const companyId = req.params.companyId
+
+        const company = await prisma.company.findUnique({
+            where:{
+                id:companyId
+            },
+            select:{
+                id:true,
+                name:true,
+                email:true,
+                image:true,
+                description:true,
+                employees_count:true,
+                created_at:true,
+                website:true,
+                _count:{
+                    select:{
+                        followers:true,
+                        jobs:true
+                    }
+                },
+            }
+        })
+
+        if(!company)
+        {
+            res.status(404).json({
+                message:"company not found"
+            })
+            return
+        }
+
+        let jobs = await prisma.job.findMany({
+                    where:{
+                        AND:[
+                            {
+                                companyId:company.id
+                            },
+                            {
+                                job_status:"open"
+                            }
+                        ]
+                    },
+                    select:{
+                        id:true,
+                        title:true,
+                        description:true,
+                        minimum_years_required: true,
+                        salary:true,
+                        skills:true,
+                        job_status:true,
+                        location:true,
+                        Company:{
+                            select:{
+                                name:true,
+                                id:true
+                            }
+                        },
+                        savedBy:{
+                            where:{
+                                id:id
+                            }
+                        }
+                    },
+                    take:5,
+                    orderBy:{
+                        created_at:"desc"
+                    }
+                })
+
+        let isFollowed;
+
+        const alreadyFollowed = await prisma.company.findFirst({
+            where:{
+                followers:{
+                    some:{
+                        id:id
+                    }
+                }
+            }
+        })
+
+        if(!alreadyFollowed)
+            isFollowed = false
+
+        else
+            isFollowed = true
+        
+        jobs = jobs.map((job) => ({...job, isSaved: job.savedBy.length > 0}))
+
+        res.status(200).json(
+        {
+            company: company,
+            jobs:jobs,
+            isFollowed:isFollowed
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
 export const onBoardingPage = async (req,res,next) =>
 {
     try {

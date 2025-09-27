@@ -1,7 +1,7 @@
 "use client"
 
 import { Plus, X } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function FollowCompanyButton({companyId,initialIsCompanyFollowed}){
@@ -36,6 +36,9 @@ export default function FollowCompanyButton({companyId,initialIsCompanyFollowed}
             }
 
             setIsFollowed(result.isFollowed)
+
+            console.log(result);
+            
         } 
         catch (error) {
             setIsFollowed(prev => prev)    

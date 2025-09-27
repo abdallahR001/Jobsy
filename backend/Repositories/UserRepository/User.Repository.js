@@ -165,6 +165,9 @@ export const UpdateProfile = async (id,data)=>
         if(data.title)
             dataToUpdate.title = data.title
 
+        if(data.location)
+            dataToUpdate.location = data.location
+
         if(data.bio)
             dataToUpdate.bio = data.bio
 
