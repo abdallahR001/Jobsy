@@ -1,5 +1,5 @@
 import { prisma } from "../prisma/prismaClient.js"
-import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, unFollowCompany, getFollowedCompanies, saveJob, getSavedJobs } from "../Services/UserService/UserService.js"
+import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, getFollowedCompanies, saveJob, getSavedJobs } from "../Services/UserService/UserService.js"
 export const createAccount = async(req,res,next) =>
 {
     try {
@@ -164,29 +164,14 @@ export const FollowCompany = async (req,res,next) =>
 {
     try {
         const userId = req.user.id
-        const {companyId} = req.params
+
+        const {companyId} = req.body
 
         const result = await followCompany(userId,companyId)
         
-        res.status(result.status).json({
-            result
-        })
-    } 
-    catch (error) {
-        next(error)    
-    }
-}
-
-export const UnFollowCompany = async (req,res,next) =>
-{
-    try {
-        const userId = req.user.id
-        const {companyId} = req.params
-
-        const result = await unFollowCompany(userId,companyId)
-    
-        res.status(result.status).json({
-            result
+        res.status(200).json({
+            message:"followed company successfully",
+            isFollowed: result
         })
     } 
     catch (error) {
@@ -202,7 +187,7 @@ export const GetFollowedCompanies = async (req,res,next) =>
         const result = await getFollowedCompanies(userId)
         
         res.status(200).json({
-            result
+            followedCompanies: result
         })
     } 
     catch (error) {

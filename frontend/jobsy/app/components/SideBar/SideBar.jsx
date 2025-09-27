@@ -53,7 +53,7 @@ export default function Sidebar() {
           <SidebarLink href="/dashboard/myjobs" icon={<Briefcase />} text="My Jobs" isOpen={isOpen} />
           <SidebarLink href="/dashboard/activejobs" icon={<Rocket />} text="Active Jobs" isOpen={isOpen} />
           <SidebarLink href="/dashboard/applicants" icon={<Users />} text="Applicants" isOpen={isOpen} />
-          <SidebarLink href="#" icon={<UserPlus />} text="Followers" isOpen={isOpen} />
+          <SidebarLink href="/dashboard/followers" icon={<UserPlus />} text="Followers" isOpen={isOpen} />
           <LogoutButton icon={<LogOutIcon />} text="Logout" isOpen={isOpen}/>        
       </nav>
       </div>

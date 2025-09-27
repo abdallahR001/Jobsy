@@ -164,7 +164,9 @@ export const getCompanyFollowers = async (req,res,next) =>
 
         const result = await GetCompanyFollowers(companyId)
 
-        res.status(200).json.json(result)
+        res.status(200).json({
+            followers: result
+        })
     } 
     catch (error) {
         next(error)    

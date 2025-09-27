@@ -1,5 +1,6 @@
 import { Lock, Navigation, Unlock, User } from "lucide-react";
 import DeleteJobButton from "../DeleteJobButton/DeleteJobButton";
+import Link from "next/link";
 
 export default function JobDashboardCard({ job }) {
   
@@ -35,10 +36,10 @@ export default function JobDashboardCard({ job }) {
         </span>
         <p className="text-sm text-gray-500 flex gap-1 items-center my-3">{job._count.applications} Applicants <User/></p>
         <div className="flex gap-2">
-          <button className="cursor-pointer flex items-center gap-1 transition-all duration-300 bg-indigo-500 hover:bg-indigo-600 text-white text-sm px-4 py-2 rounded-full">
+          <Link href={`/dashboard/job/${job.id}`} className="cursor-pointer flex items-center gap-1 transition-all duration-300 bg-indigo-500 hover:bg-indigo-600 text-white text-sm px-4 py-2 rounded-full">
           Details
           <Navigation />
-        </button>
+        </Link>
         <DeleteJobButton jobId={job.id}/>
         </div>
       </div>

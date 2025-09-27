@@ -44,6 +44,7 @@ export default function Login()
         catch (error) {
             setErrorMessage("something went wrong, please try again")
             setLoading(false)
+            console.log(error);
         }
     }
     return (

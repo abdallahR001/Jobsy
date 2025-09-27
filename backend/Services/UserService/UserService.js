@@ -1,4 +1,4 @@
-import { UpdateProfile, DeleteProfile, SignIn, SignUp, FollowCompany, GetFollowedCompanies, UnfollowCompany, SaveJob, GetSavedJobs } from "../../Repositories/UserRepository/User.Repository.js"
+import { UpdateProfile, DeleteProfile, SignIn, SignUp, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs } from "../../Repositories/UserRepository/User.Repository.js"
 import { validateEmail } from "../../Utils/Validations/emailValidation.js"
 import { ValidateName } from "../../Utils/Validations/nameValidation.js"
 import { validatePassword } from "../../Utils/Validations/passwordValidation.js"
@@ -92,7 +92,7 @@ export const followCompany = async (userId,companyId) =>
     }
 }
 
-export const getFollowedCompanies = async (userId) =>
+export const getFollowedCompanies = async (userId,) =>
 {
     try {
         const result = await GetFollowedCompanies(userId)
@@ -105,18 +105,6 @@ export const getFollowedCompanies = async (userId) =>
     }
 }
 
-export const unFollowCompany = async (userId,companyId) =>
-{
-    try {
-        const result = await UnfollowCompany(userId,companyId)
-
-        return result
-    }
-    catch (error) {
-        console.log("error❌", error.message)
-        throw error
-    }
-}
 
 export const saveJob = async (userId,jobId) =>
 {

@@ -1,8 +1,11 @@
 "use client"
 import { Bookmark } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 export default function SaveJobButton({jobId,initialIsSaved}){
     const [isSaved, setIsSaved] = useState(initialIsSaved)
+
+    const router = useRouter()
     const handleSave = async () =>
     {
       try {
@@ -18,6 +21,9 @@ export default function SaveJobButton({jobId,initialIsSaved}){
         })
 
         const result = await response.json()
+
+        if(response.status === 401 || response.status === 403)
+          router.push("/login/jobseeker")
 
         if(!response.ok)
         {

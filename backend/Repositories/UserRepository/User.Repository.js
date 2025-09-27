@@ -257,33 +257,59 @@ export const FollowCompany = async (userId,companyId) =>
             throw error
         }
 
-        const updatedUser = await prisma.user.update({
+        const alreadyFollowed = await prisma.user.findFirst({
             where:{
-                id:userId
-            },
-            select:{
-                first_name:true,
-                last_name:true,
-                email:true,
-                image:true,
-                bio:true,
-                years_of_experience:true,
-                title:true
-            },
-            data:{
+                id:user.id,
                 followings:{
-                    connect:{
-                        id:companyId
+                    some:{
+                        id:company.id
                     }
                 }
             }
         })
 
-        return {
-            status: 200,
-            message: "followed company successfully",
-            updatedUser
+        let isFollowed;
+
+        if(!alreadyFollowed)
+        {
+            await prisma.user.update({
+                where:{
+                    id:user.id,
+                },
+                data:{
+                    followings:{
+                        connect:{
+                            id:company.id
+                        }
+                    }
+                }
+            })
+
+            console.log("follow")
+
+            isFollowed = true
         }
+        else if(alreadyFollowed)
+        {
+            await prisma.user.update({
+                where:{
+                    id:user.id
+                },
+                data:{
+                    followings:{
+                        disconnect:{
+                            id:company.id
+                        }
+                    }
+                }
+            })
+
+            console.log("unfollow")
+            
+            isFollowed = false
+        }
+
+        return isFollowed
     } 
     catch (error) {
         throw error        
@@ -318,6 +344,7 @@ export const GetFollowedCompanies = async (userId) =>
                 id:true,
                 name:true,
                 image:true,
+                email:true,
                 description:true,
                 employees_count:true,
                 created_at:true,
@@ -331,67 +358,6 @@ export const GetFollowedCompanies = async (userId) =>
     }
 }
 
-export const UnfollowCompany = async (userId,companyId) =>
-{
-    try {
-        const user = await prisma.user.findUnique({
-            where:{
-                id:userId
-            }
-        })
-
-        if(!user)
-        {
-            const error = new Error("user not found")
-            error.status = 404
-            throw error
-        }
-
-        const company = await prisma.company.findUnique({
-            where:{
-                id:companyId
-            }
-        })
-
-        if(!company)
-        {
-            const error = new Error("company not found")
-            error.status = 404
-            throw error
-        }
-
-        const updatedUser = await prisma.user.update({
-            where:{
-                id:userId
-            },
-            select:{
-                first_name:true,
-                last_name:true,
-                email:true,
-                image:true,
-                bio:true,
-                years_of_experience:true,
-                title:true
-            },
-            data:{
-                followings:{
-                    disconnect:{
-                        id:companyId
-                    }
-                }
-            }
-        })
-
-        return {
-            status: 200,
-            message: "unfollowed company successfully",
-            updatedUser
-        }
-    } 
-    catch (error) {
-        throw error    
-    }
-}
 
 export const SaveJob = async(userId,jobId) =>
 {

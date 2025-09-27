@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js"
 import { authorizeRoles} from "../MiddleWares/AuthorizationMiddleWare.js"
-import { CreateJob, DeleteAllJobs, DeleteJob, GetCompanyJobs, GetJob, GetJobsByCategory, GetOpenJobs, GetSkillsJobs, SearchJobs } from "../Controllers/jobController.js";
+import { CreateJob, DeleteAllJobs, DeleteJob, GetCompanyJobs, GetJob, GetJobForDashboard, GetJobsByCategory, GetOpenJobs, GetSkillsJobs, SearchJobs } from "../Controllers/jobController.js";
 import { searchMiddleWare } from "../MiddleWares/JobsMiddleWares/searchMiddleWare.js";
 
 const jobRouter = Router()
@@ -12,6 +12,7 @@ jobRouter.get("/activejobs",authMiddleWare,authorizeRoles("user","company"),GetO
 jobRouter.get("/companyjobs",authMiddleWare,authorizeRoles("company","user","admin"),GetCompanyJobs)
 jobRouter.get("/category/:categoryId",authMiddleWare,authorizeRoles("user","admin"),GetJobsByCategory)
 jobRouter.get("/:jobId",GetJob)
+jobRouter.get("/dashboard/:jobId",authMiddleWare,authorizeRoles("company"),GetJobForDashboard)
 jobRouter.post("/",authMiddleWare,authorizeRoles("company"),CreateJob)
 jobRouter.delete("/:jobId",authMiddleWare,authorizeRoles("company"),DeleteJob)
 jobRouter.delete("/",authMiddleWare,authorizeRoles("company"),DeleteAllJobs)

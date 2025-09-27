@@ -31,11 +31,6 @@ export default function Header (){
         "/onboarding/employers/step4",
         "/onboarding/employers/step5",
         "/onboarding/employers/step6",
-        "/dashboard/newjob",
-        "/dashboard/myjobs",
-        "/dashboard/activejobs",
-        "/dashboard/mycompany",
-        "/dashboard/applicants",
     ]
     useEffect(() =>
     {
@@ -71,7 +66,7 @@ export default function Header (){
         fetchUserData()
     },[])       
 
-    if(hideHeaderIn.includes(pathName))
+    if(hideHeaderIn.includes(pathName) || pathName.startsWith("/dashboard"))
         return null
 
     return(

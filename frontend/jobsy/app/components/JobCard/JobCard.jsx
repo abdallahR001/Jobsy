@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import SaveJobButton from "../SaveJobButton/SaveJobButton"
+
 export default async function JobCard({job}){  
 
     return(
@@ -10,10 +11,9 @@ export default async function JobCard({job}){
 >
   {/* Title */}
   <div>
-      <h2 className="text-lg font-bold text-gray-900 mb-1">{job.title}</h2>
-    <p className="text-sm text-gray-600 truncate mb-3">{job.description}</p>
+    <h2 className="text-lg font-bold text-gray-900 mb-1">{job.title}</h2>
   </div>
-
+    <p className="text-sm text-gray-600 truncate mb-3">{job.description}</p>
   {/* Company Info */}
   <div className="flex items-center justify-between mb-3">
     <div className="flex items-center gap-2">

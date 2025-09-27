@@ -65,6 +65,59 @@ export const GetJob = async (req,res,next) =>
     }
 }
 
+export const GetJobForDashboard = async (req,res,next) =>
+{
+    try {
+        const {jobId} = req.params
+
+        const job = await prisma.job.findUnique({
+            where:{
+                id: jobId,
+            },
+            select:{
+                id:true,
+                title:true,
+                description:true,
+                minimum_years_required: true,
+                salary:true,
+                skills:true,
+                type:true,
+                location:true,
+                job_status:true,
+                _count:{
+                    select:{
+                        applications:true
+                    }
+                },
+                applications:{
+                    select:{
+                        id:true,
+                        user:{
+                            select:{
+                                id:true,
+                                first_name:true,
+                                last_name:true,
+                                email:true,
+                                image:true,
+                                title:true
+                            }
+                        },
+                        cover_letter:true,
+                        salary:true
+                    }
+                }
+            }
+        })
+
+        res.status(200).json({
+            job:job
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
 export const DeleteJob = async (req,res,next) =>
 {
     try {
@@ -100,9 +153,9 @@ export const DeleteAllJobs = async (req,res,next) =>
 export const GetCompanyJobs = async (req,res,next) =>
 {
     try {
-        const {companyId} = req.user
+        const {id} = req.user
 
-        const result = await getCompanyJobs(companyId)
+        const result = await getCompanyJobs(id)
 
         res.status(200).json({
             jobs: result

@@ -80,6 +80,7 @@ const handleSubmit = async (e) =>
     catch (error) {
         setErrorMessage("something went wrong, please try again later")
         console.log(error)
+        setLoading(false)
     }
     }
     return(

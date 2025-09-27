@@ -140,7 +140,8 @@ export const GetJob = async (id) =>
                         image:true,
                         name:true,
                     }
-                }
+                },
+                
             }
         })
 
@@ -223,6 +224,7 @@ export const GetCompanyJobs = async (companyId) =>
                 type:true,
                 location:true,
                 job_status:true,
+                companyId:true,
                 _count:{
                     select:{
                         applications:true
