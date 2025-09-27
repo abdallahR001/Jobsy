@@ -1,4 +1,4 @@
-import { acceptApplication, createApplication, getApplicationsByJob, rejectApplication, toggleApplicationSeen } from "../Services/ApplicationService/ApplicationService.js"
+import { acceptApplication, createApplication, getApplicationsByJob, getUserApplications, rejectApplication, toggleApplicationSeen } from "../Services/ApplicationService/ApplicationService.js"
 
 export const CreateApplication = async (req,res,next) =>
 {
@@ -40,8 +40,8 @@ export const GetUserApplications = async (req,res,next) =>
 
         const result = await getUserApplications(id)
 
-        res.status(result.status).json({
-            result
+        res.status(200).json({
+            applications: result
         })
     } 
     catch (error) {

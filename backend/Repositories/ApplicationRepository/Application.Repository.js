@@ -115,12 +115,22 @@ export const GetUserApplications = async (id) =>
             select:{
                 id:true,
                 salary:true,
+                cover_letter:true,
+                status:true,
                 job:{
                     select:{
                         id:true,
                         title:true,
                         description:true,
                         salary:true,
+                        location:true,
+                        Company:{
+                            select:{
+                                id:true,
+                                name:true,
+                                image:true
+                            }
+                        }
                     }
                 }
             }

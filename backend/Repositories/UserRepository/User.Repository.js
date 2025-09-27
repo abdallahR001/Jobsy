@@ -463,15 +463,42 @@ export const GetSavedJobs = async (userId) =>
             throw error
         }
 
-        const savedJobs = await prisma.job.findMany({
+        let savedJobs = await prisma.job.findMany({
             where:{
                 savedBy:{
                     some:{
                         id:userId
                     }
                 }
-            }
+            },
+            select:{
+                    id:true,
+                    title:true,
+                    description:true,
+                    minimum_years_required: true,
+                    salary:true,
+                    skills:true,
+                    job_status:true,
+                    location:true,
+                    Company:{
+                        select:{
+                            name:true,
+                            id:true
+                        }
+                    },
+                    savedBy:{
+                        where:{
+                            id:userId
+                        }
+                    }
+                },
+                take:5,
+                orderBy:{
+                    created_at:"desc"
+                }
         })
+
+        savedJobs = savedJobs.map((job) => ({...job, isSaved: job.savedBy.length > 0}))
 
         return savedJobs
     } 

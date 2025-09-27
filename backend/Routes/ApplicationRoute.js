@@ -5,9 +5,9 @@ import { AcceptApplication, CreateApplication, GetApplicationsByJob, GetUserAppl
 
 const applicationRoute = Router()
 
+applicationRoute.get("/my-applications",authMiddleWare,authorizeRoles("user"), GetUserApplications)
 applicationRoute.post("/:jobId",authMiddleWare,authorizeRoles("user"), CreateApplication)
 applicationRoute.get("/:jobId",authMiddleWare, authorizeRoles("company"), GetApplicationsByJob)
-applicationRoute.get("/my-applications",authMiddleWare,authorizeRoles("user"), GetUserApplications)
 applicationRoute.put("/see/:applicationId",authMiddleWare,authorizeRoles("company"), ToggleApplicationSeen)
 applicationRoute.put("/accept/applicationId",authMiddleWare,authorizeRoles, AcceptApplication)
 applicationRoute.put("/reject/applicationId",authMiddleWare,authorizeRoles("company"), RejectApplication)
