@@ -113,12 +113,14 @@ export const GetJobsByCategory = async (categoryId) =>
     }
 }
 
-export const GetJob = async (id) =>
+export const GetJob = async (userId,id) =>
 {
     try {
+        console.log(id);
+        
         const job = await prisma.job.findUnique({
             where:{
-                id
+                id:id
             },
             select:{
                 id:true,
@@ -137,6 +139,7 @@ export const GetJob = async (id) =>
                 },
                 Company:{
                     select:{
+                        id:true,
                         image:true,
                         name:true,
                     }
@@ -145,7 +148,34 @@ export const GetJob = async (id) =>
             }
         })
 
-        return job
+        let isApplied;
+
+        const alreadyApplied = await prisma.job.findFirst({
+            where:{
+                id:job.id,
+                applications:{
+                    some:{
+                        user:{
+                            id:userId
+                        }
+                    }
+                }
+            }
+        })
+
+        if(!alreadyApplied)
+        {
+            isApplied = false
+        }
+        else if(alreadyApplied)
+        {
+            isApplied = true
+        }
+
+        return {
+            job,
+            isApplied
+        }
     } catch (error) {
         throw error
     }

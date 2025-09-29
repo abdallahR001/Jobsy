@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link";
 import { useState } from "react";
+import JobSeekerLoginFormSkeleton from "../JobSeekerLoginSkeleton/JobSeekerLoginSkeleton";
 export default function JobSeekerLoginForm(){
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")

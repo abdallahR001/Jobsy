@@ -96,6 +96,7 @@ export const viewCompanyProfile = async (req,res,next) =>
 
         const alreadyFollowed = await prisma.company.findFirst({
             where:{
+                id:company.id,
                 followers:{
                     some:{
                         id:id
@@ -107,7 +108,7 @@ export const viewCompanyProfile = async (req,res,next) =>
         if(!alreadyFollowed)
             isFollowed = false
 
-        else
+        else if(alreadyFollowed)
             isFollowed = true
         
         jobs = jobs.map((job) => ({...job, isSaved: job.savedBy.length > 0}))

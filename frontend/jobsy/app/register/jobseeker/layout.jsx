@@ -5,7 +5,7 @@ export const metadata = {
 export default function Layout({children})
 {
     return(
-    <div className="bg-white">
+    <div>
         {children}
     </div>
     )

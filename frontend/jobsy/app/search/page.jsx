@@ -2,6 +2,7 @@ import MainSearch from "../components/SearchForm/MainSearch";
 import JobCard from "../components/JobCard/JobCard";
 import { Suspense } from "react";
 import { cookies } from "next/headers";
+import { JobCardGridSkeleton } from "../components/JobCardGridSkeleton/JobCardGridSkeleton";
 export default async function SearchPage({ searchParams }) {
   const params = new URLSearchParams(await searchParams);
 
@@ -37,9 +38,7 @@ export default async function SearchPage({ searchParams }) {
 
       {/* Results */}
       <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center">
-            <h1 className="text-indigo-500 font-bold">Loading</h1>
-        </div>
+        <JobCardGridSkeleton/>
       }>
         <div className="w-full max-w-6xl">
         {data.jobs.length > 0 ? (

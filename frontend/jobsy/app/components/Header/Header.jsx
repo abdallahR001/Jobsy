@@ -1,16 +1,17 @@
 "use client"
-import { Bookmark, Menu, MessageCircleMore, Rocket, X } from "lucide-react";
+import { Bookmark, Menu, MessageCircleMore, Rocket, X, User, ChevronDown, Bell, Settings, Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 export default function Header (){
     const [open,setOpen] = useState(false)
     const [user,setUser] = useState(null)
     const [activeLink,setActiveLink] = useState("")
+    const [profileDropdown, setProfileDropdown] = useState(false)
 
     const pathName = usePathname()
-
     const router = useRouter()
 
     const hideHeaderIn = [
@@ -33,13 +34,13 @@ export default function Header (){
         "/onboarding/employers/step5",
         "/onboarding/employers/step6",
     ]
+
     useEffect(() =>
     {
         if(hideHeaderIn.includes(pathName))
             return
         const fetchUserData = async () =>
         {
-            
             try {
                 const response = await fetch("http://localhost:4000/api/users/me",{
                 credentials:"include"
@@ -61,7 +62,6 @@ export default function Header (){
             } 
             catch (error) {
                 setUser(null)
-                console.log(error)
             }
         }
         fetchUserData()
@@ -73,94 +73,253 @@ export default function Header (){
     const navLinks = [
         {
             href:"/savedjobs",
-            title:"saved jobs",
-            icon: <Bookmark/>
+            title:"Saved Jobs",
+            icon: <Bookmark className="w-5 h-5"/>,
+            color: "text-purple-600"
         },
         {
             href:"/applications",
-            title:"applications",
-            icon: <Rocket/>
+            title:"Applications",
+            icon: <Rocket className="w-5 h-5"/>,
+            color: "text-indigo-600"
         },
         {
             href:"/",
             title:"messages",
-            icon: <MessageCircleMore/>
+            icon: <MessageCircleMore className="w-5 h-5"/>,
+            color: "text-green-600"
         },
+        {
+            href:"/followedcompanies",
+            title:"followed companies",
+            icon: <Heart/>,
+            color: "text-blue-600"
+        }
     ]
 
     return(
-        <header className="fixed w-full bg-white shadow-md">
-            <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
-                <Link href={"/"} onClick={() => {setActiveLink(""),setOpen(false)}}>
-                    <h1 className="text-2xl font-bold text-indigo-600">Jobs<span className="text-indigo-700">y</span></h1>
-                </Link>
-            
-                <nav className="hidden md:flex gap-6 items-center">
-                    <div className="hidden md:flex gap-6 items-center">
-                        {
-                            user ? 
-                            <div className="flex gap-5 items-center">
-                                {
-                                    navLinks.map((link) => (
-                                        <Link className={`transition-all flex items-center gap-2 duration-300 ${activeLink === link.title ? "text-indigo-500" : "text-gray-800"} hover:text-indigo-500`} onClick={() => setActiveLink(link.title)} key={link.title} href={link.href}>{link.title} {link.icon}</Link>
-                                    ))
-                                }
-                                <Link className="flex items-center gap-5" href={"/profile"}>
-                                <h1>{user.type === "user" ? `${user.first_name} ${user.last_name}` : user.name ? `${user.name}` : "" }</h1>
-                                {
-                                    user.image ? <Image 
-                                    src={`http://localhost:4000/${user.image}`}
-                                    width={40}
-                                    height={40}
-                                    alt="profile"
-                                    className="rounded-full"
-                                    />: <div className="rounded-full w-[40px] h-[40px] bg-gradient-to-t from-indigo-500 to-white"></div>
-                                }
+        <>
+            <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+                <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-4">
+                    {/* Logo */}
+                    <Link href={"/"} onClick={() => {setActiveLink(""),setOpen(false)}} className="group">
+                        <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                            Jobs<span className="text-indigo-700">y</span>
+                        </h1>
+                    </Link>
+                
+                    {/* Desktop Navigation */}
+                    <nav className="hidden lg:flex gap-8 items-center">
+                        {user ? (
+                            <div className="flex gap-6 items-center">
+                                {/* Navigation Links */}
+                                <div className="flex gap-6">
+                                    {navLinks.map((link) => (
+                                        <Link 
+                                            className={`group relative flex items-center gap-2 px-4 py-2 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-50 ${
+                                                activeLink === link.title 
+                                                ? `${link.color} bg-gray-50` 
+                                                : "text-gray-700 hover:text-gray-900"
+                                            }`} 
+                                            onClick={() => setActiveLink(link.title)} 
+                                            key={link.title} 
+                                            href={link.href}
+                                        >
+                                            <span className={`transition-colors duration-300 ${activeLink === link.title ? link.color : "text-gray-400 group-hover:text-gray-600"}`}>
+                                                {link.icon}
+                                            </span>
+                                            <span>{link.title}</span>
+                                            {activeLink === link.title && (
+                                                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"></div>
+                                            )}
+                                        </Link>
+                                    ))}
+                                </div>
+
+                                {/* Notifications */}
+                                {/* <div className="relative">
+                                    <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl transition-all duration-300">
+                                        <Bell className="w-5 h-5" />
+                                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+                                    </button>
+                                </div> */}
+
+                                {/* Profile Dropdown */}
+                                <div className="relative">
+                                    <button 
+                                        onClick={() => setProfileDropdown(!profileDropdown)}
+                                        className="flex items-center gap-3 p-2 rounded-2xl hover:bg-gray-50 transition-all duration-300 group"
+                                    >
+                                        <div className="text-right">
+                                            <p className="text-sm font-semibold text-gray-900">
+                                                {user.type === "user" ? `${user.first_name} ${user.last_name}` : user.name || "User"}
+                                            </p>
+                                            <p className="text-xs text-gray-500 capitalize">{user.type}</p>
+                                        </div>
+                                        {user.image ? (
+                                            <Image 
+                                                src={`http://localhost:4000/${user.image}`}
+                                                width={40}
+                                                height={40}
+                                                alt="profile"
+                                                className="rounded-full ring-2 ring-white shadow-md"
+                                            />
+                                        ) : (
+                                            <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                                                <User className="w-5 h-5 text-white" />
+                                            </div>
+                                        )}
+                                        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${profileDropdown ? 'rotate-180' : ''}`} />
+                                    </button>
+
+                                    {/* Dropdown Menu */}
+                                    {profileDropdown && (
+                                        <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
+                                            <Link 
+                                                href="/profile" 
+                                                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                                onClick={() => setProfileDropdown(false)}
+                                            >
+                                                <User className="w-4 h-4" />
+                                                <span>View Profile</span>
+                                            </Link>
+                                            <Link 
+                                                href="/settings" 
+                                                className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                                onClick={() => setProfileDropdown(false)}
+                                            >
+                                                <Settings className="w-4 h-4" />
+                                                <span>Settings</span>
+                                            </Link>
+                                            <hr className="my-2 border-gray-100" />
+                                            <button className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200 text-left">
+                                                <span>Sign Out</span>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-4">
+                                <Link 
+                                    href="/login/jobseeker" 
+                                    className="text-gray-700 hover:text-indigo-600 font-medium transition-colors duration-300"
+                                >
+                                    Login
                                 </Link>
-                            </div>:<>
-                                <Link href={"/login/jobseeker"} className="text-gray-700 hover:text-indigo-600 transition-colors duration-300" >Login</Link>
-                                <Link href={"/join"} className="px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition-all duration-300">Join</Link>
-                            </>
-                        }
-                    </div>
-                </nav>
-                <button onClick={()=>setOpen(!open)} className="md:hidden text-gray-700 font-medium">{open ? <X/> : <Menu/>}</button>
-                {/* mobile nav */}
-                    <nav className={`fixed top-0 right-0 w-[70%] h-full flex flex-col gap-6 px-4 pb-4 md:hidden bg-gray-50 transition-transform duration-500 ease-in-out ${open ? "translate-x-0 ": "translate-x-full"}`}>
-                        {
-                            user ? 
-                            <div className="flex gap-5 flex-col">
-                                <Link href={"/profile"} onClick={()=> setOpen(false)} className="flex w-fit items-center gap-8 py-2">
-                                <div className="flex flex-col gap-4 items-start">
-                                    {
-                                        user.image ? <Image 
+                                <Link 
+                                    href="/join" 
+                                    className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                                >
+                                    Get Started
+                                </Link>
+                            </div>
+                        )}
+                    </nav>
+
+                    {/* Mobile Menu Button */}
+                    <button 
+                        onClick={()=>setOpen(!open)} 
+                        className="lg:hidden p-2 text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-300"
+                    >
+                        {open ? <X className="w-6 h-6"/> : <Menu className="w-6 h-6"/>}
+                    </button>
+                </div>
+            </header>
+
+            {/* Mobile Navigation Overlay */}
+            {open && (
+                <div 
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={() => setOpen(false)}
+                />
+            )}
+
+            {/* Mobile Navigation Menu */}
+            <nav className={`fixed top-0 right-0 w-80 h-full flex flex-col bg-white lg:hidden transition-transform duration-300 ease-out z-50 shadow-2xl ${open ? "translate-x-0" : "translate-x-full"}`}>
+                {/* Mobile Header */}
+                <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                    <h2 className="text-xl font-bold text-gray-900">Menu</h2>
+                    <button 
+                        onClick={() => setOpen(false)} 
+                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl transition-all duration-300"
+                    >
+                        <X className="w-5 h-5"/>
+                    </button>
+                </div>
+
+                {/* Mobile Content */}
+                <div className="flex-1 overflow-y-auto p-6">
+                    {user ? (
+                        <div className="space-y-6">
+                            {/* Mobile Profile */}
+                            <Link 
+                                href="/profile" 
+                                onClick={() => setOpen(false)} 
+                                className="flex items-center gap-4 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100"
+                            >
+                                {user.image ? (
+                                    <Image 
                                         src={`http://localhost:4000/${user.image}`}
-                                        width={40}
-                                        height={40}
+                                        width={50}
+                                        height={50}
                                         alt="profile"
-                                        className="rounded-full"
-                                        />: <div className="rounded-full w-[40px] h-[40px] bg-gray-300"></div> 
-                                    }
-                                    <h1>{user.type === "user" ? `${user.first_name} ${user.last_name}` : user.name ? `${user.name}` : "" }</h1>
+                                        className="rounded-full ring-2 ring-white shadow-md"
+                                    />
+                                ) : (
+                                    <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                                        <User className="w-6 h-6 text-white" />
+                                    </div>
+                                )}
+                                <div>
+                                    <h3 className="font-semibold text-gray-900">
+                                        {user.type === "user" ? `${user.first_name} ${user.last_name}` : user.name || "User"}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 capitalize">{user.type}</p>
                                 </div>
                             </Link>
-                            {
-                                navLinks.map((link) => (
-                                        <Link className={`transition-all flex items-center gap-2 duration-300 ${activeLink === link.title ? "text-indigo-500" : "text-gray-800"} hover:text-indigo-500`} onClick={() => {setActiveLink(link.title),setOpen(false)}} key={link.title} href={link.href}>{link.title} {link.icon}</Link>
-                                    ))
-                            }
+
+                            {/* Mobile Navigation Links */}
+                            <div className="space-y-2">
+                                {navLinks.map((link) => (
+                                    <Link 
+                                        key={link.title}
+                                        href={link.href}
+                                        className={`flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+                                            activeLink === link.title 
+                                            ? `${link.color} bg-gray-50` 
+                                            : "text-gray-700 hover:bg-gray-50"
+                                        }`}
+                                        onClick={() => {setActiveLink(link.title), setOpen(false)}}
+                                    >
+                                        <span className={activeLink === link.title ? link.color : "text-gray-400"}>
+                                            {link.icon}
+                                        </span>
+                                        <span>{link.title}</span>
+                                    </Link>
+                                ))}
                             </div>
-                            :
-                            <>
-                                <Link href={"/login/jobseeker"} className="text-gray-700 hover:text-indigo-600 transition-colors duration-300" onClick={()=>setOpen(false)}>Login</Link>
-                                <Link href={"/join"} className="text-gray-700 hover:text-indigo-600 transition-colors duration-300" onClick={()=>setOpen(false)}>Join</Link>
-                            </>
-                        }
-                        
-                        <button onClick={() => setOpen(false)} className="text-gray-700 cursor-pointer text-left absolute top-5 right-5"><X/></button>
-                    </nav>
-                
-            </div>
-        </header>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            <Link 
+                                href="/login/jobseeker" 
+                                className="block w-full text-center py-3 text-gray-700 hover:bg-gray-50 rounded-xl font-medium transition-colors duration-300" 
+                                onClick={() => setOpen(false)}
+                            >
+                                Login
+                            </Link>
+                            <Link 
+                                href="/join" 
+                                className="block w-full text-center py-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white rounded-xl font-semibold shadow-lg transition-all duration-300" 
+                                onClick={() => setOpen(false)}
+                            >
+                                Get Started
+                            </Link>
+                        </div>
+                    )}
+                </div>
+            </nav>
+        </>
     )
 }

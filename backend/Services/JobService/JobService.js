@@ -33,10 +33,10 @@ export const getJobsByCategory = async (categoryId) =>
     }
 }
 
-export const getJob = async (jobId) =>
+export const getJob = async (userId,jobId) =>
 {
     try {
-        const result = await GetJob(jobId)
+        const result = await GetJob(userId,jobId)
 
         return result
     } 

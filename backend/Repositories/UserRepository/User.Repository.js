@@ -351,6 +351,11 @@ export const GetFollowedCompanies = async (userId) =>
                 description:true,
                 employees_count:true,
                 created_at:true,
+                _count:{
+                    select:{
+                        jobs:true
+                    }
+                }
             }
         })
 

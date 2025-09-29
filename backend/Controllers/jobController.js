@@ -52,12 +52,18 @@ export const GetJobsByCategory = async (req,res,next) =>
 export const GetJob = async (req,res,next) =>
 {
     try {
-        const {jobId} = req.params
+        const jobId = req.params.jobId
 
-        const result = await getJob(jobId)
+        console.log(jobId);
+        
+
+        const {id} = req.user
+
+        const result = await getJob(id,jobId)
 
         res.status(200).json({
-            result
+            job:result.job,
+            isApplied: result.isApplied
         })
     } 
     catch (error) {
