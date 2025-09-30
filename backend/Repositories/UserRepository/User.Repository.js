@@ -123,6 +123,14 @@ export const GetProfile = async(id)=>
                         followings:true,
                         savedJobs:true
                     }
+                },
+                PortfolioFiles:{
+                    select:{
+                        fileName:true,
+                        title:true,
+                        description:true,
+                        url:true
+                    }
                 }
             }
         })

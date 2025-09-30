@@ -220,6 +220,45 @@ export const logIn = async(req,res,next) =>
     }
 }
 
+export const UploadPortfolioFile = async (req,res,next) =>
+{
+    try {
+        const {id} = req.user
+        const {title,description} = req.body
+
+        const file = req.file
+
+        if(!file)
+            return res.status(400).json({
+            message: "no file uploaded"
+        })
+
+        if (file.mimetype === "application/x-msdos-program" || file.mimetype === "application/x-msdownload") {
+            return res.status(400).json({ message: "Executable files are not allowed" });
+        }
+
+
+        const newFile = await prisma.portfolioFile.create({
+            data:{
+                title,
+                description,
+                fileName:file.originalname,
+                fileType:file.mimetype,
+                url:`uploads/${file.filename}`,
+                userId:id
+            }
+        })
+
+        res.status(201).json({
+            message:`uploaded ${newFile.title} succesfully`,
+            file:newFile
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
 export const GetProfile = async (req,res,next) =>
 {
     try {

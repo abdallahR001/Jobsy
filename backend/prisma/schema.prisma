@@ -33,6 +33,7 @@ model User {
   followings Company[]
   applications Application[]
   skills Skill[]
+  PortfolioFiles PortfolioFile[]
 }
 
 model Job {
@@ -109,4 +110,17 @@ model Admin {
   name String
   email String @unique
   password String
+}
+
+model PortfolioFile {
+  id String @id @default(cuid())
+  fileName String
+  fileType String
+  title String
+  description String
+  url String
+  created_at DateTime @default(now())
+  
+  userId String
+  user User @relation(fields: [userId], references: [id],onDelete: Cascade)
 }

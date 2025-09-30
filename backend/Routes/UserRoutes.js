@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile, Logout } from "../Controllers/userController.js";
+import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile, Logout, UploadPortfolioFile } from "../Controllers/userController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import multer from "multer";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
@@ -21,11 +21,25 @@ const storage = multer.diskStorage({
     },
     filename:function(req,file,cb)
     {
-        cb(null,file.originalname + "-" + Date.now())
+        cb(null,Date.now() + "-" + file.originalname)
     }
 })
 
-const upload = multer({storage})
+const upload = multer(
+    {
+        storage,
+        limits: {
+            fieldSize:50 * 1024 * 1024,
+            fileSize: 50 * 1024 * 1024 // 50 MB
+        },
+        fileFilter: (req, file, cb) => {
+            if (file.mimetype === "application/x-msdownload") {
+            return cb(new Error("EXE files not allowed"));
+            }
+            cb(null, true);
+        },
+    }
+)
 
 userRouter.get("/profile",authMiddleWare,authorizeRoles("user","company"),GetProfile)
 userRouter.get("/followed-companies",authMiddleWare,authorizeRoles("user"),GetFollowedCompanies)
@@ -38,6 +52,7 @@ userRouter.put("/update-profile",authMiddleWare,upload.single("image"),authorize
 userRouter.delete("/delete",authMiddleWare,DeleteProfile)
 userRouter.post("/follow",authMiddleWare,authorizeRoles("user"),FollowCompany)
 userRouter.post("/save",authMiddleWare,authorizeRoles("user"),SaveJob)
+userRouter.post("/upload-file",authMiddleWare,authorizeRoles("user"),upload.single("file"),UploadPortfolioFile)
 userRouter.get("/savedjobs",authMiddleWare,authorizeRoles("user"),GetSavedJobs)
 userRouter.get("/logout",authMiddleWare,authorizeRoles("user"),Logout)
 
