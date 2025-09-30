@@ -26,6 +26,7 @@ export const createApplication = async (id,jobId,data) =>
         return result
     } 
     catch (error) {
+        throw error
         console.log("error❌", error)    
     }
 }

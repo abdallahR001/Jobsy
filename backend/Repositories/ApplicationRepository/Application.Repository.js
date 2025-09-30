@@ -29,7 +29,7 @@ export const CreateApplication = async (id,jobId,data) =>
             throw error
         }
 
-        if(job.job_status === "hired")
+        if(job.job_status === "closed")
         {
             const error = new Error("this job is closed because someone is already hired")
             error.status = 400

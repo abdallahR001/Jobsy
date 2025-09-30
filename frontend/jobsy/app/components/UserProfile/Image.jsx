@@ -1,11 +1,11 @@
 "use client"
-import { Camera, Save, Loader2 } from "lucide-react";
+import { Camera, Save, Loader2, User } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function CompanyImage({companyImage}){
+export default function UserImage({userImage}){
     const [image,setImage] = useState(null)
-    const [preview,setPreview] = useState(companyImage)
+    const [preview,setPreview] = useState(userImage)
     const [updateMode,setUpdateMode] = useState(false)
     const [loading,setLoading] = useState(false)
 
@@ -35,15 +35,17 @@ export default function CompanyImage({companyImage}){
             const formData = new FormData()
             formData.append("image",image)
 
-            const response = await fetch("http://localhost:4000/api/companies",{
+            const response = await fetch("http://localhost:4000/api/users/update-profile",{
                 credentials:"include",
                 method:"PUT",
                 body: formData
             })
 
-            const company = await response.json()
+            const data = await response.json()
 
-            setPreview(`http://localhost:4000/${company.company.image}`)
+            console.log(data);
+
+            setPreview(`http://localhost:4000/${data.user.image}`)
             setUpdateMode(false)
             setLoading(false)
         }
@@ -57,7 +59,7 @@ export default function CompanyImage({companyImage}){
     const cancel = () => {
         setUpdateMode(false)
         setImage(null)
-        setPreview(companyImage)
+        setPreview(userImage)
     }
 
     return(
@@ -67,21 +69,26 @@ export default function CompanyImage({companyImage}){
                 {image ? 
                     <Image 
                         src={preview}
-                        alt="company profile image"
+                        alt="user profile image"
                         width={150}
                         height={150}
                         className="rounded-full w-32 h-32 object-cover border-4 border-white shadow-xl ring-4 ring-indigo-100"
                         priority
                     />
                     :
+                    preview?
                     <Image 
                         src={`http://localhost:4000/${preview}`}
-                        alt="company profile image"
+                        alt="user profile image"
                         width={150}
                         height={150}
                         className="rounded-full w-32 h-32 object-cover border-4 border-white shadow-xl ring-4 ring-indigo-100"
                         priority
                     />
+                    :
+                    <div className="w-[150px] h-[150px] bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+                        <User className="text-3xl w-full text-white" />
+                    </div>
                 }
 
                 {/* Edit Button Overlay */}

@@ -162,6 +162,12 @@ export const UpdateProfile = async (id,data)=>
             throw error
         }
 
+        if(data.first_name)
+            dataToUpdate.first_name = data.first_name
+
+        if(data.last_name)
+            dataToUpdate.last_name = data.last_name
+
         if(data.title)
             dataToUpdate.title = data.title
 
@@ -180,9 +186,21 @@ export const UpdateProfile = async (id,data)=>
         if(!user.hasSeenOnboarding)
             dataToUpdate.hasSeenOnboarding = true
 
-        await prisma.user.update({
+        const updatedUser = await prisma.user.update({
             where:{
                 id:id
+            },
+            select:{
+                id:true,
+                first_name:true,
+                last_name:true,
+                title:true,
+                email:true,
+                bio:true,
+                image:true,
+                years_of_experience:true,
+                created_at:true,
+                savedJobs:true,
             },
             data: dataToUpdate,
         })
@@ -190,6 +208,7 @@ export const UpdateProfile = async (id,data)=>
         return {
             status:200,
             message:"updated user profile successfully",
+            user: updatedUser
         }
     }
     catch (error) {

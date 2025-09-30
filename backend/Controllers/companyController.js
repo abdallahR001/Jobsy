@@ -36,10 +36,16 @@ export const getAllApplicants = async (req,res,next) =>
                 id:true,
                 first_name:true,
                 last_name:true,
+                title:true,
                 email:true,
                 location:true,
                 image:true,
                 applications:{
+                    where:{
+                        job:{
+                            companyId:companyId
+                        }
+                    },
                     select:{
                         id:true,
                         job:{
@@ -51,6 +57,9 @@ export const getAllApplicants = async (req,res,next) =>
                         salary:true
                     }
                 }
+            },
+            orderBy:{
+                created_at:"asc"
             }
         })
 
@@ -228,6 +237,7 @@ export const dashBoard = async (req,res,next) =>
                 minimum_years_required:true || null,
                 type:true,
                 job_status:true,
+                created_at:true,
                 _count:{
                     select:{
                         applications:true

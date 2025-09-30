@@ -1,37 +1,37 @@
 "use client"
 import { PenBox, Save, X, Loader2, AlertCircle } from "lucide-react"
-import { useState,useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
-export default function CompanyDescription({description}){
-    const [companyDescription,setCompanyDescription] = useState(description)
+export default function UserName({FirstName,LastName}){
+    const [firstName,setFirstName] = useState(FirstName)
+    const [lastName,setLastName] = useState(LastName)
     const [updateMode,setUpdateMode] = useState(false)
-    const [loading,setLoading] = useState(false)
     const [errorMessage,setErrorMessage] = useState("")
-
-    const inputRef = useRef(null)
+    const [loading,setLoading] = useState(false)
 
     const save = async () =>
     {
-        if(companyDescription.trim() === description)
+        if(firstName.trim() === FirstName && lastName.trim() === LastName)
         {
             setUpdateMode(false)
             setErrorMessage("")
             return
         }
 
-        if(companyDescription.trim().length === 0)
+        if(firstName.trim().length === 0 || lastName.trim().length === 0)
         {
-            setErrorMessage("Description cannot be empty")
+            setErrorMessage("name cannot be empty")
             return
         }
 
         setLoading(true)
         setErrorMessage("")
 
-        const response = await fetch("http://localhost:4000/api/companies",{
+        const response = await fetch("http://localhost:4000/api/users/update-profile",{
             credentials:"include",
             body:JSON.stringify({
-                description: companyDescription
+                first_name: firstName,
+                last_name: lastName 
             }),
             method:"PUT",
             headers:{
@@ -48,52 +48,52 @@ export default function CompanyDescription({description}){
             return
         }
 
-        setCompanyDescription(result.company.description)
+        setFirstName(result.user.first_name)
+        setLastName(result.user.last_name)
         setUpdateMode(false)
+        setErrorMessage("")
         setLoading(false)
     }
 
     const cancel = () => {
-        setCompanyDescription(description)
+        setFirstName(FirstName)
+        setLastName(LastName)
         setUpdateMode(false)
         setErrorMessage("")
     }
-
-    useEffect(() =>
-    {
-        if(updateMode && inputRef.current)
-        {
-            const el = inputRef.current
-            el.focus()
-            el.setSelectionRange(el.value.length,el.value.length)
-        }
-    },[updateMode])
-
+    
     return(
-        <div className="flex flex-col gap-3 w-full">
-            <div className="flex items-start gap-3 w-full">
+        <div className="flex flex-col gap-3 items-center justify-center w-full max-w-2xl">
+            <div className="flex items-center gap-3 w-full">
                 {!updateMode ? (
                     <>
-                        <p className="flex-1 text-gray-700 leading-relaxed text-center max-w-3xl break-words">
-                            {companyDescription}
-                        </p>
+                        <h1 className="text-3xl font-bold text-gray-900 capitalize flex-1 text-center">
+                            {firstName} {lastName}
+                        </h1>
                         <button 
                             onClick={() => setUpdateMode(true)}
-                            className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all duration-300 flex-shrink-0"
+                            className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all duration-300"
                         >
                             <PenBox className="w-5 h-5"/>
                         </button>
                     </>
                 ) : (
                     <>
-                        <textarea 
-                            ref={inputRef} 
-                            className="flex-1 min-h-[120px] max-h-[300px] text-gray-700 leading-relaxed px-4 py-3 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 resize-y" 
-                            onChange={(e) => setCompanyDescription(e.target.value)} 
-                            value={companyDescription}
+                        <input 
+                            type="text" 
+                            className="flex-1 text-3xl font-bold text-gray-900 capitalize text-center px-4 py-2 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300" 
+                            onChange={(e) => setFirstName(e.target.value)} 
+                            value={firstName}
                             disabled={loading}
                         />
-                        <div className="flex flex-col gap-2">
+                        <input 
+                            type="text" 
+                            className="flex-1 text-3xl font-bold text-gray-900 capitalize text-center px-4 py-2 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300" 
+                            onChange={(e) => setLastName(e.target.value)} 
+                            value={lastName}
+                            disabled={loading}
+                        />
+                        <div className="flex gap-2">
                             <button 
                                 onClick={save}
                                 disabled={loading}
@@ -116,7 +116,7 @@ export default function CompanyDescription({description}){
                     </>
                 )}
             </div>
-
+            
             {errorMessage && (
                 <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-xl animate-shake">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />

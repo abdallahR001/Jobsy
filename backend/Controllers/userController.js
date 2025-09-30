@@ -226,7 +226,7 @@ export const GetProfile = async (req,res,next) =>
         const result = await getProfile(req.user.id)
 
         res.status(result.status).json({
-            result
+            profile:result.user
         })
     } 
     catch (error) {
@@ -247,6 +247,7 @@ export const UpdateProfile = async (req,res,next) =>
 
         res.status(result.status).json({
             message:result.message,
+            user: result.user
         })
     } 
     catch (error) {
@@ -340,4 +341,14 @@ export const GetSavedJobs = async (req,res,next) =>
     catch (error) {
         next(error)    
     }
+}
+
+export const Logout = async (req,res,next) =>
+{
+    res.status(200).clearCookie("token",{
+        httpOnly:true,
+        secure:false
+    }).json({
+        message:"logged out"
+    })
 }

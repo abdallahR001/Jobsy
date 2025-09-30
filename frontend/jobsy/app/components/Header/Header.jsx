@@ -97,6 +97,23 @@ export default function Header (){
         }
     ]
 
+    const handleLogout = async () =>
+    {
+        try {
+            const response = await fetch("http://localhost:4000/api/users/logout",{
+                credentials:"include"
+            })
+
+            if(!response.ok)
+                return
+
+            window.location.reload()
+        } 
+        catch (error) {
+            return    
+        }
+    }
+
     return(
         <>
             <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
@@ -192,7 +209,7 @@ export default function Header (){
                                                 <span>Settings</span>
                                             </Link>
                                             <hr className="my-2 border-gray-100" />
-                                            <button className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200 text-left">
+                                            <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200 text-left">
                                                 <span>Sign Out</span>
                                             </button>
                                         </div>

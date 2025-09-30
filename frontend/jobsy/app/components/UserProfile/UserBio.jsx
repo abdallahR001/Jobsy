@@ -2,8 +2,8 @@
 import { PenBox, Save, X, Loader2, AlertCircle } from "lucide-react"
 import { useState,useEffect, useRef } from "react"
 
-export default function CompanyDescription({description}){
-    const [companyDescription,setCompanyDescription] = useState(description)
+export default function UserBio({bio}){
+    const [userBio,setBio] = useState(bio)
     const [updateMode,setUpdateMode] = useState(false)
     const [loading,setLoading] = useState(false)
     const [errorMessage,setErrorMessage] = useState("")
@@ -12,26 +12,26 @@ export default function CompanyDescription({description}){
 
     const save = async () =>
     {
-        if(companyDescription.trim() === description)
+        if(userBio.trim() === bio)
         {
             setUpdateMode(false)
             setErrorMessage("")
             return
         }
 
-        if(companyDescription.trim().length === 0)
+        if(userBio.trim().length === 0)
         {
-            setErrorMessage("Description cannot be empty")
+            setErrorMessage("bio cannot be empty")
             return
         }
 
         setLoading(true)
         setErrorMessage("")
 
-        const response = await fetch("http://localhost:4000/api/companies",{
+        const response = await fetch("http://localhost:4000/api/users/update-profile",{
             credentials:"include",
             body:JSON.stringify({
-                description: companyDescription
+                bio: userBio
             }),
             method:"PUT",
             headers:{
@@ -41,6 +41,9 @@ export default function CompanyDescription({description}){
 
         const result = await response.json()
 
+        console.log(result.user);
+        
+
         if(!response.ok)
         {
             setErrorMessage(result.message)
@@ -48,13 +51,13 @@ export default function CompanyDescription({description}){
             return
         }
 
-        setCompanyDescription(result.company.description)
+        setBio(result.user.bio)
         setUpdateMode(false)
         setLoading(false)
     }
 
     const cancel = () => {
-        setCompanyDescription(description)
+        setBio(bio)
         setUpdateMode(false)
         setErrorMessage("")
     }
@@ -75,7 +78,7 @@ export default function CompanyDescription({description}){
                 {!updateMode ? (
                     <>
                         <p className="flex-1 text-gray-700 leading-relaxed text-center max-w-3xl break-words">
-                            {companyDescription}
+                            {userBio}
                         </p>
                         <button 
                             onClick={() => setUpdateMode(true)}
@@ -89,8 +92,8 @@ export default function CompanyDescription({description}){
                         <textarea 
                             ref={inputRef} 
                             className="flex-1 min-h-[120px] max-h-[300px] text-gray-700 leading-relaxed px-4 py-3 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 resize-y" 
-                            onChange={(e) => setCompanyDescription(e.target.value)} 
-                            value={companyDescription}
+                            onChange={(e) => setBio(e.target.value)} 
+                            value={userBio}
                             disabled={loading}
                         />
                         <div className="flex flex-col gap-2">

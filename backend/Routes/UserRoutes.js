@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile } from "../Controllers/userController.js";
+import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile, Logout } from "../Controllers/userController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import multer from "multer";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
@@ -39,5 +39,6 @@ userRouter.delete("/delete",authMiddleWare,DeleteProfile)
 userRouter.post("/follow",authMiddleWare,authorizeRoles("user"),FollowCompany)
 userRouter.post("/save",authMiddleWare,authorizeRoles("user"),SaveJob)
 userRouter.get("/savedjobs",authMiddleWare,authorizeRoles("user"),GetSavedJobs)
+userRouter.get("/logout",authMiddleWare,authorizeRoles("user"),Logout)
 
 export default userRouter
