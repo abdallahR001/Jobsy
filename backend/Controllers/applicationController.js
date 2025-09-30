@@ -68,9 +68,9 @@ export const ToggleApplicationSeen = async (req,res,next) =>
 export const AcceptApplication = async (req,res,next) =>
 {
     try {
-        const {id} = req.params
+        const {applicationId} = req.params
 
-        const result = await acceptApplication(id)
+        const result = await acceptApplication(applicationId)
 
         res.status(result.status).json({
             result

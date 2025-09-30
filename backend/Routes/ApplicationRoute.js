@@ -9,7 +9,7 @@ applicationRoute.get("/my-applications",authMiddleWare,authorizeRoles("user"), G
 applicationRoute.post("/:jobId",authMiddleWare,authorizeRoles("user"), CreateApplication)
 applicationRoute.get("/:jobId",authMiddleWare, authorizeRoles("company"), GetApplicationsByJob)
 applicationRoute.put("/see/:applicationId",authMiddleWare,authorizeRoles("company"), ToggleApplicationSeen)
-applicationRoute.put("/accept/applicationId",authMiddleWare,authorizeRoles, AcceptApplication)
-applicationRoute.put("/reject/applicationId",authMiddleWare,authorizeRoles("company"), RejectApplication)
+applicationRoute.put("/accept/:applicationId",authMiddleWare,authorizeRoles("company"), AcceptApplication)
+applicationRoute.put("/reject/:applicationId",authMiddleWare,authorizeRoles("company"), RejectApplication)
 
 export default applicationRoute

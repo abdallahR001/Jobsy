@@ -246,10 +246,8 @@ export const AcceptApplication = async (id) =>
 
         if(application.status === "accepted")
             return {
-                status: 400,
+                status: 200,
                 message: "already accepted",
-                application,
-                job
             }
 
         const updatedApplication = await prisma.application.update({
@@ -261,12 +259,16 @@ export const AcceptApplication = async (id) =>
             }
         })
 
-        const updatedJob = await prisma.application.update({
+        const updatedJob = await prisma.job.update({
             where:{
-                id:jobId
+                id:job.id
+            },
+            select:{
+                id:true,
+                job_status:true
             },
             data:{
-                status:"hired"
+                job_status:"closed"
             }
         })
 

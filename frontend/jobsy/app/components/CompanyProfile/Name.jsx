@@ -71,7 +71,7 @@ export default function CompanyName({name}){
     }
     
     return(
-        <div className="flex flex-col gap-3 items-center justify-center w-full max-w-2xl">
+        <div className="flex flex-col gap-3 items-center justify-center w-full">
             <div className="flex items-center gap-3 w-full">
                 {!updateMode ? (
                     <>

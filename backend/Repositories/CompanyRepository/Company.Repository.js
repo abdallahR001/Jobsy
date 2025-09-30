@@ -277,6 +277,14 @@ export const getCompanyFollowers = async (companyId) =>
                         id:companyId
                     }
                 }
+            },
+            select:{
+                id:true,
+                first_name:true,
+                last_name:true,
+                title:true,
+                image:true,
+                email:true
             }
         })    
 

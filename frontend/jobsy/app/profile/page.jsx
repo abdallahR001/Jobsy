@@ -2,7 +2,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import UserImage from "../components/UserProfile/Image";
 import UserName from "../components/UserProfile/UserName";
-import { Mail } from "lucide-react";
+import UserTitle from "../components/UserProfile/UserTitle";
+import { Mail, User as UserIcon, FileText } from "lucide-react";
 import UserBio from "../components/UserProfile/UserBio";
 
 export default async function Profile()
@@ -27,16 +28,76 @@ export default async function Profile()
         redirect("/")
 
     const data = await response.json()
+    
+    const profile = data.profile
 
     console.log(data);
     
-    const profile = data.profile
+    
     return(
-        <div className="flex justify-center items-center w-full h-screen flex-col gap-3">
-            <UserImage userImage={profile.image}/>
-            <UserName FirstName={profile.first_name} LastName={profile.last_name} />
-            <span className="text-gray-400 text-sm flex items-center justify-center gap-2"><Mail/>{profile.email}</span>
-            <UserBio bio={profile.bio}/>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 py-12 px-4">
+            <div className="max-w-5xl mx-auto">
+                {/* Header */}
+                <div className="mb-8">
+                    <h1 className="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>
+                    <p className="text-lg text-gray-600">Manage your personal information</p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Left Column - Image & Basic Info */}
+                    <div className="lg:col-span-1">
+                        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 sticky top-6">
+                            {/* User Image */}
+                            <div className="flex justify-center mb-6">
+                                <UserImage userImage={profile.image}/>
+                            </div>
+
+                            {/* User Name */}
+                            <div className="mb-4">
+                                <UserName FirstName={profile.first_name} LastName={profile.last_name} />
+                            </div>
+
+                            {/* User Title */}
+                            <div className="mb-6">
+                                <UserTitle title={profile.title}/>
+                            </div>
+
+                            {/* Divider */}
+                            <div className="border-t border-gray-100 my-6"></div>
+
+                            {/* Email */}
+                            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-4 border border-indigo-100">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                        <Mail className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                        <p className="text-xs text-gray-500 font-medium mb-1">Email</p>
+                                        <p className="text-sm font-semibold text-gray-900 truncate">{profile.email}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column - Bio */}
+                    <div className="lg:col-span-2">
+                        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8">
+                            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-100">
+                                <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
+                                    <FileText className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold text-gray-900">About Me</h3>
+                                    <p className="text-sm text-gray-500">Tell recruiters about yourself</p>
+                                </div>
+                            </div>
+                            
+                            <UserBio bio={profile.bio}/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

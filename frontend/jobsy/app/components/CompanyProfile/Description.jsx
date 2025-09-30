@@ -4,6 +4,7 @@ import { useState,useEffect, useRef } from "react"
 
 export default function CompanyDescription({description}){
     const [companyDescription,setCompanyDescription] = useState(description)
+    const [initialDescription,setInitialDescription] = useState(description)
     const [updateMode,setUpdateMode] = useState(false)
     const [loading,setLoading] = useState(false)
     const [errorMessage,setErrorMessage] = useState("")
@@ -12,7 +13,7 @@ export default function CompanyDescription({description}){
 
     const save = async () =>
     {
-        if(companyDescription.trim() === description)
+        if(companyDescription.trim() === initialDescription)
         {
             setUpdateMode(false)
             setErrorMessage("")
@@ -49,12 +50,13 @@ export default function CompanyDescription({description}){
         }
 
         setCompanyDescription(result.company.description)
+        setInitialDescription(result.company.description) 
         setUpdateMode(false)
         setLoading(false)
     }
 
     const cancel = () => {
-        setCompanyDescription(description)
+        setCompanyDescription(initialDescription)
         setUpdateMode(false)
         setErrorMessage("")
     }
@@ -74,7 +76,7 @@ export default function CompanyDescription({description}){
             <div className="flex items-start gap-3 w-full">
                 {!updateMode ? (
                     <>
-                        <p className="flex-1 text-gray-700 leading-relaxed text-center max-w-3xl break-words">
+                        <p className="flex-1 w-full text-gray-700 leading-relaxed text-center max-w-3xl break-words">
                             {companyDescription}
                         </p>
                         <button 
@@ -88,7 +90,7 @@ export default function CompanyDescription({description}){
                     <>
                         <textarea 
                             ref={inputRef} 
-                            className="flex-1 min-h-[120px] max-h-[300px] text-gray-700 leading-relaxed px-4 py-3 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 resize-y" 
+                            className="flex-1 w-full min-h-[120px] max-h-[300px] text-gray-700 leading-relaxed px-4 py-3 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 resize-y" 
                             onChange={(e) => setCompanyDescription(e.target.value)} 
                             value={companyDescription}
                             disabled={loading}

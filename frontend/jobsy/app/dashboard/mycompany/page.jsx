@@ -36,20 +36,22 @@ export default async function MyCompany() {
 
                 {/* Profile Card */}
                 <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8 mb-8">
-                    {/* Company Image */}
-                    <div className="flex justify-center mb-6">
-                        <CompanyImage companyImage={company.image}/>
-                    </div>
+                    <div className="flex items-center justify-center flex-col w-full">
+                            {/* Company Image */}
+                        <div className="flex justify-center items-center mb-6">
+                            <CompanyImage companyImage={company.image}/>
+                        </div>
 
-                    {/* Company Name */}
-                    <div className="flex justify-center mb-4">
-                        <CompanyName name={company.name}/>
-                    </div>
+                        {/* Company Name */}
+                        <div className="flex justify-center items-center mb-4">
+                            <CompanyName name={company.name}/>
+                        </div>
 
-                    {/* Company Email */}
-                    <div className="flex items-center justify-center gap-2 mb-6">
-                        <Mail className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm text-gray-600">{company.email}</span>
+                        {/* Company Email */}
+                        <div className="flex items-center justify-center gap-2 mb-6">
+                            <Mail className="w-4 h-4 text-gray-400" />
+                            <span className="text-sm text-gray-600">{company.email}</span>
+                        </div>
                     </div>
 
                     {/* Divider */}

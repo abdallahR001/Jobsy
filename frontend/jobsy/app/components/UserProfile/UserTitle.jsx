@@ -2,14 +2,14 @@
 import { PenBox, Save, X, Loader2, AlertCircle } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 
-export default function UserBio({bio}) {
-    const [initialBio, setInitialBio] = useState(bio)
-    const [userBio, setUserBio] = useState(bio)
+export default function UserTitle({title}) {
+    const [initialTitle, setInitialTitle] = useState(title)
+    const [userTitle, setUserTitle] = useState(title)
     const [updateMode, setUpdateMode] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [loading, setLoading] = useState(false)
 
-    const inputRef = useRef(null)
+    const inputRef = useRef()
 
     useEffect(() => {
         if(updateMode && inputRef.current) {
@@ -20,14 +20,14 @@ export default function UserBio({bio}) {
     }, [updateMode])
 
     const save = async () => {
-        if(userBio.trim() === initialBio) {
+        if(userTitle.trim() === initialTitle) {
             setUpdateMode(false)
             setErrorMessage("")
             return
         }
 
-        if(userBio.trim().length === 0) {
-            setErrorMessage("Bio cannot be empty")
+        if(userTitle.trim().length === 0) {
+            setErrorMessage("Title cannot be empty")
             return
         }
 
@@ -37,7 +37,7 @@ export default function UserBio({bio}) {
         const response = await fetch("http://localhost:4000/api/users/update-profile", {
             credentials: "include",
             body: JSON.stringify({
-                bio: userBio
+                title: userTitle
             }),
             method: "PUT",
             headers: {
@@ -53,45 +53,46 @@ export default function UserBio({bio}) {
             return
         }
 
-        setUserBio(result.user.bio)
-        setInitialBio(result.user.bio)
+        setUserTitle(result.user.title)
+        setInitialTitle(result.user.title)
         setUpdateMode(false)
         setErrorMessage("")
         setLoading(false)
     }
 
     const cancel = () => {
-        setUserBio(initialBio)
+        setUserTitle(initialTitle)
         setUpdateMode(false)
         setErrorMessage("")
     }
 
     return(
-        <div className="flex flex-col gap-3 w-full">
-            <div className="flex items-start gap-3 w-full">
+        <div className="flex flex-col gap-3 items-center justify-center w-full max-w-2xl">
+            <div className="flex items-center gap-3 w-full">
                 {!updateMode ? (
                     <>
-                        <p className="flex-1 w-full text-gray-700 leading-relaxed text-center max-w-3xl break-words">
-                            {userBio}
-                        </p>
+                        <h2 className="text-xl font-semibold text-gray-600 flex-1 text-center">
+                            {userTitle}
+                        </h2>
                         <button 
                             onClick={() => setUpdateMode(true)}
-                            className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all duration-300 flex-shrink-0"
+                            className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all duration-300"
                         >
                             <PenBox className="w-5 h-5"/>
                         </button>
                     </>
                 ) : (
                     <>
-                        <textarea 
+                        <input 
+                            type="text"
                             ref={inputRef}
-                            className="flex-1 w-full min-h-[120px] max-h-[300px] text-gray-700 leading-relaxed px-4 py-3 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 resize-y" 
-                            onChange={(e) => setUserBio(e.target.value)} 
-                            value={userBio}
+                            className="flex-1 w-full text-xl font-semibold text-gray-600 text-center px-4 py-2 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300" 
+                            onChange={(e) => setUserTitle(e.target.value)} 
+                            value={userTitle}
                             disabled={loading}
-                            placeholder="Tell us about yourself..."
+                            placeholder="e.g. Software Engineer"
                         />
-                        <div className="flex flex-col gap-2">
+                        <div className="flex gap-2">
                             <button 
                                 onClick={save}
                                 disabled={loading}
@@ -114,7 +115,7 @@ export default function UserBio({bio}) {
                     </>
                 )}
             </div>
-
+            
             {errorMessage && (
                 <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-xl animate-shake">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />

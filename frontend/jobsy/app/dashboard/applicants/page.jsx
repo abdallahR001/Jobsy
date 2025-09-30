@@ -2,6 +2,7 @@ import { redirect } from "next/dist/server/api-utils"
 import { cookies } from "next/headers"
 import Image from "next/image"
 import { Users, Mail, DollarSign, FileText, Briefcase, User } from "lucide-react"
+import AcceptButton from "@/app/components/AcceptAppliacantButton/AcceptButton"
 
 export default async function Applicants(){
     const cookieStore = cookies()
@@ -23,7 +24,6 @@ export default async function Applicants(){
     const data = await response.json()
 
     console.log(data);
-    
 
     return(
         <div className="w-full min-h-screen p-6">
@@ -124,9 +124,7 @@ export default async function Applicants(){
 
                                         {/* Right Section - Actions */}
                                         <div className="lg:w-64 flex flex-col gap-3">
-                                            <button className="w-full cursor-pointer bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-green-500/25 transition-all duration-300 hover:scale-105">
-                                                Accept
-                                            </button>
+                                            <AcceptButton id={applicant.applications[2]?.id} token={token}/>
                                             <button className="w-full cursor-pointer bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105">
                                                 Reject
                                             </button>
