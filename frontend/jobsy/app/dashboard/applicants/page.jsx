@@ -1,8 +1,10 @@
 import { redirect } from "next/dist/server/api-utils"
 import { cookies } from "next/headers"
 import Image from "next/image"
-import { Users, Mail, DollarSign, FileText, Briefcase, User } from "lucide-react"
+import { Users, Mail, DollarSign, FileText, Briefcase, User, CheckCircle, XCircle } from "lucide-react"
 import AcceptButton from "@/app/components/AcceptAppliacantButton/AcceptButton"
+import RejectButton from "@/app/components/RejectApplicantButton/RejectApplicantButton"
+import ViewProfileButton from "@/app/components/ViewProfileButton/ViewProfileButton"
 
 export default async function Applicants(){
     const cookieStore = cookies()
@@ -24,6 +26,7 @@ export default async function Applicants(){
     const data = await response.json()
 
     console.log(data);
+    
 
     return(
         <div className="w-full min-h-screen p-6">
@@ -76,7 +79,6 @@ export default async function Applicants(){
                                                     <h2 className="text-2xl font-bold text-gray-900 capitalize">
                                                         {applicant.first_name} {applicant.last_name}
                                                     </h2>
-                                                    <h3>{applicant.title}</h3>
                                                     <div className="flex items-center gap-2 text-gray-600 mt-1">
                                                         <Mail className="w-4 h-4" />
                                                         <span className="text-sm">{applicant.email}</span>
@@ -85,53 +87,72 @@ export default async function Applicants(){
                                             </div>
 
                                             {/* Applications */}
-                                            <div className="space-y-4">
+                                            <div className="space-y-6">
                                                 {applicant.applications.map((application) => (
-                                                    <div key={application.id} className="space-y-4">
+                                                    <div key={application.id} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                                                         {/* Job Title */}
-                                                        <div className="flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 px-4 py-2 rounded-xl border border-indigo-100">
-                                                            <Briefcase className="w-4 h-4 text-indigo-600" />
-                                                            <span className="font-semibold text-indigo-900">
-                                                                Applied for: {application.job.title}
+                                                        <div className="flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 px-4 py-3 rounded-xl border border-indigo-100 mb-4">
+                                                            <Briefcase className="w-5 h-5 text-indigo-600" />
+                                                            <span className="font-bold text-indigo-900 text-lg">
+                                                                {application.job.title}
                                                             </span>
                                                         </div>
 
-                                                        {/* Cover Letter */}
-                                                        <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
-                                                            <div className="flex items-center gap-2 mb-3">
-                                                                <FileText className="w-4 h-4 text-gray-600" />
-                                                                <h3 className="font-semibold text-gray-900">Cover Letter</h3>
-                                                            </div>
-                                                            <p className="text-gray-700 leading-relaxed max-w-3xl break-words">
-                                                                {application.cover_letter}
-                                                            </p>
-                                                        </div>
+                                                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                                                            {/* Left: Cover Letter & Salary */}
+                                                            <div className="lg:col-span-2 space-y-4">
+                                                                {/* Cover Letter */}
+                                                                <div className="bg-white rounded-xl p-4 border border-gray-200">
+                                                                    <div className="flex items-center gap-2 mb-3">
+                                                                        <FileText className="w-4 h-4 text-gray-600" />
+                                                                        <h3 className="font-semibold text-gray-900">Cover Letter</h3>
+                                                                    </div>
+                                                                    <p className="text-gray-700 leading-relaxed break-words">
+                                                                        {application.cover_letter}
+                                                                    </p>
+                                                                </div>
 
-                                                        {/* Salary */}
-                                                        <div className="flex items-center gap-2 bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-3 rounded-xl border border-green-100 w-fit">
-                                                            <DollarSign className="w-5 h-5 text-green-600" />
-                                                            <div>
-                                                                <p className="text-xs text-green-600 font-medium">Expected Salary</p>
-                                                                <p className="text-lg font-bold text-green-900">
-                                                                    {application.salary || "Not specified"}
-                                                                </p>
+                                                                {/* Salary */}
+                                                                <div className="bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-3 rounded-xl border border-green-100 w-fit">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <DollarSign className="w-5 h-5 text-green-600" />
+                                                                        <div>
+                                                                            <p className="text-xs text-green-600 font-medium">Expected Salary</p>
+                                                                            <p className="text-lg font-bold text-green-900">
+                                                                                {application.salary || "Not specified"}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
+
+                                                            {
+                                                                application.status === "accepted" ?
+                                                                <div className="flex-1 bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-green-500/25 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2">
+                                                                    <h1 className=" flex items-center justify-center gap-2">Accepted <CheckCircle/></h1>
+                                                                </div>
+                                                                :
+                                                                application.status === "rejected" ?
+                                                                <div className="flex-1 bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2">
+                                                                    <h1 className=" flex items-center justify-center gap-2">Rejected <XCircle/></h1>
+                                                                </div>
+                                                                :
+                                                                <>
+                                                                {/* Right: Action Buttons */}
+                                                                    <div className="lg:col-span-1 flex flex-col gap-3">
+                                                                        <AcceptButton id={application.id} token={token}/>
+                                                                        <RejectButton id={application.id} token={token}/>
+                                                                        <ViewProfileButton userId={application.userId}/>
+                                                                    </div>
+                                                                </>
+                                                            }
                                                         </div>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
 
-                                        {/* Right Section - Actions */}
-                                        <div className="lg:w-64 flex flex-col gap-3">
-                                            <AcceptButton id={applicant.applications[2]?.id} token={token}/>
-                                            <button className="w-full cursor-pointer bg-gradient-to-r from-red-600 via-rose-600 to-red-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105">
-                                                Reject
-                                            </button>
-                                            <button className="w-full cursor-pointer bg-gray-200 text-gray-700 px-6 py-3 rounded-2xl font-semibold hover:bg-gray-300 transition-all duration-300">
-                                                View Profile
-                                            </button>
-                                        </div>
+                                        {/* Right Section - Removed old buttons */}
                                     </div>
                                 </div>
 

@@ -244,6 +244,13 @@ export const AcceptApplication = async (id) =>
             throw error
         }
 
+        if(job.job_status === "closed")
+        {
+            const error = new Error("someone was already accepted")
+            error.status = 400
+            throw error
+        }
+
         if(application.status === "accepted")
             return {
                 status: 200,

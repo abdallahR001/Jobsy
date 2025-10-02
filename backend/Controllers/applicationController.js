@@ -84,11 +84,11 @@ export const AcceptApplication = async (req,res,next) =>
 export const RejectApplication = async (req,res,next) =>
 {
     try {
-        const {id} = req.params
+        const {applicationId} = req.params
 
-        const result = await rejectApplication(id)
+        const result = await rejectApplication(applicationId)
 
-        res.status(result.status).json({
+        res.status(200).json({
             result
         })
     } 

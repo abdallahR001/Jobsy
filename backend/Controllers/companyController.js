@@ -48,6 +48,8 @@ export const getAllApplicants = async (req,res,next) =>
                     },
                     select:{
                         id:true,
+                        userId:true,
+                        status:true,
                         job:{
                             select:{
                                 title:true
@@ -55,6 +57,9 @@ export const getAllApplicants = async (req,res,next) =>
                         },
                         cover_letter:true,
                         salary:true
+                    },
+                    orderBy:{
+                        created_at:"desc"
                     }
                 }
             },

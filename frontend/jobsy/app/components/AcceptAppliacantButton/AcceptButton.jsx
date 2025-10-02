@@ -1,4 +1,7 @@
 "use client"
+
+import { CheckCircle } from "lucide-react";
+
 export default function AcceptButton({id,token})
 {
     const handleAccept = async (id) =>
@@ -19,12 +22,14 @@ export default function AcceptButton({id,token})
         }
 
         console.log(result);
+
+        window.location.reload()
         
     }
 
     return(
-        <button onClick={() => handleAccept(id)} className="w-full cursor-pointer bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-green-500/25 transition-all duration-300 hover:scale-105">
-            Accept
+        <button onClick={() => handleAccept(id)} className="flex-1 cursor-pointer bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2">
+           <CheckCircle/> Accept
         </button>
     )
 }
