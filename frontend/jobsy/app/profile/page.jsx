@@ -101,12 +101,7 @@ export default async function Profile()
                             <UserBio bio={profile.bio}/>
                             <div className="bg-gray-100 w-full h-[1px] rounded-full my-4"/>
                             <div>
-                                <h1 className="text-3xl text-gray-800 flex items-center gap-2">
-                                    <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center text-white">
-                                        <Star  className="w-6 h-6"/>
-                                    </div>
-                                    skills
-                                </h1>
+                                
                                 <UserSkills userSkills={profile.skills}/>
                             </div>
                         </div>

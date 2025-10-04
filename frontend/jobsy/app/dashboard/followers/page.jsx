@@ -25,6 +25,13 @@ export default async function Followers()
 
     const followers = data.followers
 
+    const getProfileImage = (user) => {
+    if (!user?.image) return 
+    return user.image.startsWith("http")
+      ? user.image // من جوجل أو أي لينك خارجي
+      : `http://localhost:4000/${user.image}` // متخزنة في السيرفر بتاعك
+  }
+
     return(
         <div className="w-full min-h-screen p-6">
             <div className="max-w-7xl mx-auto">
@@ -57,7 +64,7 @@ export default async function Followers()
                                     <div className="mb-4">
                                         {follower.image ? (
                                             <Image 
-                                                src={`http://localhost:4000/${follower.image}`}
+                                                src={getProfileImage(follower)}
                                                 width={80}
                                                 height={80}
                                                 priority

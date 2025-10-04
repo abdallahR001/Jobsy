@@ -93,6 +93,35 @@ export const addSkill = async (req,res,next) =>
     }
 }
 
+export const addSkillsToUser = async (req,res,next) =>
+{
+    try {
+        const {id} = req.user
+        
+        const {skillsIds} = req.body
+    
+        await prisma.user.update({
+            where:{
+                id
+            },
+            data:{
+                skills:{
+                    connect:skillsIds.map((id) => ({id}))
+                }
+            }
+        })
+
+        res.status(200).json(
+            {
+                message: "added skills successfully"
+            }
+        )
+    } 
+    catch (error) {
+        next(error)
+    }
+}
+
 export const updateSkill = async (req,res,next) =>
 {
     try {
@@ -139,6 +168,47 @@ export const getUserSkills = async (req,res,next) =>
         res.status(200).json({
             skills
         })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
+export const deleteUserSkill = async (req,res,next) =>
+{
+    const {id} = req.user
+    const {skillId} = req.body
+
+    try {
+        const deletedSkill = await prisma.skill.update({
+            where:{
+                id:skillId,
+                user:{
+                    some:{
+                        id:id
+                    }
+                }
+            },
+            data:{
+                user:{
+                    disconnect:{
+                        id:id
+                    }
+                }
+            }
+        })
+
+        if(!deletedSkill)
+            return res.status(404).json(
+        {
+            message: "skill not found"
+        })
+
+        res.status(200).json(
+            {
+                message: "skill removed successfully from your skill set"
+            }
+        )
     } 
     catch (error) {
         next(error)    

@@ -100,7 +100,7 @@ export default function PortfolioFiles({initialFiles}) {
     }
 
     return(
-        <div className={`bg-white/90 backdrop-blur-sm w-full h-screen rounded-3xl shadow-2xl p-8 transition-all duration-300`}>
+        <div className={`bg-white/90 backdrop-blur-sm w-full min-h-screen rounded-3xl shadow-2xl p-8 transition-all duration-300`}>
             {/* Header */}
             <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100">
                 <div className="flex items-center gap-3">
@@ -115,7 +115,7 @@ export default function PortfolioFiles({initialFiles}) {
                 
                 <button
                     onClick={() => setShowUploadPopup(true)}
-                    className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-indigo-500/25 transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                    className="bg-gradient-to-r cursor-pointer from-indigo-600 via-purple-600 to-indigo-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-indigo-500/25 transition-all duration-300 hover:scale-105 flex items-center gap-2"
                 >
                     <Plus className="w-5 h-5" />
                     <span>Upload File</span>

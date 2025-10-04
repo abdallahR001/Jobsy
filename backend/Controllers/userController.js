@@ -500,6 +500,29 @@ export const AddSkill = async (req,res,next) =>
     }
 }
 
+export const GetUserField = async (req,res,next) =>
+{
+    try {
+        const {id} = req.user
+
+        const feild = await prisma.user.findUnique({
+            where:{
+                id:id
+            },
+            select:{
+                field:true
+            }
+        })
+
+        res.status(200).json({
+            field:feild
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
 export const Logout = async (req,res,next) =>
 {
     res.status(200).clearCookie("token",{

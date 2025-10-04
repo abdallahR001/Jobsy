@@ -119,12 +119,6 @@ export const GetProfile = async(id)=>
                 savedJobs:true,
                 location:true,
                 skills:true,
-                _count:{
-                    select:{
-                        applications:true,
-                        followings:true,
-                    }
-                },
                 PortfolioFiles:{
                     select:{
                         id:true,
