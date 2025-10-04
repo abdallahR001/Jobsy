@@ -35,6 +35,14 @@ export default function Header (){
         "/onboarding/employers/step6",
     ]
 
+
+    const getProfileImage = () => {
+    if (!user?.image) return "/default-avatar.png" // صورة افتراضية لو مفيش صورة
+    return user.image.startsWith("http")
+      ? user.image // من جوجل أو أي لينك خارجي
+      : `http://localhost:4000/${user.image}` // متخزنة في السيرفر بتاعك
+  }
+
     useEffect(() =>
     {
         if(hideHeaderIn.includes(pathName))
@@ -175,7 +183,7 @@ export default function Header (){
                                         </div>
                                         {user.image ? (
                                             <Image 
-                                                src={`http://localhost:4000/${user.image}`}
+                                                src={getProfileImage()}
                                                 width={40}
                                                 height={40}
                                                 alt="profile"
@@ -277,7 +285,7 @@ export default function Header (){
                             >
                                 {user.image ? (
                                     <Image 
-                                        src={`http://localhost:4000/${user.image}`}
+                                        src={getProfileImage()}
                                         width={50}
                                         height={50}
                                         alt="profile"

@@ -1,6 +1,7 @@
 "use client"
 import { Camera, Save, Loader2, User } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function UserImage({userImage}){
@@ -8,6 +9,15 @@ export default function UserImage({userImage}){
     const [preview,setPreview] = useState(userImage)
     const [updateMode,setUpdateMode] = useState(false)
     const [loading,setLoading] = useState(false)
+
+    const router = useRouter()
+
+    const getProfileImage = () => {
+    if (!userImage) return "/default-avatar.png" // صورة افتراضية لو مفيش صورة
+    return userImage.startsWith("http")
+      ? userImage // من جوجل أو أي لينك خارجي
+      : `http://localhost:4000/${userImage}` // متخزنة في السيرفر بتاعك
+  }
 
     const handleImageChange = (e) =>
     {
@@ -45,7 +55,7 @@ export default function UserImage({userImage}){
 
             console.log(data);
 
-            setPreview(`http://localhost:4000/${data.user.image}`)
+            setPreview(`${data.user.image}`)
             setUpdateMode(false)
             setLoading(false)
         }
@@ -78,7 +88,7 @@ export default function UserImage({userImage}){
                     :
                     preview?
                     <Image 
-                        src={`http://localhost:4000/${preview}`}
+                        src={`${getProfileImage()}`}
                         alt="user profile image"
                         width={150}
                         height={150}

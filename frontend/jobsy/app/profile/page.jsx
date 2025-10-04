@@ -3,8 +3,11 @@ import { redirect } from "next/navigation";
 import UserImage from "../components/UserProfile/Image";
 import UserName from "../components/UserProfile/UserName";
 import UserTitle from "../components/UserProfile/UserTitle";
-import { Mail, User as UserIcon, FileText } from "lucide-react";
+import { Mail, User as UserIcon, FileText, Star } from "lucide-react";
 import UserBio from "../components/UserProfile/UserBio";
+import UserLocation from "../components/UserProfile/Location";
+import PortfolioFiles from "../components/UserProfile/PortfolioFiles";
+import UserSkills from "../components/UserSkills/UserSkills";
 
 export default async function Profile()
 {
@@ -35,7 +38,7 @@ export default async function Profile()
     
     
     return(
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 py-12 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50 to-purple-100 py-12 px-4">
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
@@ -76,12 +79,14 @@ export default async function Profile()
                                         <p className="text-sm font-semibold text-gray-900 truncate">{profile.email}</p>
                                     </div>
                                 </div>
+                                
                             </div>
+                            <UserLocation location={profile.location}/>
                         </div>
                     </div>
 
                     {/* Right Column - Bio */}
-                    <div className="lg:col-span-2">
+                    <div className="lg:col-span-2 flex flex-col gap-3">
                         <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8">
                             <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-100">
                                 <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center">
@@ -94,6 +99,19 @@ export default async function Profile()
                             </div>
                             
                             <UserBio bio={profile.bio}/>
+                            <div className="bg-gray-100 w-full h-[1px] rounded-full my-4"/>
+                            <div>
+                                <h1 className="text-3xl text-gray-800 flex items-center gap-2">
+                                    <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center text-white">
+                                        <Star  className="w-6 h-6"/>
+                                    </div>
+                                    skills
+                                </h1>
+                                <UserSkills userSkills={profile.skills}/>
+                            </div>
+                        </div>
+                        <div>
+                            <PortfolioFiles initialFiles={profile.PortfolioFiles}/>
                         </div>
                     </div>
                 </div>

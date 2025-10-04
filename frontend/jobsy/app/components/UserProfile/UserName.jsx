@@ -64,7 +64,7 @@ export default function UserName({FirstName,LastName}){
     
     return(
         <div className="flex flex-col gap-3 items-center justify-center w-full max-w-2xl">
-            <div className="flex items-center gap-3 w-full">
+            <div className="flex flex-col justify-center items-center gap-3 w-full">
                 {!updateMode ? (
                     <>
                         <h1 className="text-3xl font-bold text-gray-900 capitalize flex-1 text-center">
@@ -81,14 +81,14 @@ export default function UserName({FirstName,LastName}){
                     <>
                         <input 
                             type="text" 
-                            className="flex-1 text-3xl font-bold text-gray-900 capitalize text-center px-4 py-2 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300" 
+                            className="flex-1 w-full text-3xl font-bold text-gray-900 capitalize text-center px-4 py-2 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300" 
                             onChange={(e) => setFirstName(e.target.value)} 
                             value={firstName}
                             disabled={loading}
                         />
                         <input 
                             type="text" 
-                            className="flex-1 text-3xl font-bold text-gray-900 capitalize text-center px-4 py-2 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300" 
+                            className="flex-1 w-full text-3xl font-bold text-gray-900 capitalize text-center px-4 py-2 bg-gray-50 border-2 border-indigo-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300" 
                             onChange={(e) => setLastName(e.target.value)} 
                             value={lastName}
                             disabled={loading}

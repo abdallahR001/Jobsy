@@ -11,6 +11,7 @@ import skillRouter from "./Routes/SkillRoute.js"
 import adminRouter from "./Routes/AdminRoute.js"
 import applicationRoute from "./Routes/ApplicationRoute.js"
 import cookieParser from "cookie-parser"
+import passport from "passport"
 
 const app = express()
 dotenv.config()
@@ -18,6 +19,7 @@ dotenv.config()
 const PORT = process.env.PORT || 4000
 //middlewares
 app.use(express.json())
+app.use(passport.initialize())
 app.use(cors({
     origin:"http://localhost:3000",
     credentials:true

@@ -12,8 +12,6 @@ export const defaultSkills = async (req,res,next) =>
             }
         })
 
-        console.log(cat)
-
         const skills = await prisma.skill.findMany({
             where:{
                 categoryId:cat.id
@@ -116,6 +114,30 @@ export const deleteSkill = async (req,res,next) =>
 
         res.status(result.status).json({
             result
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
+export const getUserSkills = async (req,res,next) =>
+{
+    const {id} = req.user
+
+    try {
+        const skills = await prisma.skill.findMany({
+            where:{
+                user:{
+                    some:{
+                        id:id
+                    }
+                }
+            }
+        })
+
+        res.status(200).json({
+            skills
         })
     } 
     catch (error) {

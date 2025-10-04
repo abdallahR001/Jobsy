@@ -1,4 +1,4 @@
-import { Rocket, MapPin, Clock, DollarSign, Users, Calendar } from "lucide-react";
+import { Rocket, MapPin, Clock, DollarSign, Users, Calendar, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { cookies } from "next/headers";
@@ -178,6 +178,11 @@ export default async function JobDetails({ params }) {
             {/* Apply Button */}
             <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-3xl p-6 border border-white/20">
               {
+                job.job_status === "closed" ?
+                <div className="w-full cursor-not-allowed rounded-2xl items-center text-center justify-center gap-3 bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 px-8 py-4">
+                    <p className="text-gray-100 flex items-center justify-center gap-3">job is closed <X/></p>
+                </div>
+                :
                 data.isApplied ? 
                 <div className="w-full cursor-not-allowed rounded-2xl items-center text-center justify-center gap-3 bg-gradient-to-r from-gray-300 via-gray-400 to-gray-300 px-8 py-4">
                     <p className="text-gray-100 flex items-center justify-center gap-3">already applied <Clock/></p>

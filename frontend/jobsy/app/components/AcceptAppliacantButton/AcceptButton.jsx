@@ -1,9 +1,11 @@
 "use client"
 
 import { CheckCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function AcceptButton({id,token})
 {
+    const router = useRouter()
     const handleAccept = async (id) =>
     {
         const response = await fetch(`http://localhost:4000/api/applications/accept/${id}`,{
@@ -23,8 +25,7 @@ export default function AcceptButton({id,token})
 
         console.log(result);
 
-        window.location.reload()
-        
+        router.push("/dashboard/applicants?#")
     }
 
     return(

@@ -1,4 +1,5 @@
 import { prisma } from "../prisma/prismaClient.js"
+import jwt from "jsonwebtoken"
 import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, getFollowedCompanies, saveJob, getSavedJobs } from "../Services/UserService/UserService.js"
 export const createAccount = async(req,res,next) =>
 {
@@ -150,6 +151,22 @@ export const onBoardingPage = async (req,res,next) =>
     }
 }
 
+export const googleCallBack = async (req,res,next) =>
+{
+        const user = req.user
+
+        const token = jwt.sign(
+        { id: user.id, role: "user" },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+        );
+
+        res.cookie("token", token, {
+        httpOnly: true,
+        secure: false
+        }).redirect("http://localhost:3000/profile")
+}
+
 export const me = async(req,res,next) =>
 {
     try {
@@ -259,6 +276,31 @@ export const UploadPortfolioFile = async (req,res,next) =>
     }
 }
 
+export const DeletePortfolioFile = async (req,res,next) =>
+{
+    try {
+        const {fileId} = req.params
+
+        const deletedFile = await prisma.portfolioFile.delete({
+            where:{
+                id:fileId
+            }
+        })
+
+        if(!deletedFile)
+            return res.status(404).json({
+                message: "file not found"
+            })
+
+        res.status(200).json({
+            message: "deleted file successfully"
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
 export const GetProfile = async (req,res,next) =>
 {
     try {
@@ -280,7 +322,7 @@ export const UpdateProfile = async (req,res,next) =>
         const data = req.body
 
         if (req.file) {
-            data.image = `uploads/${req.file.filename}`
+            data.image = `http://localhost:4000/uploads/${req.file.filename}`
         }
         const result = await updateProfile(req.user.id,data)
 
@@ -376,6 +418,82 @@ export const GetSavedJobs = async (req,res,next) =>
         res.status(200).json({
             savedJobs:result
         })
+    } 
+    catch (error) {
+        next(error)    
+    }
+}
+
+export const AddSkill = async (req,res,next) =>
+{
+    try {
+        const {id} = req.user
+
+    const {skillId} = req.body
+
+    const skill = await prisma.skill.findUnique({
+        where:{
+            id:skillId,
+        }
+    })
+
+    if(!skill)
+        return res.status(404).json(
+    {
+        message: "skill not found"
+    })
+
+    let isAdded;
+
+    let alreadyAdded = await prisma.skill.findFirst({
+        where:{
+            id:skill.id,
+            user:{
+                some:{
+                    id:id
+                }
+            }
+        }
+    })
+
+    if(!alreadyAdded)
+    {
+        await prisma.skill.update({
+        where:{
+            id:skill.id
+        },
+        data:{
+            user:{
+                connect:{
+                    id:id
+                }
+            }
+        }
+    })
+        return res.status(200).json({
+        message: `added ${skill.name} to your skill set successfully`
+    })
+    }
+
+    else
+    {
+        await prisma.skill.update({
+            where:{
+                id:skill.id
+            },
+            data:{
+                user:{
+                    disconnect:{
+                        id:id
+                    }
+                }
+            }
+        })
+        return res.status(200).json({
+        message: `removed ${skill.name} from your skill set successfully`
+    })
+    }
+    
     } 
     catch (error) {
         next(error)    

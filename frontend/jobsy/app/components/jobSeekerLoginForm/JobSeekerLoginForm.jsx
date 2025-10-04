@@ -102,6 +102,21 @@ const handleSubmit = async (e) =>
                                 loading ? "Wait a minute..." : "Login"
                             }
                         </button>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                window.location.href = "http://localhost:4000/api/users/google";
+                            }}
+                            className="w-full flex items-center justify-center gap-2 bg-white-500 text-gray-800 py-3 rounded-lg font-semibold border border-transparent cursor-pointer hover:border-gray-800 transition-all duration-500 mt-4"
+                            >
+                            <img
+                                src="https://www.svgrepo.com/show/355037/google.svg"
+                                alt="Google"
+                                className="w-5 h-5"
+                            />
+                            Login with Google
+                        </button>
+
                     </form>
                     <p className="text-center text-sm text-gray-600 mt-6">
                         Are you an employer?

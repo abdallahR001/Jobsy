@@ -117,18 +117,21 @@ export const GetProfile = async(id)=>
                 years_of_experience:true,
                 created_at:true,
                 savedJobs:true,
+                location:true,
+                skills:true,
                 _count:{
                     select:{
                         applications:true,
                         followings:true,
-                        savedJobs:true
                     }
                 },
                 PortfolioFiles:{
                     select:{
+                        id:true,
                         fileName:true,
                         title:true,
                         description:true,
+                        fileType:true,
                         url:true
                     }
                 }
@@ -185,6 +188,9 @@ export const UpdateProfile = async (id,data)=>
         if(data.bio)
             dataToUpdate.bio = data.bio
 
+        if(data.field)
+            dataToUpdate.field = data.field
+
         if(data.years_of_experience)
             dataToUpdate.years_of_experience = data.years_of_experience
 
@@ -209,6 +215,7 @@ export const UpdateProfile = async (id,data)=>
                 years_of_experience:true,
                 created_at:true,
                 savedJobs:true,
+                location:true,
             },
             data: dataToUpdate,
         })

@@ -52,6 +52,7 @@ export const getAllApplicants = async (req,res,next) =>
                         status:true,
                         job:{
                             select:{
+                                id:true,
                                 title:true
                             }
                         },
@@ -64,7 +65,7 @@ export const getAllApplicants = async (req,res,next) =>
                 }
             },
             orderBy:{
-                created_at:"asc"
+                created_at:"desc"
             }
         })
 

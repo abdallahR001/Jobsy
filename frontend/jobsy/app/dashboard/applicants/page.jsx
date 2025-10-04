@@ -5,6 +5,7 @@ import { Users, Mail, DollarSign, FileText, Briefcase, User, CheckCircle, XCircl
 import AcceptButton from "@/app/components/AcceptAppliacantButton/AcceptButton"
 import RejectButton from "@/app/components/RejectApplicantButton/RejectApplicantButton"
 import ViewProfileButton from "@/app/components/ViewProfileButton/ViewProfileButton"
+import Link from "next/link"
 
 export default async function Applicants(){
     const cookieStore = cookies()
@@ -93,9 +94,9 @@ export default async function Applicants(){
                                                         {/* Job Title */}
                                                         <div className="flex items-center gap-2 bg-gradient-to-r from-indigo-50 to-purple-50 px-4 py-3 rounded-xl border border-indigo-100 mb-4">
                                                             <Briefcase className="w-5 h-5 text-indigo-600" />
-                                                            <span className="font-bold text-indigo-900 text-lg">
+                                                            <Link href={`/dashboard/job/${application.job.id}`} className="font-bold text-indigo-900 text-lg">
                                                                 {application.job.title}
-                                                            </span>
+                                                            </Link>
                                                         </div>
 
                                                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
