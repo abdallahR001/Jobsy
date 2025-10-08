@@ -1,7 +1,9 @@
 "use client"
 import { X } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function RejectButton({id, token}) {
+    const router = useRouter()
     const handleReject = async (id) => {
         const response = await fetch(`http://localhost:4000/api/applications/reject/${id}`, {
             method: "PUT",
@@ -18,7 +20,30 @@ export default function RejectButton({id, token}) {
         }
 
         console.log(result);
-        window.location.reload()
+
+        const notificationResponse = await fetch("http://localhost:4000/api/notifications",{
+            credentials:"include",
+            method:"POST",
+            body:JSON.stringify({
+                applicationId:id,
+                type:"reject application"
+            }),
+            headers:{
+                "content-type":"application/json"
+            }
+        })
+
+        const notificationResult = await notificationResponse.json()
+
+        if(!notificationResponse.ok)
+        {
+            console.log(notificationResult);
+            router.push("/dashboard/applicants?#")
+        }
+
+        router.push("/dashboard/applicants?#")
+
+        router.refresh()
     }
 
     return(

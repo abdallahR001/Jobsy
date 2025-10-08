@@ -12,6 +12,7 @@ import adminRouter from "./Routes/AdminRoute.js"
 import applicationRoute from "./Routes/ApplicationRoute.js"
 import cookieParser from "cookie-parser"
 import passport from "passport"
+import notificationRouter from "./Routes/NotificationRoute.js"
 
 const app = express()
 dotenv.config()
@@ -36,7 +37,7 @@ app.use("/api/categories",categoryRouter)
 app.use("/api/skills",skillRouter)
 app.use("/api/admins",adminRouter)
 app.use("/api/applications",applicationRoute)
-
+app.use("/api/notifications",notificationRouter)
 //error handling
 app.use(errorHandler)
 

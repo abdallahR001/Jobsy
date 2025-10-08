@@ -41,7 +41,11 @@ export const viewCompanyProfile = async (req,res,next) =>
                 _count:{
                     select:{
                         followers:true,
-                        jobs:true
+                        jobs:{
+                            where:{
+                                job_status:"open"
+                            }
+                        }
                     }
                 },
             }
@@ -262,7 +266,12 @@ export const UploadPortfolioFile = async (req,res,next) =>
                 fileName:file.originalname,
                 fileType:file.mimetype,
                 url:`uploads/${file.filename}`,
-                userId:id
+                userId:id,
+                user:{
+                    connect:{
+                        id
+                    }
+                }
             }
         })
 

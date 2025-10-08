@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import JobCard from "@/app/components/JobCard/JobCard"
 import { Building2, Mail, Users, Briefcase, Globe, Heart } from "lucide-react"
+import Image from "next/image"
 
 export default async function Company({params})
 {
@@ -25,9 +26,18 @@ export default async function Company({params})
         redirect("/login/jobseeker")
 
     const data = await response.json()
-
     const company = data.company
     const jobs = data.jobs
+
+    console.log(data);
+    
+
+    const getProfileImage = () => {
+    if (!company?.image) return "/default-avatar.png" // صورة افتراضية لو مفيش صورة
+    return company.image.startsWith("http")
+      ? company.image // من جوجل أو أي لينك خارجي
+      : `http://localhost:4000/${company.image}` // متخزنة في السيرفر بتاعك
+  }
 
     return(
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 py-12 px-4">
@@ -37,8 +47,20 @@ export default async function Company({params})
                     {/* Company Name & Follow Button */}
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8 pb-8 border-b border-gray-100">
                         <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-xl">
-                                <Building2 className="w-8 h-8 text-white" />
+                            <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl">
+                                {
+                                    company.image ? 
+                                    <Image 
+                                    src={getProfileImage()}
+                                    width={150}
+                                    height={150}
+                                    priority
+                                    className="rounded-2xl"
+                                    alt="company image"
+                                    />
+                                    :
+                                    <Building2 className="w-8 h-8 text-white" />
+                                }
                             </div>
                             <div>
                                 <h1 className="text-4xl font-bold text-gray-900 mb-2">{company.name}</h1>

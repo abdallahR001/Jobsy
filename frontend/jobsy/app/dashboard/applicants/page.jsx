@@ -25,9 +25,13 @@ export default async function Applicants(){
         redirect("/login/employer")
 
     const data = await response.json()
-
-    console.log(data);
     
+    const getProfileImage = (user) => {
+    if (!user?.image) return "/default-avatar.png" // صورة افتراضية لو مفيش صورة
+    return user.image.startsWith("http")
+      ? user.image // من جوجل أو أي لينك خارجي
+      : `http://localhost:4000/${user.image}` // متخزنة في السيرفر بتاعك
+  }
 
     return(
         <div className="w-full min-h-screen p-6">
@@ -64,7 +68,7 @@ export default async function Applicants(){
                                             <div className="flex items-center gap-4 mb-6">
                                                 {applicant.image ? (
                                                     <Image 
-                                                        src={`http://localhost:4000/${applicant.image}`}
+                                                        src={`${getProfileImage(applicant)}`}
                                                         width={80}
                                                         height={80}
                                                         priority
@@ -141,9 +145,11 @@ export default async function Applicants(){
                                                                 <>
                                                                 {/* Right: Action Buttons */}
                                                                     <div className="lg:col-span-1 flex flex-col gap-3">
-                                                                        <AcceptButton id={application.id} token={token}/>
+                                                                        <Link href={`/acceptapplication/${application.id}`} className="flex-1 cursor-pointer bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2">
+                                                                            <CheckCircle/> Accept
+                                                                        </Link>
                                                                         <RejectButton id={application.id} token={token}/>
-                                                                        <ViewProfileButton userId={application.userId}/>
+                                                                        <ViewProfileButton userId={application.userId} applicationId={application.id}/>
                                                                     </div>
                                                                 </>
                                                             }

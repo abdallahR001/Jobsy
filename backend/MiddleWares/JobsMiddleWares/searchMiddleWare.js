@@ -3,8 +3,6 @@ export const searchMiddleWare = (req,res,next) =>
 {
     const token = req.cookies.token || req.headers.token
 
-    console.log(token)
-
     if(!token)
         return next()
 

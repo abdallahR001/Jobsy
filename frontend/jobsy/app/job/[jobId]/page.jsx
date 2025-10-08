@@ -101,7 +101,7 @@ export default async function JobDetails({ params }) {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Job Description */}
-            <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-3xl p-8 border border-white/20 line-clamp-2">
+            <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-3xl p-8 border border-white/20 ">
               <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <div className="w-2 h-8 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"></div>
                 Job Description

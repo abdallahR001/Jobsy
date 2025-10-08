@@ -279,7 +279,13 @@ export const SearchJobs = async (userId = null,title,type = null,location = null
                     contains:title,
                     mode:"insensitive"
                 },
-                ...(type && {type}),
+                ...(type && {
+                    type:{
+                        contains:type,
+                        mode:"insensitive"
+                    }
+
+                }),
                 ...(location &&{
                     location:{
                         contains:location,

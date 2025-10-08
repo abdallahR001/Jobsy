@@ -20,11 +20,14 @@ export default async function Getjob({params}){
 
     const data = await response.json()
 
-    console.log(data);
-
     const job = data.job
 
-
+    const getProfileImage = (user) => {
+    if (!user?.image) return "/default-avatar.png" // صورة افتراضية لو مفيش صورة
+    return user.image.startsWith("http")
+      ? user.image // من جوجل أو أي لينك خارجي
+      : `http://localhost:4000/${user.image}` // متخزنة في السيرفر بتاعك
+  }
     return(
         <div className="p-6 w-full h-screen flex flex-col gap-3 items-center justify-center">
             <h1 className="text-3xl font-bold text-gray-800">{job.title}</h1>
@@ -48,7 +51,7 @@ export default async function Getjob({params}){
                             {
                                 applicant.user.image ?
                                 <Image 
-                                    src={`http://localhost:4000/${applicant.user.image}`}
+                                    src={`${getProfileImage(applicant.user)}`}
                                     width={300}
                                     height={300}
                                     priority

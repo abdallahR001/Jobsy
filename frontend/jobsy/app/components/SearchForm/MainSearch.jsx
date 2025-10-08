@@ -82,10 +82,10 @@ export default function MainSearch(){
                                 }}
                             >
                                 <option value={""} className="text-gray-400">Select job type</option>
-                                <option value={"fullTime"} className="text-gray-700">Full-Time</option>
-                                <option value={"partTime"} className="text-gray-700">Part-Time</option>
-                                <option value={"remote"} className="text-gray-700">Remote</option>
-                                <option value={"internShip"} className="text-gray-700">Internship</option>
+                                <option value={"Full-Time"} className="text-gray-700">Full-Time</option>
+                                <option value={"Part-Time"} className="text-gray-700">Part-Time</option>
+                                <option value={"Remote"} className="text-gray-700">Remote</option>
+                                <option value={"Internship"} className="text-gray-700">Internship</option>
                             </select>
                             <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300"></div>
                         </div>

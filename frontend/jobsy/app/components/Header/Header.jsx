@@ -1,14 +1,16 @@
 "use client"
-import { Bookmark, Menu, MessageCircleMore, Rocket, X, User, ChevronDown, Bell, Settings, Heart } from "lucide-react";
+import { Bookmark, Menu, MessageCircleMore, Rocket, X, User, ChevronDown, Bell, Settings, Heart, Home } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Notifications from "../Notifications/Notifications";
 
 export default function Header (){
     const [open,setOpen] = useState(false)
     const [user,setUser] = useState(null)
     const [activeLink,setActiveLink] = useState("")
+    const [notifications,setNotifications] = useState([])
     const [profileDropdown, setProfileDropdown] = useState(false)
 
     const pathName = usePathname()
@@ -35,7 +37,6 @@ export default function Header (){
         "/onboarding/employers/step6",
     ]
 
-
     const getProfileImage = () => {
     if (!user?.image) return "/default-avatar.png" // صورة افتراضية لو مفيش صورة
     return user.image.startsWith("http")
@@ -59,6 +60,8 @@ export default function Header (){
             if(!response.ok)
             {
                 setUser(null)
+                if(me.type === "comapny")
+                    router.push("/dashboard")
                 return
             }
 
@@ -73,9 +76,35 @@ export default function Header (){
             }
         }
         fetchUserData()
-    },[])       
+    },[])    
+    
+    useEffect(() =>
+    {
+        const fetchNotifications = async () =>
+        {
+            const response = await fetch("http://localhost:4000/api/notifications",
+                {
+                    credentials:"include"
+                }
+            )
 
-    if(hideHeaderIn.includes(pathName) || pathName.startsWith("/dashboard"))
+            if(response.status === 401 || response.status === 403)
+            {
+                setNotifications(null)
+                return
+            }
+
+            const data = await response.json()
+            
+            const notifications = data.notifications
+            
+            setNotifications(notifications)
+        }
+
+        fetchNotifications()
+    },[])
+
+    if(hideHeaderIn.includes(pathName) || pathName.startsWith("/dashboard") || pathName.startsWith("/acceptapplication"))
         return null
 
     const navLinks = [
@@ -102,6 +131,12 @@ export default function Header (){
             title:"followed companies",
             icon: <Heart/>,
             color: "text-blue-600"
+        },
+        {
+            href:"/",
+            title:"home",
+            icon: <Home/>,
+            color:"text-gray-800"
         }
     ]
 
@@ -138,7 +173,7 @@ export default function Header (){
                         {user ? (
                             <div className="flex gap-6 items-center">
                                 {/* Navigation Links */}
-                                <div className="flex gap-6">
+                                <div className="flex gap-3">
                                     {navLinks.map((link) => (
                                         <Link 
                                             className={`group relative flex items-center gap-2 px-4 py-2 rounded-2xl font-medium transition-all duration-300 hover:bg-gray-50 ${
@@ -162,13 +197,7 @@ export default function Header (){
                                 </div>
 
                                 {/* Notifications */}
-                                {/* <div className="relative">
-                                    <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl transition-all duration-300">
-                                        <Bell className="w-5 h-5" />
-                                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
-                                    </button>
-                                </div> */}
-
+                                <Notifications notifications={notifications}/>
                                 {/* Profile Dropdown */}
                                 <div className="relative">
                                     <button 
