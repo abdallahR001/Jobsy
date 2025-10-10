@@ -5,12 +5,15 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Notifications from "../Notifications/Notifications";
+import { io } from "socket.io-client";
 
 export default function Header (){
     const [open,setOpen] = useState(false)
     const [user,setUser] = useState(null)
     const [activeLink,setActiveLink] = useState("")
     const [notifications,setNotifications] = useState([])
+    const [unseenNotifications,setUnseenNotifications] = useState(notifications?.some((n) => !n.seen))
+    const [newNotifications,setNewNotifications] = useState(false)
     const [profileDropdown, setProfileDropdown] = useState(false)
 
     const pathName = usePathname()
@@ -104,10 +107,43 @@ export default function Header (){
         fetchNotifications()
     },[])
 
+    useEffect(() =>
+    {
+        const socket = io("http://localhost:4000")
+
+        socket.on("connect",() => console.log("connected to server"))
+
+        socket.on("new-notification",(notification) =>
+        {
+            console.log(notification);
+            setNewNotifications(true)
+        })
+
+        socket.on("check-seen-notifications",() =>
+        {
+            const seenNotifications = notifications.every((n) => n.seen === true)
+
+            if(seenNotifications)
+            {
+                setUnseenNotifications(false)
+                setNewNotifications(false)
+                setNotifications((prev) => prev?.map((n) => ({...n ,seen:true})))
+            }
+        })
+
+        return () => socket.disconnect()
+    },[])
+
     if(hideHeaderIn.includes(pathName) || pathName.startsWith("/dashboard") || pathName.startsWith("/acceptapplication"))
         return null
 
     const navLinks = [
+        {
+            href:"/",
+            title:"home",
+            icon: <Home/>,
+            color:"text-gray-800"
+        },
         {
             href:"/savedjobs",
             title:"Saved Jobs",
@@ -121,23 +157,12 @@ export default function Header (){
             color: "text-indigo-600"
         },
         {
-            href:"/",
-            title:"messages",
-            icon: <MessageCircleMore className="w-5 h-5"/>,
-            color: "text-green-600"
-        },
-        {
             href:"/followedcompanies",
             title:"followed companies",
             icon: <Heart/>,
             color: "text-blue-600"
         },
-        {
-            href:"/",
-            title:"home",
-            icon: <Home/>,
-            color:"text-gray-800"
-        }
+        
     ]
 
     const handleLogout = async () =>
@@ -197,7 +222,7 @@ export default function Header (){
                                 </div>
 
                                 {/* Notifications */}
-                                <Notifications notifications={notifications}/>
+                                <Notifications unseenNotifications={unseenNotifications} newNotifications={newNotifications}/>
                                 {/* Profile Dropdown */}
                                 <div className="relative">
                                     <button 

@@ -1,20 +1,21 @@
 "use client"
 
 import { Bell } from "lucide-react"
+import Link from "next/link"
 
-export default function Notifications({notifications = null}){
-    const unSeenNotifications = notifications?.some((notification) => !notification.seen)
+export default function Notifications({unseenNotifications,newNotifications}){
+
     return(
         <div className="relative">
-            <a href={"/notifications"} className="p-2 text-gray-400 ">
+            <Link href={"/notifications"} className="p-2 text-gray-400 ">
                 <Bell className="w-full h-full" />
                 {
-                    unSeenNotifications ? 
+                    unseenNotifications ||newNotifications ? 
                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
                     :
                     ""
                 }
-            </a>
+            </Link>
         </div>
     )
 }

@@ -1,3 +1,4 @@
+import { io } from "../index.js"
 import { prisma } from "../prisma/prismaClient.js"
 
 export const createNotification = async (req,res,next) =>
@@ -64,6 +65,8 @@ export const createNotification = async (req,res,next) =>
                 }
             }
         })
+
+        io.emit("new-notification",(notification))
 
         res.status(200).json({
             notification
@@ -154,6 +157,8 @@ export const getNotification = async (req,res,next) =>
             },
             select:{
                 id:true,
+                seen:true,
+                title:true,
                 Company:{
                     select:{
                         id:true,
@@ -163,6 +168,8 @@ export const getNotification = async (req,res,next) =>
                 }
             }
         })
+
+        io.emit("check-seen-notifications")
 
         res.status(200).json(
             {

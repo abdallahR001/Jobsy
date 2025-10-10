@@ -40,6 +40,7 @@ export default async function Notification({params})
       ? company.image // من جوجل أو أي لينك خارجي
       : `http://localhost:4000/${company.image}` // متخزنة في السيرفر بتاعك
   }
+
     return(
         <div className="w-full h-screen flex items-center justify-center gap-3 flex-col">
             <Link href={`/company/${data.notification.Company.id}`}>

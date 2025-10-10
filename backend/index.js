@@ -13,8 +13,28 @@ import applicationRoute from "./Routes/ApplicationRoute.js"
 import cookieParser from "cookie-parser"
 import passport from "passport"
 import notificationRouter from "./Routes/NotificationRoute.js"
+import { Server } from "socket.io"
+import { createServer } from "http"
 
 const app = express()
+
+const server = createServer(app)
+
+export const io = new Server(server,{
+    cors:{
+        origin:"http://localhost:3000"
+    }
+})
+
+io.on("connection",(socket) =>
+{
+    console.log(socket.id)
+    socket.on("disconnect",() =>
+    {
+        console.log("socket disconnected")
+    })
+})
+
 dotenv.config()
 
 const PORT = process.env.PORT || 4000
@@ -41,7 +61,7 @@ app.use("/api/notifications",notificationRouter)
 //error handling
 app.use(errorHandler)
 
-app.listen(PORT,async () =>
+server.listen(PORT,async () =>
 {
     console.log(`server is up and running on port http://localhost:${PORT}`)
 })
