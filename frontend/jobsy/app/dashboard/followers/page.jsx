@@ -2,6 +2,7 @@ import { redirect } from "next/dist/server/api-utils"
 import { cookies } from "next/headers"
 import Image from "next/image"
 import { UserPlus, Mail, User, Heart } from "lucide-react"
+import Link from "next/link"
 
 export default async function Followers()
 {
@@ -102,9 +103,9 @@ export default async function Followers()
                                     </div>
 
                                     {/* Action Button */}
-                                    <button className="w-full cursor-pointer bg-gradient-to-r from-pink-600 via-rose-600 to-pink-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105">
+                                    <Link href={`/userprofile/${follower.id}`} className="w-full cursor-pointer bg-gradient-to-r from-pink-600 via-rose-600 to-pink-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105">
                                         View Profile
-                                    </button>
+                                    </Link>
                                 </div>
 
                                 {/* Decorative elements */}

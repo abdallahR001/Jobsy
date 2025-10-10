@@ -36,11 +36,11 @@ export default async function Notifications()
     console.log(notifications);
     
     return(
-        <div className="flex items-center justify-center p-4 w-full h-screen flex-col gap-3">
+        <div className="flex items-center justify-center p-4 w-full min-h-screen flex-col gap-3">
             <h1 className="text-gray-800 text-3xl font-bold mb-5">Notifications</h1>
             {
                 notifications.map((notification) => (
-                    <Link href={`/notifications/${notification.id}`} className="w-full p-4 shadow-sm rounded-2xl relative" key={notification.id}>
+                    <a href={`/notifications/${notification.id}`} className="w-full p-4 shadow-sm rounded-2xl relative" key={notification.id}>
                         <h1 className={`text-2xl font-semibold ${notification.type === "accept application" ? "text-green-500" : notification.type === "reject application" ? "text-red-500" : "text-gray-800"}`}>
                             {notification.type === "accept application" ? <CheckCircle /> : <X/>} {notification.type === "accept application" ? notification.title : notification.title}
                         </h1>
@@ -51,7 +51,7 @@ export default async function Notifications()
                             :
                             ""
                         }
-                    </Link>
+                    </a>
                 ))
             }
         </div>    

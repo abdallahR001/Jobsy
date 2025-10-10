@@ -266,7 +266,6 @@ export const UploadPortfolioFile = async (req,res,next) =>
                 fileName:file.originalname,
                 fileType:file.mimetype,
                 url:`uploads/${file.filename}`,
-                userId:id,
                 user:{
                     connect:{
                         id
@@ -321,6 +320,60 @@ export const GetProfile = async (req,res,next) =>
     } 
     catch (error) {
         next(error)
+    }
+}
+
+export const ViewUserProfile = async (req,res,next) =>
+{
+    try {
+        const {userId} = req.params
+
+        const user = await prisma.user.findUnique({
+            where:{
+                id:userId
+            },
+            select:{
+                id:true,
+                first_name:true,
+                last_name:true,
+                bio:true,
+                image:true,
+                field:true,
+                title:true,
+                years_of_experience:true,
+                email:true,
+                location:true,
+                PortfolioFiles:{
+                    select:{
+                        id:true,
+                        fileName:true,
+                        fileType:true,
+                        url:true,
+                        title:true,
+                        description:true,
+                        created_at:true,
+                    }
+                },
+                skills:{
+                    select:{
+                        id:true,
+                        name:true,
+                    }
+                }
+            }
+        })
+
+        if(!user)
+            return res.status(404).json({
+                message: "user not found"
+            })
+
+        res.status(200).json({
+            user
+        })
+    } 
+    catch (error) {
+        next(error)    
     }
 }
 

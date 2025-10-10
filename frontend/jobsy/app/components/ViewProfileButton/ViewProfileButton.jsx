@@ -28,11 +28,11 @@ export default function ViewProfileButton({userId,applicationId}) {
             router.push("/dashboard/applicants?#")
         }
 
-        router.push("/dashboard/applicants?#")
+        router.push(`/dashboard/userprofile/${userId}`)
     }
     return(
         <Link 
-            href={`/dashboard`}
+            href={`/dashboard/userprofile/${userId}`}
             onClick={handleViewProfile}
             className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-xl font-semibold hover:bg-gray-300 transition-all duration-300 flex items-center justify-center gap-2"
         >

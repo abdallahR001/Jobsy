@@ -1,13 +1,12 @@
 "use client"
 
 import { Bell } from "lucide-react"
-import Link from "next/link"
 
 export default function Notifications({notifications = null}){
     const unSeenNotifications = notifications?.some((notification) => !notification.seen)
     return(
         <div className="relative">
-            <Link href={"/notifications"} className="p-2 text-gray-400 ">
+            <a href={"/notifications"} className="p-2 text-gray-400 ">
                 <Bell className="w-full h-full" />
                 {
                     unSeenNotifications ? 
@@ -15,7 +14,7 @@ export default function Notifications({notifications = null}){
                     :
                     ""
                 }
-            </Link>
+            </a>
         </div>
     )
 }

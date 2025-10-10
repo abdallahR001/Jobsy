@@ -63,9 +63,6 @@ export const getAllApplicants = async (req,res,next) =>
                         created_at:"desc"
                     }
                 }
-            },
-            orderBy:{
-                created_at:"desc"
             }
         })
 
