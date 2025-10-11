@@ -107,39 +107,78 @@ export default function Header (){
         fetchNotifications()
     },[])
 
-    useEffect(() =>
-    {
-        const socket = io("http://localhost:4000")
+    // useEffect(() =>
+    // {
+    //     const socket = io("http://localhost:4000")
 
-        socket.on("connect",() => console.log("connected to server"))
+    //     socket.on("connect",() => console.log("connected to server"))
 
-        socket.on("new-notification",(notification) =>
-        {
-            console.log(notification);
-            setNewNotifications(true)
-        })
+    //     socket.on("new-notification",(notification) =>
+    //     {
+    //         console.log(notification);
+    //         setNewNotifications(true)
+    //     })
 
-        socket.on("check-seen-notifications",() =>
-        {
-            const seenNotifications = notifications.every((n) => n.seen === true)
+    //     socket.on("check-seen-notifications",() =>
+    //     {
+    //         const seenNotifications = notifications.every((n) => n.seen === true)
 
-            if(seenNotifications)
-            {
-                setUnseenNotifications(false)
-                setNewNotifications(false)
-                setNotifications((prev) => prev?.map((n) => ({...n ,seen:true})))
-            }
-        })
+    //         if(seenNotifications)
+    //         {
+    //             setUnseenNotifications(false)
+    //             setNewNotifications(false)
+    //             setNotifications((prev) => prev?.map((n) => ({...n ,seen:true})))
+    //         }
+    //     })
 
-        return () => socket.disconnect()
-    },[])
+    //     return () => socket.disconnect()
+    // },[])
+
+    useEffect(() => {
+  if (!user?.id) return;
+
+  const socket = io("http://localhost:4000", {
+    auth: { userId: user.id }
+  });
+
+  socket.on("connect", () => {
+    console.log("Connected:", socket.id);
+
+    socket.emit("register-user", user.id);
+  });
+
+  socket.on("new-notification", (notification) => {
+
+    if (notification.userId === user.id) {
+      setNotifications(prev => [notification, ...prev]);
+      setNewNotifications(true);
+      setUnseenNotifications(true);
+    }
+  });
+
+  socket.on("notification-seen", ({ notificationId }) => {
+    setNotifications(prev =>
+      prev.map(n =>
+        n.id === notificationId ? { ...n, seen: true } : n
+      )
+    );
+    
+    const allSeen = notifications.every(n => n.seen);
+    if (allSeen) {
+      setUnseenNotifications(false);
+      setNewNotifications(false);
+    }
+  });
+
+  return () => socket.disconnect();
+}, [user?.id]); 
 
     if(hideHeaderIn.includes(pathName) || pathName.startsWith("/dashboard") || pathName.startsWith("/acceptapplication"))
         return null
 
     const navLinks = [
         {
-            href:"/",
+            href:"/home",
             title:"home",
             icon: <Home/>,
             color:"text-gray-800"
@@ -222,7 +261,7 @@ export default function Header (){
                                 </div>
 
                                 {/* Notifications */}
-                                <Notifications unseenNotifications={unseenNotifications} newNotifications={newNotifications}/>
+                                <Notifications notifications={notifications} unseenNotifications={unseenNotifications} newNotifications={newNotifications}/>
                                 {/* Profile Dropdown */}
                                 <div className="relative">
                                     <button 

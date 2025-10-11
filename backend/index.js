@@ -26,15 +26,24 @@ export const io = new Server(server,{
     }
 })
 
-io.on("connection",(socket) =>
-{
-    console.log(socket.id)
-    socket.on("disconnect",() =>
-    {
-        console.log("socket disconnected")
-    })
-})
+const userSockets = new Map();
 
+io.on("connection", (socket) => {
+
+  socket.on("register-user", (userId) => {
+    userSockets.set(userId, socket.id);
+    socket.join(userId);
+  });
+
+  socket.on("disconnect", () => {
+    for (const [userId, socketId] of userSockets.entries()) {
+      if (socketId === socket.id) {
+        userSockets.delete(userId);
+        break;
+      }
+    }
+  });
+});
 dotenv.config()
 
 const PORT = process.env.PORT || 4000

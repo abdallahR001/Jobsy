@@ -66,7 +66,7 @@ export const createNotification = async (req,res,next) =>
             }
         })
 
-        io.emit("new-notification",(notification))
+        io.to(notification.userId).emit("new-notification",(notification))
 
         res.status(200).json({
             notification
@@ -108,76 +108,68 @@ export const getAllNotifications = async (req,res,next) =>
     }
 }
 
-export const getNotification = async (req,res,next) =>
-{
-    try {
-        const {notificationId} = req.params
+export const getNotification = async (req, res, next) => {
+  try {
+    const { notificationId } = req.params;
+    const userId = req.user.id; 
 
-        let notification = await prisma.notification.findUnique({
-            where:{
-                id:notificationId
-            }
-        })
-
-        if(!notification)
-            res.status(404).json({
-            message: "notification not found"
-        })
-
-        if(!notification.seen)
-        {
-            notification = await prisma.notification.update({
-                where:{
-                    id:notification.id
-                },
-                select:{
-                    id:true,
-                    type:true,
-                    title:true,
-                    message:true,
-                    created_at:true,
-                    seen:true,
-                    Company:{
-                        select:{
-                            id:true,
-                            image:true,
-                            name:true
-                        }
-                    }
-                },
-                data:{
-                    seen:true
-                }
-            })
+    let notification = await prisma.notification.findUnique({
+      where: { id: notificationId },
+      select: {
+        id: true,
+        type: true,
+        title: true,
+        message: true,
+        created_at: true,
+        seen: true,
+        userId: true, 
+        Company: {
+          select: {
+            id: true,
+            image: true,
+            name: true
+          }
         }
+      }
+    });
 
-        notification = await prisma.notification.findUnique({
-            where:{
-                id:notificationId
-            },
-            select:{
-                id:true,
-                seen:true,
-                title:true,
-                Company:{
-                    select:{
-                        id:true,
-                        image:true,
-                        name:true
-                    }
-                }
-            }
-        })
-
-        io.emit("check-seen-notifications")
-
-        res.status(200).json(
-            {
-                notification
-            }
-        )
-    } 
-    catch (error) {
-        next(error)    
+    if (!notification) {
+      return res.status(404).json({ message: "Notification not found" });
     }
-}
+
+    if (notification.userId !== userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    if (!notification.seen) {
+      notification = await prisma.notification.update({
+        where: { id: notificationId },
+        data: { seen: true },
+        select: {
+          id: true,
+          type: true,
+          title: true,
+          message: true,
+          created_at: true,
+          seen: true,
+          Company: {
+            select: {
+              id: true,
+              image: true,
+              name: true
+            }
+          }
+        }
+      });
+
+      io.to(userId).emit("notification-seen", { 
+        notificationId,
+        userId 
+      });
+    }
+
+    res.status(200).json({ notification });
+  } catch (error) {
+    next(error);
+  }
+};
