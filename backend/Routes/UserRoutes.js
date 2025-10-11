@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile, Logout, UploadPortfolioFile, DeletePortfolioFile, googleCallBack, AddSkill, GetUserField, ViewUserProfile } from "../Controllers/userController.js";
+import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile, Logout, UploadPortfolioFile, DeletePortfolioFile, googleCallBack, AddSkill, GetUserField, ViewUserProfile, homePage } from "../Controllers/userController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import multer from "multer";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
@@ -87,6 +87,7 @@ passport.use(
 
 userRouter.get("/google",passport.authenticate("google",{scope:["profile","email"]}))
 userRouter.get("/google/callback",passport.authenticate("google",{failureRedirect:"http://localhost:3000/login/jobseeker",session:false}),googleCallBack)
+userRouter.get("/home",authMiddleWare,authorizeRoles("user"),homePage)
 userRouter.get("/profile",authMiddleWare,authorizeRoles("user","company"),GetProfile)
 userRouter.get("/viewprofile/:userId",authMiddleWare,authorizeRoles("user","company"),ViewUserProfile)
 userRouter.get("/field",authMiddleWare,authorizeRoles("user"),GetUserField)

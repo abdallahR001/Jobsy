@@ -1,6 +1,107 @@
 import { prisma } from "../prisma/prismaClient.js"
 import jwt from "jsonwebtoken"
 import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, getFollowedCompanies, saveJob, getSavedJobs } from "../Services/UserService/UserService.js"
+
+export const homePage = async (req,res,next) =>
+{
+    const {id} = req.user
+    console.log(id);
+    
+    try {
+        const activejobsCount = await prisma.job.count({
+            where:{
+                job_status:"open"
+            }
+        })
+
+        const companiesCount = await prisma.company.count()
+
+        const jobSeekersCount = await prisma.user.count()
+
+        const user = await prisma.user.findUnique({
+            where:{
+                id
+            },
+            select:{
+                field:true,
+                skills:true,
+                title:true
+            }
+        })
+        
+        const userSkillsIDs = user.skills.map((skill) => skill.id)
+
+        const jobsFeed = await prisma.job.findMany({
+            where:{
+                OR:[
+                    {
+                    Category:{
+                      name:user.field
+                    },
+                    },
+                    {
+                      skills:{
+                        some:{
+                            id:{
+                                in:userSkillsIDs
+                            }
+                        }
+                      }
+                    },
+                ]
+            },
+            take:8,
+            select:{
+                id:true,
+                title:true,
+                description:true,
+                location:true,
+                salary:true,
+                type:true,
+                Company:{
+                    select:{
+                        id:true,
+                        name:true,
+                        image:true,
+                    }
+                }
+            }
+        })
+
+        const companiesFeed = await prisma.company.findMany({
+            where:{
+                field:user.field
+            },
+            select:{
+                id:true,
+                name:true,
+                employees_count:true,
+                image:true,
+                _count:{
+                    select:{
+                        jobs:{
+                            where:{
+                                job_status:"open"
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        res.status(200).json({
+            activejobsCount,
+            jobSeekersCount,
+            companiesCount,
+            jobsFeed,
+            companiesFeed
+        })
+    } 
+    catch (error) {
+        next(error)
+    }
+}
+
 export const createAccount = async(req,res,next) =>
 {
     try {
