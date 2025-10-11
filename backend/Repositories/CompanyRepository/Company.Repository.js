@@ -202,6 +202,9 @@ export const UpdateCompany = async (id,data) =>
         if(data.image)
             dataToUpdate.image = data.image
 
+        if(data.field)
+            dataToUpdate.field = data.field
+
         if(!company.hasSeenOnboarding)
             dataToUpdate.hasSeenOnboarding = true
 

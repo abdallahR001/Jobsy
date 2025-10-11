@@ -55,6 +55,7 @@ export default function CompanyLogoUpload() {
     data.append("description", localStorage.getItem("description"));
     data.append("website", localStorage.getItem("website"));
     data.append("employees_count", localStorage.getItem("employeesCount"));
+    data.append("field",localStorage.getItem("field"))
 
     if (image) {
       data.append("image", image);

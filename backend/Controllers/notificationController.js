@@ -40,7 +40,7 @@ export const createNotification = async (req,res,next) =>
         let title;
 
         if(type === "accept application")
-            title = `congrats! your application was accepted by ${company.name}, click here to see their message`
+            title = `congrats! your application was accepted by ${company.name}`
 
         if(type === "reject application")
             title = `your application was rejected by ${company.name}`

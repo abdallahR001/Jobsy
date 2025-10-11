@@ -54,7 +54,7 @@ export default function Step1() {
     },[router])
 
   const handleContinue = () => {
-    localStorage.setItem("companyField", companyField);
+    localStorage.setItem("field", companyField);
     router.push("/onboarding/employers/step2"); 
   };
 

@@ -107,33 +107,6 @@ export default function Header (){
         fetchNotifications()
     },[])
 
-    // useEffect(() =>
-    // {
-    //     const socket = io("http://localhost:4000")
-
-    //     socket.on("connect",() => console.log("connected to server"))
-
-    //     socket.on("new-notification",(notification) =>
-    //     {
-    //         console.log(notification);
-    //         setNewNotifications(true)
-    //     })
-
-    //     socket.on("check-seen-notifications",() =>
-    //     {
-    //         const seenNotifications = notifications.every((n) => n.seen === true)
-
-    //         if(seenNotifications)
-    //         {
-    //             setUnseenNotifications(false)
-    //             setNewNotifications(false)
-    //             setNotifications((prev) => prev?.map((n) => ({...n ,seen:true})))
-    //         }
-    //     })
-
-    //     return () => socket.disconnect()
-    // },[])
-
     useEffect(() => {
   if (!user?.id) return;
 
@@ -226,7 +199,7 @@ export default function Header (){
             <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
                 <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-4">
                     {/* Logo */}
-                    <Link href={"/"} onClick={() => {setActiveLink(""),setOpen(false)}} className="group">
+                    <Link href={user ? "/home" : "/"} onClick={() => {setActiveLink(""),setOpen(false)}} className="group">
                         <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-800 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
                             Jobs<span className="text-indigo-700">y</span>
                         </h1>

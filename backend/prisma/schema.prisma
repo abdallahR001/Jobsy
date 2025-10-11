@@ -67,6 +67,7 @@ model Company {
   image String?
   website String?
   employees_count String?
+  field String?
   hasSeenOnboarding Boolean
   created_at DateTime @default(now())
 
