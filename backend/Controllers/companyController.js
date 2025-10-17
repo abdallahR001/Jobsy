@@ -1,4 +1,5 @@
 import { prisma } from "../prisma/prismaClient.js"
+import jwt from "jsonwebtoken"
 import { GetCompanyProfile , CreateNewCompany , LogInAsCompany, UpdateCompanyProfile , DeleteCompanyProfile, GetCompanyFollowers } from "../Services/CompanyService/CompanyService.js"
 export const getCompany = async (req,res,next) =>
 {
@@ -14,6 +15,45 @@ export const getCompany = async (req,res,next) =>
     } 
     catch (error) {
         next(error)    
+    }
+}
+
+export const googleCallBack = async (req,res) =>
+{
+    const user = req.user
+
+    console.log(user);
+    
+    
+    const token = jwt.sign(
+        { id: user.id, role: "company" },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+        );
+
+    const company = await prisma.company.findUnique({
+        where:{
+            id:user.id
+        },
+        select:{
+            hasSeenOnboarding:true,
+        }
+    })
+
+    if(company.hasSeenOnboarding)
+    {
+        res.cookie("token", token, {
+        httpOnly: true,
+        secure: false
+        }).redirect("http://localhost:3000/dashboard")
+    }
+
+    else
+    {
+        res.cookie("token", token, {
+        httpOnly: true,
+        secure: false
+        }).redirect("http://localhost:3000/onboarding/employers/step1")
     }
 }
 

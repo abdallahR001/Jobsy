@@ -172,7 +172,7 @@ export default async function Applications()
                             Start applying to jobs and track your applications here.
                         </p>
                         <Link 
-                            href="/search"
+                            href="/home"
                             className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white px-8 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
                         >
                             <Briefcase className="w-5 h-5" />

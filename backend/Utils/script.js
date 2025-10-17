@@ -1,9 +1,11 @@
 import { prisma } from "../prisma/prismaClient.js";
 
-const user = await prisma.user.findUnique({
+const cat = await prisma.user.findUnique(
+   {
     where:{
-        id:"cmfpmsipn0000tues9a9jzpw8"
+        email:"ramadanabdallah546@gmail.com"
     }
-})
+   }
+)
 
-console.log(user);
+console.log(cat);

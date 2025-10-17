@@ -36,6 +36,7 @@ model User {
   skills Skill[]
   PortfolioFiles PortfolioFile[]
   notifications Notification[]
+  resumes Resume[]
 }
 
 model Job {
@@ -62,7 +63,7 @@ model Company {
   id String @id @default(cuid())
   name String @unique
   email String @unique
-  password String
+  password String?
   description String?
   image String?
   website String?
@@ -133,12 +134,19 @@ model PortfolioFile {
 model Notification {
   id String @id @default(cuid())
   type String
-  Company Company @relation(fields: [companyId], references: [id])
-  User User @relation(fields: [userId], references: [id])
+  Company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
   companyId String
   message String?
   title String
   seen Boolean @default(false)
   created_at DateTime @default(now())
+}
+
+model Resume {
+  id String @id @default(cuid())
+  userId String @unique
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url String
 }

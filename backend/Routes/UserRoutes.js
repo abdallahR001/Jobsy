@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile, Logout, UploadPortfolioFile, DeletePortfolioFile, googleCallBack, AddSkill, GetUserField, ViewUserProfile, homePage } from "../Controllers/userController.js";
+import { UpdateProfile, createAccount, DeleteProfile, GetProfile, logIn, FollowCompany, GetFollowedCompanies, SaveJob, GetSavedJobs, me, onBoardingPage, viewCompanyProfile, Logout, UploadPortfolioFile, DeletePortfolioFile, googleCallBack, AddSkill, GetUserField, ViewUserProfile, homePage, UploadResume } from "../Controllers/userController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import multer from "multer";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
@@ -46,6 +46,7 @@ const upload = multer(
 
 // google auth
 passport.use(
+    "google-user",
     new GoogleStrategy(
         {
             clientID:process.env.GOOGLE_CLIENT_ID,
@@ -60,6 +61,8 @@ passport.use(
                 const lastName = profile.name.familyName;
                 const image = profile.photos[0].value;    
 
+                console.log(email);
+                
                 let user = await prisma.user.findUnique({
                     where:{email}
                 })
@@ -71,10 +74,14 @@ passport.use(
                             email,
                             first_name: firstName,
                             last_name: lastName,
-                            image
+                            image,
+                            hasSeenOnboarding:false
                         }
                     })
                 }
+
+                console.log(user);
+                
                 return done(null,user)
             } 
             catch (error) {
@@ -85,8 +92,8 @@ passport.use(
 )
 
 
-userRouter.get("/google",passport.authenticate("google",{scope:["profile","email"]}))
-userRouter.get("/google/callback",passport.authenticate("google",{failureRedirect:"http://localhost:3000/login/jobseeker",session:false}),googleCallBack)
+userRouter.get("/google",passport.authenticate("google-user",{scope:["profile","email"]}))
+userRouter.get("/google/callback",passport.authenticate("google-user",{failureRedirect:"http://localhost:3000/login/jobseeker",session:false}),googleCallBack)
 userRouter.get("/home",authMiddleWare,authorizeRoles("user"),homePage)
 userRouter.get("/profile",authMiddleWare,authorizeRoles("user","company"),GetProfile)
 userRouter.get("/viewprofile/:userId",authMiddleWare,authorizeRoles("user","company"),ViewUserProfile)
@@ -97,7 +104,8 @@ userRouter.get("/me",authMiddleWare,authorizeRoles("user","company"),me)
 userRouter.get("/company/:companyId",authMiddleWare,authorizeRoles("user","admin"),viewCompanyProfile)
 userRouter.post("/signUp", createAccount)
 userRouter.post("/signIn",logIn)
-userRouter.put("/update-profile",authMiddleWare,upload.single("image"),authorizeRoles("user"),UpdateProfile)
+userRouter.post("/resume",authMiddleWare,authorizeRoles("user"),upload.single("file"),UploadResume)
+userRouter.put("/update-profile",authMiddleWare,authorizeRoles("user"),upload.single("image"),UpdateProfile)
 userRouter.delete("/delete",authMiddleWare,DeleteProfile)
 userRouter.post("/follow",authMiddleWare,authorizeRoles("user"),FollowCompany)
 userRouter.post("/save",authMiddleWare,authorizeRoles("user"),SaveJob)

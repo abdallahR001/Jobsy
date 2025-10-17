@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 export default function StepOne(){
     const [userName,setUserName] = useState("")
     const [field,setField] = useState("")
-
+    // note: the fields will come from the server when we add it
     const fields = [
         "Software Development",
         "Graphic Design",

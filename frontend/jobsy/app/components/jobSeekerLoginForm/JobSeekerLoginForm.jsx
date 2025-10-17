@@ -76,7 +76,7 @@ const handleSubmit = async (e) =>
     setEmailError(false)
     setPasswordError(false)
 
-    window.location.replace("/")
+    window.location.replace("/home")
     } 
     catch (error) {
         setErrorMessage("something went wrong, please try again later")

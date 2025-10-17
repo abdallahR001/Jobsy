@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com", // 👈 صور Google Profile
+        hostname: "lh3.googleusercontent.com", //google images from google auth
       },
     ],
   },

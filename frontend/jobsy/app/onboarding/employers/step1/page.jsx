@@ -14,6 +14,7 @@ export default function Step1() {
     "Education",
     "Retail",
     "Hospitality",
+    "Marketing",
     "Other",
   ];
 

@@ -1,14 +1,14 @@
 import { prisma } from "../prisma/prismaClient.js"
 import jwt from "jsonwebtoken"
 import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, getFollowedCompanies, saveJob, getSavedJobs } from "../Services/UserService/UserService.js"
+import { log } from "console"
 
 export const homePage = async (req,res,next) =>
 {
     const {id} = req.user
-    console.log(id);
     
     try {
-        const activejobsCount = await prisma.job.count({
+        const activeJobsCount = await prisma.job.count({
             where:{
                 job_status:"open"
             }
@@ -31,12 +31,12 @@ export const homePage = async (req,res,next) =>
         
         const userSkillsIDs = user.skills.map((skill) => skill.id)
 
-        const jobsFeed = await prisma.job.findMany({
+        let jobsFeed = await prisma.job.findMany({
             where:{
                 OR:[
                     {
                     Category:{
-                      name:user.field
+                      name:user?.field
                     },
                     },
                     {
@@ -58,17 +58,28 @@ export const homePage = async (req,res,next) =>
                 location:true,
                 salary:true,
                 type:true,
+                created_at:true,
                 Company:{
                     select:{
                         id:true,
                         name:true,
                         image:true,
                     }
+                },
+                savedBy:{
+                    where:{
+                        id:id
+                    }
+                },
+                Category:{
+                    select:{
+                        name:true,
+                    }
                 }
             }
         })
 
-        const companiesFeed = await prisma.company.findMany({
+        let companiesFeed = await prisma.company.findMany({
             where:{
                 field:user.field
             },
@@ -85,16 +96,27 @@ export const homePage = async (req,res,next) =>
                             }
                         }
                     }
+                },
+                followers:{
+                    where:{
+                        id:id
+                    }
                 }
             }
         })
 
+        jobsFeed = jobsFeed.map((job) => ({...job, isSaved: job.savedBy.length > 0}))
+
+        companiesFeed = companiesFeed.map((company) => ({...company, isFollowed: company.followers.length > 0}))
+
         res.status(200).json({
-            activejobsCount,
-            jobSeekersCount,
-            companiesCount,
-            jobsFeed,
-            companiesFeed
+            feed:{
+                activeJobsCount,
+                jobSeekersCount,
+                companiesCount,
+                jobsFeed,
+                companiesFeed
+            }
         })
     } 
     catch (error) {
@@ -256,7 +278,7 @@ export const onBoardingPage = async (req,res,next) =>
     }
 }
 
-export const googleCallBack = async (req,res,next) =>
+export const googleCallBack = async (req,res) =>
 {
         const user = req.user
 
@@ -266,20 +288,47 @@ export const googleCallBack = async (req,res,next) =>
         { expiresIn: "7d" }
         );
 
-        res.cookie("token", token, {
-        httpOnly: true,
-        secure: false
-        }).redirect("http://localhost:3000/profile")
+        console.log(user);
+        
+
+        const existingUser = await prisma.user.findUnique({
+            where:{
+                id:user.id
+            },
+            select:{
+                hasSeenOnboarding:true,
+            }
+        })
+
+        if(existingUser.hasSeenOnboarding === true)
+        {
+            res.cookie("token", token, {
+            httpOnly: true,
+            secure: false
+            }).redirect("http://localhost:3000/home")
+        }
+        else
+        {
+            res.cookie("token", token, {
+            httpOnly: true,
+            secure: false
+            }).redirect("http://localhost:3000/onboarding/users/step1")
+        }        
 }
 
 export const me = async(req,res,next) =>
 {
     try {
-        if(req.user.role === "user")
+        const {id,role} = req.user
+
+        console.log(id);
+        console.log(role);
+        
+        if(role === "user")
         {
             const user = await prisma.user.findUnique({
             where:{
-                id:req.user.id
+                id:id
             },
             select:{
                 id:true,
@@ -287,24 +336,27 @@ export const me = async(req,res,next) =>
                 last_name:true,
                 image:true,
             }
-        })    
+        })  
 
-        res.status(200).json({
-            id:user.id,
-            first_name:user.first_name,
-            last_name:user.last_name,
-            image:user.image,
-            type:"user"
-        })
+            console.log(user);
+            
 
-        return user
+            res.status(200).json({
+                id:user.id,
+                first_name:user.first_name,
+                last_name:user.last_name,
+                image:user.image,
+                type:"user"
+            })
+
+            return user
         }
 
-        else if(req.user.role === "company")
+        else if(role === "company")
         {
             const company = await prisma.company.findUnique({
                 where:{
-                    id:req.user.id
+                    id:id
                 },
                 select:{
                     id:true,
@@ -359,7 +411,6 @@ export const UploadPortfolioFile = async (req,res,next) =>
             return res.status(400).json({ message: "Executable files are not allowed" });
         }
 
-
         const newFile = await prisma.portfolioFile.create({
             data:{
                 title,
@@ -408,6 +459,45 @@ export const DeletePortfolioFile = async (req,res,next) =>
     catch (error) {
         next(error)    
     }
+}
+
+export const UploadResume = async (req,res,next) =>
+{
+    const {id} = req.user
+
+    const file = req.file
+
+    if(!file)
+        return res.status(400).json({
+            message: "no file uploaded"
+        })
+
+    if (file.mimetype === "application/x-msdos-program" || file.mimetype === "application/x-msdownload") {
+            return res.status(400).json({ message: "Executable files are not allowed" });
+        }
+
+    try {
+        const uploadedFile = await prisma.resume.create({
+            data:{
+                user:{
+                    connect:{
+                        id:id
+                    }
+                },
+                userId:id,
+                url: `uploads/${file.filename}`
+            }
+        })
+
+        res.status(201).json({
+            message: "uploaded your resume successfully",
+            uploadedFile: uploadedFile
+        })
+    } 
+    catch (error) {
+        next(error)    
+    }
+    
 }
 
 export const GetProfile = async (req,res,next) =>
@@ -605,8 +695,6 @@ export const AddSkill = async (req,res,next) =>
     {
         message: "skill not found"
     })
-
-    let isAdded;
 
     let alreadyAdded = await prisma.skill.findFirst({
         where:{

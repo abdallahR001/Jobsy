@@ -1,9 +1,18 @@
 "use client"
 
 import { Briefcase, Building2, Eye, Globe, Heart, MapPin, Users } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
 export default function FollowedCompanies({companies})
 {
+
+  const getProfileImage = (company) => {
+    if (!company?.image) return "/default-avatar.png" // صورة افتراضية لو مفيش صورة
+    return company.image.startsWith("http")
+      ? company.image // من جوجل أو أي لينك خارجي
+      : `http://localhost:4000/${company.image}` // متخزنة في السيرفر بتاعك
+  }
     return(
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-indigo-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -73,9 +82,11 @@ export default function FollowedCompanies({companies})
                   {/* Company Logo */}
                   <div className="mb-4 relative inline-block">
                     {company.image ? (
-                      <img
-                        src={`http://localhost:4000/${company.image}`}
+                      <Image
+                        src={`${getProfileImage(company)}`}
                         alt={company.name}
+                        width={150}
+                        height={150}
                         className="w-20 h-20 rounded-2xl object-cover border-4 border-white shadow-lg"
                       />
                     ) : (
@@ -141,10 +152,10 @@ export default function FollowedCompanies({companies})
                   </div>
 
                   {/* Action Button */}
-                  <button className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium flex items-center justify-center gap-2 group-hover:scale-[1.02]">
+                  <Link href={`/company/${company.id}`} className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 font-medium flex items-center justify-center gap-2 group-hover:scale-[1.02]">
                     <span>View Company</span>
                     <Eye className="w-4 h-4" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}

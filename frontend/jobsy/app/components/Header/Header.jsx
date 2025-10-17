@@ -60,6 +60,9 @@ export default function Header (){
 
             const me = await response.json()
 
+            console.log(me);
+            
+
             if(!response.ok)
             {
                 setUser(null)
@@ -67,6 +70,9 @@ export default function Header (){
                     router.push("/dashboard")
                 return
             }
+
+            console.log(me);
+            
 
             setUser(me)
 
@@ -115,8 +121,6 @@ export default function Header (){
   });
 
   socket.on("connect", () => {
-    console.log("Connected:", socket.id);
-
     socket.emit("register-user", user.id);
   });
 

@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { createCompany, dashBoard, deleteCompany, getAllApplicants, getCompany, getCompanyFollowers, logIn, logout, onBoardingPage, updateCompany } from "../Controllers/companyController.js";
+import { createCompany, dashBoard, deleteCompany, getAllApplicants, getCompany, getCompanyFollowers, googleCallBack, logIn, logout, onBoardingPage, updateCompany } from "../Controllers/companyController.js";
 import { authMiddleWare } from "../MiddleWares/AuthMiddleWare.js";
 import { authorizeRoles } from "../MiddleWares/AuthorizationMiddleWare.js";
 import multer from "multer";
 import path from "path"
 import fs from "fs";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { prisma } from "../prisma/prismaClient.js";
 
 const companyRouter = Router()
 
@@ -23,8 +26,52 @@ const storage = multer.diskStorage({
     },
 })
 
+// google auth
+passport.use(
+    "google-company",
+    new GoogleStrategy(
+        {
+            clientID:process.env.GOOGLE_CLIENT_ID,
+            clientSecret:process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: "http://localhost:4000/api/companies/google/callback",
+        },
+        async (accessToken, refreshToken,profile,done) =>
+        {
+            try {
+                const email = profile.emails[0].value
+                const name = profile.name.givenName;
+                const image = profile.photos[0].value;    
+
+                let company = await prisma.company.findUnique({
+                    where:{email}
+                })
+
+                if(!company)
+                {
+                    company = await prisma.company.create({
+                        data:{
+                            email:email,
+                            name,
+                            image,
+                            hasSeenOnboarding:false,
+                        }
+                    })
+                }
+
+                if(company)
+                    return done(null,company)
+            } 
+            catch (error) {
+                return done(error,null)
+            }
+        }
+    )
+)
+
 const upload = multer({storage})
 
+companyRouter.get("/google",passport.authenticate("google-company",{scope:["profile","email"]}))
+companyRouter.get("/google/callback",passport.authenticate("google-company",{failureRedirect:"http://localhost:3000/login/employer",session:false}),googleCallBack)
 companyRouter.get("/",authMiddleWare,authorizeRoles("company","user"),getCompany)
 companyRouter.get("/applicants",authMiddleWare,authorizeRoles("company"),getAllApplicants)
 companyRouter.get("/dashboard",authMiddleWare,authorizeRoles("company"),dashBoard)
