@@ -62,7 +62,7 @@ export default function Step1() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-indigo-50 to-white px-4">
       <h1 className="text-3xl font-bold text-center text-indigo-500 mb-6">
-        {companyName} is a nice name!
+        Welcome!
       </h1>
       <p className="text-gray-600 text-center mb-6">
         What's your company's main field of work?

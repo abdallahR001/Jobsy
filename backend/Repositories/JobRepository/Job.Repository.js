@@ -1,5 +1,5 @@
 import { prisma } from "../../prisma/prismaClient.js"
-
+import { sendEmail } from "../../Utils/sendEmail.js"
 export const CreateJob = async (companyId,data) =>
 {
     try {
@@ -42,7 +42,7 @@ export const CreateJob = async (companyId,data) =>
                 salary:data.salary || null,
                 job_status:"open",
                 type:data.type,
-                location: data.city || "remote",
+                location: data.city?.trim() || "remote",
                 Company:{
                     connect:{
                         id:companyId
@@ -69,6 +69,24 @@ export const CreateJob = async (companyId,data) =>
                 }
             })
         }
+
+        const company = await prisma.company.findUnique({
+            where:{
+                id:companyId,
+            },
+            select:{
+                name:true,
+                followers:{
+                    select:{
+                        email:true,
+                    }
+                }
+            }
+        })
+
+        await Promise.all(
+            company.followers.map(f => sendEmail(f.email, `new job posted by ${company.name}`, NewJob.title))
+        )
 
         return {
             status:201,

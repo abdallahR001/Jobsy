@@ -1,3 +1,4 @@
+
 "use client"
 import { useState } from "react"
 import { Plus, X, Upload, File, FileText, Image as ImageIcon, Download, Trash2, Loader2 } from "lucide-react"
@@ -100,11 +101,11 @@ export default function PortfolioFiles({initialFiles}) {
     }
 
     return(
-        <div className={`bg-white/90 backdrop-blur-sm w-full min-h-screen rounded-3xl shadow-2xl p-8 transition-all duration-300`}>
+        <div className="bg-white/90 backdrop-blur-sm w-full rounded-3xl shadow-2xl p-6 sm:p-8 transition-all duration-300">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0">
                         <File className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -115,62 +116,68 @@ export default function PortfolioFiles({initialFiles}) {
                 
                 <button
                     onClick={() => setShowUploadPopup(true)}
-                    className="bg-gradient-to-r cursor-pointer from-indigo-600 via-purple-600 to-indigo-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-indigo-500/25 transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                    className="bg-gradient-to-r cursor-pointer from-indigo-600 via-purple-600 to-indigo-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-indigo-500/25 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 w-full sm:w-auto"
                 >
                     <Plus className="w-5 h-5" />
                     <span>Upload File</span>
                 </button>
             </div>
 
-            {/* Files Grid */}
+            {/* Files List */}
             {files.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="space-y-4">
                     {files.map((file) => (
-                        <div key={file.id} className="group bg-gray-50 rounded-2xl  border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                            {/* File Preview */}
-                            {isImage(file.fileName) ? (
-                                <div className="relative w-full h-48 mb-4 rounded-xl overflow-hidden bg-gray-100">
-                                    <Image
-                                        src={`http://localhost:4000/${file.url}`}
-                                        width={200}
-                                        height={200}
-                                        className="object-cover w-full h-full"
-                                        alt={file.title}
-                                        priority
-                                    />
+                        <div key={file.id} className="group bg-gradient-to-r from-gray-50 to-gray-100/50 rounded-2xl border border-gray-200 hover:shadow-xl hover:border-indigo-300 transition-all duration-300 overflow-hidden">
+                            <div className="flex flex-col md:flex-row gap-4 p-4 md:p-6">
+                                {/* File Preview */}
+                                <div className="flex-shrink-0 w-full md:w-48 h-48 rounded-xl overflow-hidden bg-gray-100">
+                                    {isImage(file.fileName) ? (
+                                        <Image
+                                            src={`http://localhost:4000/${file.url}`}
+                                            width={200}
+                                            height={200}
+                                            className="object-cover w-full h-full"
+                                            alt={file.title}
+                                            priority
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
+                                            <div className="text-indigo-600">
+                                                {getFileIcon(file.fileName)}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                            ) : (
-                                <div className="w-full h-48 mb-4 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                                    <div className="text-indigo-600">
-                                        {getFileIcon(file.fileName)}
-                                    </div>
-                                </div>
-                            )}
 
-                            <div className="p-4">
                                 {/* File Info */}
-                                <h4 className="font-semibold text-gray-900 mb-1 truncate">{file.title}</h4>
-                                {file.description && (
-                                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{file.description}</p>
-                                )}
+                                <div className="flex-1 flex flex-col justify-between min-w-0">
+                                    <div>
+                                        <h4 className="font-bold text-xl text-gray-900 mb-2">{file.title}</h4>
+                                        {file.description && (
+                                            <p className="text-sm w-full text-gray-600 leading-relaxed break-words mb-3">{file.description}</p>
+                                        )}
+                                        <p className="text-xs text-gray-400 font-medium break-words">{file.fileName}</p>
+                                    </div>
 
-                                {/* Actions */}
-                                <div className="flex gap-2">
-                                    <a
-                                        href={`http://localhost:4000/${file.url}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-all duration-300 flex items-center justify-center gap-2"
-                                    >
-                                        <Download className="w-4 h-4" />
-                                        <span>Download</span>
-                                    </a>
-                                    <button
-                                        onClick={() => handleDelete(file.id)}
-                                        className="p-2 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition-all duration-300"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
+                                    {/* Actions */}
+                                    <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                                        <a
+                                            href={`http://localhost:4000/${file.url}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-xl text-sm font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                                        >
+                                            <Download className="w-4 h-4" />
+                                            <span>Download</span>
+                                        </a>
+                                        <button
+                                            onClick={() => handleDelete(file.id)}
+                                            className="px-5 py-3 bg-red-100 text-red-600 rounded-xl hover:bg-red-200 transition-all duration-300 flex items-center justify-center gap-2 font-semibold text-sm"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                            <span>Delete</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

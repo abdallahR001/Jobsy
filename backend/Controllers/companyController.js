@@ -21,9 +21,6 @@ export const getCompany = async (req,res,next) =>
 export const googleCallBack = async (req,res) =>
 {
     const user = req.user
-
-    console.log(user);
-    
     
     const token = jwt.sign(
         { id: user.id, role: "company" },

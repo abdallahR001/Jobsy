@@ -8,6 +8,7 @@ import UserBio from "../components/UserProfile/UserBio";
 import UserLocation from "../components/UserProfile/Location";
 import PortfolioFiles from "../components/UserProfile/PortfolioFiles";
 import UserSkills from "../components/UserSkills/UserSkills";
+import UserCV from "../components/UserProfile/UserCv";
 
 export default async function Profile()
 {
@@ -39,7 +40,7 @@ export default async function Profile()
     
     return(
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50 to-purple-100 py-12 px-4">
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>
@@ -82,6 +83,7 @@ export default async function Profile()
                                 
                             </div>
                             <UserLocation location={profile.location}/>
+                            <UserCV/>
                         </div>
                     </div>
 

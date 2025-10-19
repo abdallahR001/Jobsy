@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import DashBoardCard from "./DashboardCard";
 import { Briefcase, Rocket, UserPlus, Users } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function DashboardCards() {
 
@@ -14,10 +15,9 @@ export default async function DashboardCards() {
               }
             })
 
-          if(!response.ok)
+          if(response.status === 401 || response.status === 403)
           {
-            router.push("/login/employer")
-            return
+            redirect("/login/employer")
           }
 
           const data = await response.json()
