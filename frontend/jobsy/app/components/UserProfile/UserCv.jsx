@@ -58,7 +58,7 @@ export default function UserCV({ initialCV }) {
                     <label className="block">
                         <input
                             type="file"
-                            accept=".pdf,.doc,.docx"
+                            accept=".pdf,.doc,.docx,.txt"
                             onChange={handleFileUpload}
                             className="hidden"
                             disabled={uploading}

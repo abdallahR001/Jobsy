@@ -34,9 +34,6 @@ export default async function Profile()
     const data = await response.json()
     
     const profile = data.profile
-
-    console.log(data);
-    
     
     return(
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50 to-purple-100 py-12 px-4">

@@ -8,6 +8,7 @@ import fs from "fs"
 import { prisma } from "../prisma/prismaClient.js";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { userMiddleWare } from "../MiddleWares/UserMiddleWare.js";
 
 const userRouter = Router()
 

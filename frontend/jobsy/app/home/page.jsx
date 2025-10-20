@@ -97,8 +97,6 @@ export default async function Home() {
     if(response.status === 401 || response.status === 403)
         redirect("/login/jobseeker")
 
-    console.log(data);
-
     const feed = data?.feed
     
     const {activeJobsCount,jobSeekersCount,companiesCount,jobsFeed,companiesFeed} = feed

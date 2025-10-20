@@ -5,7 +5,7 @@ import Link from "next/link"
 
 export default function Notifications({unseenNotifications,newNotifications, notifications}){
 
-    const UnseenNotifications = notifications.some((n) => !n.seen)
+    const UnseenNotifications = notifications?.some((n) => !n.seen)
     return(
         <div className="relative">
             <Link href={"/notifications"} className="p-2 text-gray-400 ">

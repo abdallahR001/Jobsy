@@ -27,8 +27,6 @@ export default async function AddSkills()
         redirect("/")
 
     const data = await response.json()
-
-    console.log(data);
     
     return(
         <div className="min-h-screen w-full bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-12">

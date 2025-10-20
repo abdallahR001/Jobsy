@@ -1,12 +1,11 @@
 "use client"
 import { useState } from "react"
-import { Sparkles, Loader2, Download, ArrowLeft, FileText, Briefcase, GraduationCap, Award } from "lucide-react"
+import { Sparkles, Loader2, Download, ArrowLeft, FileText, Briefcase, GraduationCap, Award, Mail, MapPin } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function GenerateResumeForm({ userData }) {
     const [generating, setGenerating] = useState(false)
     const [generated, setGenerated] = useState(false)
-    const [selectedTemplate, setSelectedTemplate] = useState("modern")
     const [additionalInfo, setAdditionalInfo] = useState("")
     const router = useRouter()
 
@@ -80,7 +79,7 @@ export default function GenerateResumeForm({ userData }) {
                                 </div>
 
                                 {/* Template Selection */}
-                                <div className="mb-8">
+                                {/* <div className="mb-8">
                                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Choose Template</h2>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         {templates.map((template) => (
@@ -105,7 +104,7 @@ export default function GenerateResumeForm({ userData }) {
                                             </button>
                                         ))}
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* Additional Instructions */}
                                 <div className="mb-8">
@@ -123,7 +122,7 @@ export default function GenerateResumeForm({ userData }) {
                                 <button
                                     onClick={handleGenerate}
                                     disabled={generating}
-                                    className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-700 text-white py-4 rounded-2xl font-bold text-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-xl"
+                                    className="w-full cursor-pointer bg-gradient-to-r from-purple-600 via-pink-600 to-purple-700 text-white py-4 rounded-2xl font-bold text-lg hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-xl"
                                 >
                                     {generating ? (
                                         <>
@@ -160,8 +159,8 @@ export default function GenerateResumeForm({ userData }) {
                                             <h3 className="text-2xl font-bold text-gray-900 mb-2">{userData.first_name} {userData.last_name}</h3>
                                             <p className="text-indigo-600 font-semibold mb-4">{userData.title}</p>
                                             <div className="space-y-4 text-sm text-gray-600">
-                                                <p>📧 {userData.email}</p>
-                                                <p>📍 {userData.location}</p>
+                                                <p className="flex items-center gap-3"><Mail/> {userData.email}</p>
+                                                <p className="flex items-center gap-3"><MapPin/> {userData.location}</p>
                                                 <div className="pt-4 border-t border-gray-200">
                                                     <p className="italic">Professional resume generated with AI based on your profile information...</p>
                                                 </div>
@@ -173,14 +172,14 @@ export default function GenerateResumeForm({ userData }) {
                                     <div className="flex flex-col sm:flex-row gap-3">
                                         <button
                                             onClick={handleDownload}
-                                            className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-4 rounded-xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                                            className="flex-1 cursor-pointer bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-4 rounded-xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                                         >
                                             <Download className="w-5 h-5" />
                                             <span>Download Resume</span>
                                         </button>
                                         <button
                                             onClick={() => setGenerated(false)}
-                                            className="flex-1 bg-gray-100 text-gray-700 px-6 py-4 rounded-xl font-bold hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2"
+                                            className="flex-1 cursor-pointer bg-gray-100 text-gray-700 px-6 py-4 rounded-xl font-bold hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2"
                                         >
                                             <Sparkles className="w-5 h-5" />
                                             <span>Generate Again</span>

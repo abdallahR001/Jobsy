@@ -1,7 +1,6 @@
 import { prisma } from "../prisma/prismaClient.js"
 import jwt from "jsonwebtoken"
 import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, getFollowedCompanies, saveJob, getSavedJobs } from "../Services/UserService/UserService.js"
-import { log } from "console"
 
 export const homePage = async (req,res,next) =>
 {
@@ -288,9 +287,6 @@ export const googleCallBack = async (req,res) =>
         { expiresIn: "7d" }
         );
 
-        console.log(user);
-        
-
         const existingUser = await prisma.user.findUnique({
             where:{
                 id:user.id
@@ -320,9 +316,6 @@ export const me = async(req,res,next) =>
 {
     try {
         const {id,role} = req.user
-
-        console.log(id);
-        console.log(role);
         
         if(role === "user")
         {
@@ -337,10 +330,6 @@ export const me = async(req,res,next) =>
                 image:true,
             }
         })  
-
-            console.log(user);
-            
-
             res.status(200).json({
                 id:user.id,
                 first_name:user.first_name,
@@ -374,7 +363,10 @@ export const me = async(req,res,next) =>
         }
     } 
     catch (error) {
-        next(error)
+        res.status(200).json({
+            message:"no error",
+            error: error.message
+        })
     }
 }
 
@@ -642,12 +634,8 @@ export const SaveJob = async (req,res,next) =>
 {
     try {
         const userId = req.user.id
-        console.log(userId)
-
-        console.log(req.body)
         
         const {jobId} = req.body
-        console.log(jobId)
 
         const isSaved = await saveJob(userId,jobId)
 

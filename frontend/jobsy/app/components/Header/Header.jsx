@@ -59,10 +59,7 @@ export default function Header (){
             })
 
             const me = await response.json()
-
-            console.log(me);
             
-
             if(!response.ok)
             {
                 setUser(null)
@@ -71,15 +68,15 @@ export default function Header (){
                 return
             }
 
-            console.log(me);
-            
+            if(me.fail)
+                return
 
             setUser(me)
 
             if(me.type === "company")
                 router.push("/dashboard") 
-
             } 
+            
             catch (error) {
                 setUser(null)
             }
@@ -105,7 +102,7 @@ export default function Header (){
 
             const data = await response.json()
             
-            const notifications = data.notifications
+            const notifications = data?.notifications
             
             setNotifications(notifications)
         }

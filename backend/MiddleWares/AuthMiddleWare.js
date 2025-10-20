@@ -2,10 +2,14 @@ import jwt from "jsonwebtoken"
 
 export const authMiddleWare = (req,res,next) =>
 {  
-    const token = req.cookies.token || req.headers.token
+    const token = req.cookies.token || req.headers.token    
 
     if(!token)
     {
+        if(req.route.path === "/me" || req.route.path === "/")
+        {
+            return res.status(200).json({fail:true})
+        }
         return res.status(401).json({message: "you are not logged in"})
     }
 

@@ -316,8 +316,6 @@ export const FollowCompany = async (userId,companyId) =>
                 }
             })
 
-            console.log("follow")
-
             isFollowed = true
         }
         else if(alreadyFollowed)
