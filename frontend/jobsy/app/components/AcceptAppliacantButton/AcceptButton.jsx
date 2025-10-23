@@ -19,11 +19,8 @@ export default function AcceptButton({id,token,message})
 
         if(!response.ok)
         {
-            console.log(result.message);
             router.push("/dashboard/applicants?#")
         }
-
-        console.log(result);
 
         const notificationResponse = await fetch("http://localhost:4000/api/notifications",{
             credentials:"include",

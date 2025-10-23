@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import {GoogleGenerativeAI} from "@google/generative-ai"
-import { prisma } from "../prisma/prismaClient"
+import { prisma } from "../prisma/prismaClient.js"
 dotenv.config()
 
 const genAi = new GoogleGenerativeAI(process.env.API_KEY)
@@ -64,33 +64,29 @@ export const generateResume = async (userPrompt,userId) =>
         };
 
         const result = await model.generateContent({
-      contents: [
+  contents: [
+    {
+      role: "user",
+      parts: [
         {
-          role: "system",
-          parts: [
-            {
-              text: `You are Genius, an intelligent assistant that creates professional resumes in plain text format.
-                Your goal is to generate a clear, well-structured, and human-sounding resume based on the user's profile information and any extra instructions they provide.
-                Avoid complex formatting, bullet points, or Markdown — keep it simple, readable, and ATS-friendly.`,
-            },
-          ],
-        },
-        {
-          role: "user",
-          parts: [
-            {
-              text: `User profile data:
-                ${JSON.stringify(userData, null, 2)}
+          text: `You are "Genius", an AI resume writer that writes resumes **from the user's perspective** (first person, "I am...").
+Write in a professional, confident tone suitable for job applications.
+Do not refer to the user as "he" or "she" — always use "I".
+Use clear sections like "Summary", "Experience", "Projects", "Skills", and "Education" if possible.
+Write naturally — not robotic — and keep it plain text (no bullet points, no markdown).
 
-                User's additional instructions:
-                ${userPrompt}
+User profile data:
+${JSON.stringify(userData, null, 2)}
 
-                Now, generate a complete and natural-sounding resume for this user.`,
-            },
-          ],
-        },
-      ],
-    });
+Extra user instructions:
+${userPrompt}
+
+Now write a complete resume using this data, making sure to include their projects and skills in context.`
+        }
+      ]
+    }
+  ]
+});
 
     const response = await result.response
 

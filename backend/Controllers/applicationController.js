@@ -1,4 +1,5 @@
 import { acceptApplication, createApplication, getApplicationsByJob, getUserApplications, rejectApplication, toggleApplicationSeen } from "../Services/ApplicationService/ApplicationService.js"
+import { sendEmail } from "../Utils/sendEmail.js"
 
 export const CreateApplication = async (req,res,next) =>
 {

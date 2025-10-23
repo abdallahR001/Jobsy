@@ -106,7 +106,7 @@ export default async function JobDetails({ params }) {
                 <div className="w-2 h-8 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"></div>
                 Job Description
               </h3>
-              <p className="text-gray-700 leading-relaxed text-lg">
+              <p className="text-gray-700 leading-relaxed text-lg break-words">
                 {job.description}
               </p>
             </div>

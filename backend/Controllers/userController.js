@@ -1,6 +1,7 @@
 import { prisma } from "../prisma/prismaClient.js"
 import jwt from "jsonwebtoken"
 import { CreateAccount, LogIn, updateProfile, deleteProfile, getProfile, followCompany, getFollowedCompanies, saveJob, getSavedJobs } from "../Services/UserService/UserService.js"
+import { log } from "console"
 
 export const homePage = async (req,res,next) =>
 {
@@ -469,15 +470,24 @@ export const UploadResume = async (req,res,next) =>
         }
 
     try {
-        const uploadedFile = await prisma.resume.create({
-            data:{
+        console.log(file.filename);
+        
+        const uploadedFile = await prisma.resume.upsert({
+            where:{
+                userId:id
+            },
+            update:{
+                url:`uploads/${file.filename}`,
+                fileName:file.originalname.trim()
+            },
+            create:{
+                url:`uploads/${file.filename}`,
                 user:{
                     connect:{
                         id:id
                     }
                 },
-                userId:id,
-                url: `uploads/${file.filename}`
+                fileName:file.originalname.trim()
             }
         })
 
@@ -542,7 +552,8 @@ export const ViewUserProfile = async (req,res,next) =>
                         id:true,
                         name:true,
                     }
-                }
+                },
+                resume:true,
             }
         })
 

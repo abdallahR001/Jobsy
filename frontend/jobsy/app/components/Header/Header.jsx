@@ -188,7 +188,7 @@ export default function Header (){
             if(!response.ok)
                 return
 
-            window.location.reload()
+            window.location.replace("/login/jobseeker")
         } 
         catch (error) {
             return    

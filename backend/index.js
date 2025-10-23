@@ -15,6 +15,7 @@ import passport from "passport"
 import notificationRouter from "./Routes/NotificationRoute.js"
 import { Server } from "socket.io"
 import { createServer } from "http"
+import geminiRouter from "./Routes/GeminiRoute.js"
 
 const app = express()
 
@@ -67,6 +68,7 @@ app.use("/api/skills",skillRouter)
 app.use("/api/admins",adminRouter)
 app.use("/api/applications",applicationRoute)
 app.use("/api/notifications",notificationRouter)
+app.use("/api/gemini",geminiRouter)
 //error handling
 app.use(errorHandler)
 

@@ -1,7 +1,7 @@
 
 "use client"
 import { useState } from "react"
-import { Plus, X, Upload, File, FileText, Image as ImageIcon, Download, Trash2, Loader2 } from "lucide-react"
+import { Plus, X, Upload, File, FileText, Image as ImageIcon, Trash2, Loader2, Eye } from "lucide-react"
 import Image from "next/image"
 
 export default function PortfolioFiles({initialFiles}) {
@@ -167,8 +167,8 @@ export default function PortfolioFiles({initialFiles}) {
                                             rel="noopener noreferrer"
                                             className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-xl text-sm font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
                                         >
-                                            <Download className="w-4 h-4" />
-                                            <span>Download</span>
+                                            <Eye className="w-4 h-4" />
+                                            <span>View</span>
                                         </a>
                                         <button
                                             onClick={() => handleDelete(file.id)}

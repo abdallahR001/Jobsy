@@ -36,7 +36,7 @@ model User {
   skills Skill[]
   PortfolioFiles PortfolioFile[]
   notifications Notification[]
-  resumes Resume[]
+  resume Resume?
 }
 
 model Job {
@@ -149,4 +149,5 @@ model Resume {
   userId String @unique
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   url String
+  fileName String?
 }

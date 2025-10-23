@@ -9,7 +9,6 @@ export default async function GenerateResume() {
     if(!token)
         redirect("/login/jobseeker")
 
-    // You can fetch user data here if needed
     const response = await fetch("http://localhost:4000/api/users/profile", {
         headers: {
             token: token

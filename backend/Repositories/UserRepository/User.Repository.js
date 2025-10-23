@@ -128,7 +128,8 @@ export const GetProfile = async(id)=>
                         fileType:true,
                         url:true
                     }
-                }
+                },
+                resume:true,       
             }
         })
 

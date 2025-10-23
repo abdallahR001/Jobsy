@@ -1,4 +1,5 @@
 import { prisma } from "../../prisma/prismaClient.js"
+import { sendEmail } from "../../Utils/sendEmail.js"
 
 export const CreateApplication = async (id,jobId,data) =>
 {
@@ -133,6 +134,9 @@ export const GetUserApplications = async (id) =>
                         }
                     }
                 }
+            },
+            orderBy:{
+                created_at:"desc"
             }
         })
 
@@ -234,6 +238,11 @@ export const AcceptApplication = async (id) =>
         const job = await prisma.job.findUnique({
             where:{
                 id:application.jobId
+            },
+            select:{
+                id:true,
+                title:true,
+                job_status:true,
             }
         })
 
@@ -279,6 +288,18 @@ export const AcceptApplication = async (id) =>
             }
         })
 
+        const user = await prisma.user.findUnique({
+            where:{
+                id:application.userId
+            },
+            select:{
+                email:true,
+                first_name:true
+            }
+        })
+
+        await sendEmail(user.email,"application accepted",`Hey ${user.first_name}! Your application on job ${job.title} was accepted and there is a message for you!`)
+        
         return {
             status: 200,
             message: "accepted successfully",
@@ -318,6 +339,27 @@ export const RejectApplication = async (id) =>
                 status:"rejected"
             }
         })
+
+        const user = await prisma.user.findUnique({
+            where:{
+                id:application.userId
+            },
+            select:{
+                email:true,
+                first_name:true
+            }
+        })
+
+        const job = await prisma.job.findUnique({
+            where:{
+                id:application.jobId
+            },
+            select:{
+                title:true
+            }
+        })
+
+        await sendEmail(user.email,"application rejected",`Hey ${user.first_name}! Your application on job ${job.title} was rejected, maybe something is wrong with your profile?`)
 
         return updatedApplication
     } 

@@ -21,10 +21,7 @@ export default function Notifications()
         const data = await response.json()
 
         if(!response.ok)
-        {
-            console.log(data);
-            return
-        }
+            redirect("/home")
 
         if(response.status === 401 || response.status === 403)
             redirect("/login/jobseeker")
@@ -46,7 +43,7 @@ export default function Notifications()
                         </div>
                         <div>
                             <h1 className="text-4xl font-bold text-gray-900">Notifications</h1>
-                            <p className="text-lg text-gray-600">{notifications.length} notifications</p>
+                            <p className="text-lg text-gray-600">{notifications?.length} notifications</p>
                         </div>
                     </div>
                 </div>

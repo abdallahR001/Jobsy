@@ -27,10 +27,10 @@ export default async function Applicants(){
     const data = await response.json()
     
     const getProfileImage = (user) => {
-    if (!user?.image) return "/default-avatar.png" // صورة افتراضية لو مفيش صورة
+    if (!user?.image) return "/default-avatar.png" 
     return user.image.startsWith("http")
-      ? user.image // من جوجل أو أي لينك خارجي
-      : `http://localhost:4000/${user.image}` // متخزنة في السيرفر بتاعك
+      ? user.image 
+      : `http://localhost:4000/${user.image}` 
   }
 
     return(

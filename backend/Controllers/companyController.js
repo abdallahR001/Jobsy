@@ -283,6 +283,9 @@ export const dashBoard = async (req,res,next) =>
                         applications:true
                     }
                 }
+            },
+            orderBy:{
+                created_at:"desc"
             }
         })
 

@@ -6,29 +6,31 @@ import { useRouter } from "next/navigation"
 export default function GenerateResumeForm({ userData }) {
     const [generating, setGenerating] = useState(false)
     const [generated, setGenerated] = useState(false)
-    const [additionalInfo, setAdditionalInfo] = useState("")
+    const [userPrompt, setUserPrompt] = useState("")
+    const [result,setResult] = useState("")
     const router = useRouter()
-
-    const templates = [
-        { id: "modern", name: "Modern", color: "from-indigo-500 to-purple-500" },
-        { id: "professional", name: "Professional", color: "from-blue-500 to-cyan-500" },
-        { id: "creative", name: "Creative", color: "from-pink-500 to-rose-500" },
-        { id: "minimal", name: "Minimal", color: "from-gray-600 to-gray-800" }
-    ]
 
     const handleGenerate = async () => {
         setGenerating(true)
-        
-        // Simulate AI generation - Replace with actual Gemini API call
-        setTimeout(() => {
-            setGenerating(false)
-            setGenerated(true)
-        }, 3000)
-    }
 
-    const handleDownload = () => {
-        // Implement download logic here
-        alert("Resume downloaded!")
+        const response = await fetch("http://localhost:4000/api/gemini",{
+            credentials:"include",
+            method:"POST",
+            body:JSON.stringify({
+                userPrompt
+            }),
+            headers:{
+                "content-type":"application/json"
+            }
+        })
+
+        const result = await response.json()
+
+
+        setResult(result.result)
+        
+        setGenerating(false)
+        setGenerated(true)
     }
 
     return (
@@ -78,40 +80,12 @@ export default function GenerateResumeForm({ userData }) {
                                     </div>
                                 </div>
 
-                                {/* Template Selection */}
-                                {/* <div className="mb-8">
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Choose Template</h2>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        {templates.map((template) => (
-                                            <button
-                                                key={template.id}
-                                                onClick={() => setSelectedTemplate(template.id)}
-                                                className={`relative p-6 rounded-2xl border-2 transition-all duration-300 ${
-                                                    selectedTemplate === template.id
-                                                        ? "border-indigo-500 shadow-lg scale-105"
-                                                        : "border-gray-200 hover:border-gray-300"
-                                                }`}
-                                            >
-                                                <div className={`w-full h-20 bg-gradient-to-r ${template.color} rounded-lg mb-3`}></div>
-                                                <p className="font-semibold text-gray-900 text-sm">{template.name}</p>
-                                                {selectedTemplate === template.id && (
-                                                    <div className="absolute top-2 right-2 w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center">
-                                                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                        </svg>
-                                                    </div>
-                                                )}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div> */}
-
                                 {/* Additional Instructions */}
                                 <div className="mb-8">
                                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Additional Instructions (Optional)</h2>
                                     <textarea
-                                        value={additionalInfo}
-                                        onChange={(e) => setAdditionalInfo(e.target.value)}
+                                        value={userPrompt}
+                                        onChange={(e) => setUserPrompt(e.target.value)}
                                         placeholder="Add any specific requirements or preferences for your resume..."
                                         className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 resize-none"
                                         rows={4}
@@ -162,7 +136,7 @@ export default function GenerateResumeForm({ userData }) {
                                                 <p className="flex items-center gap-3"><Mail/> {userData.email}</p>
                                                 <p className="flex items-center gap-3"><MapPin/> {userData.location}</p>
                                                 <div className="pt-4 border-t border-gray-200">
-                                                    <p className="italic">Professional resume generated with AI based on your profile information...</p>
+                                                    <p className="italic">{result}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -170,13 +144,6 @@ export default function GenerateResumeForm({ userData }) {
 
                                     {/* Action Buttons */}
                                     <div className="flex flex-col sm:flex-row gap-3">
-                                        <button
-                                            onClick={handleDownload}
-                                            className="flex-1 cursor-pointer bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-4 rounded-xl font-bold hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
-                                        >
-                                            <Download className="w-5 h-5" />
-                                            <span>Download Resume</span>
-                                        </button>
                                         <button
                                             onClick={() => setGenerated(false)}
                                             className="flex-1 cursor-pointer bg-gray-100 text-gray-700 px-6 py-4 rounded-xl font-bold hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2"

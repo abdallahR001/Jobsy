@@ -103,7 +103,7 @@ export default async function Followers()
                                     </div>
 
                                     {/* Action Button */}
-                                    <Link href={`/userprofile/${follower.id}`} className="w-full cursor-pointer bg-gradient-to-r from-pink-600 via-rose-600 to-pink-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105">
+                                    <Link href={`/dashboard/userprofile/${follower.id}`} className="w-full cursor-pointer bg-gradient-to-r from-pink-600 via-rose-600 to-pink-700 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl hover:shadow-pink-500/25 transition-all duration-300 hover:scale-105">
                                         View Profile
                                     </Link>
                                 </div>

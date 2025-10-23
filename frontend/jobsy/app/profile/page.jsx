@@ -28,10 +28,10 @@ export default async function Profile()
     if(response.status === 401 || response.status === 403)
         redirect("/login/jobseeker")
 
+    const data = await response.json()
+
     if(!response.ok)
         redirect("/")
-
-    const data = await response.json()
     
     const profile = data.profile
     
@@ -80,7 +80,7 @@ export default async function Profile()
                                 
                             </div>
                             <UserLocation location={profile.location}/>
-                            <UserCV/>
+                            <UserCV initialCV={profile.resume}/>
                         </div>
                     </div>
 
